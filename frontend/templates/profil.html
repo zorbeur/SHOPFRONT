@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Utilisateur</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css">
+    <style>
+        body {
+            background-color: #357e53;
+        }
+        .profile-card {
+            background-color: #6a9b5e;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 50px;
+        }
+        .profile-image {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        .profile-info {
+            text-align: center;
+        }
+        .profile-info h5 {
+            margin-bottom: 5px;
+        }
+        .profile-info p {
+            color: #6c757d;
+        }
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .profile-stats .stat {
+            text-align: center;
+        }
+        .profile-stats .stat h6 {
+            margin-bottom: 5px;
+        }
+        .profile-stats .stat p {
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="profile-card">
+                <div class="profile-info">
+                    <img src="https://th.bing.com/th/id/OIP.x7rwEJkms37ZHEARSI6a1wHaHa?w=157&h=180&c=7&r=0&o=5&dpr=2.3&pid=1.7"
+                         alt="Profil Image" class="profile-image">
+                    <h5>Unknows</h5>
+                    <p>Unknows</p>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat">
+                        <h6>Balance</h6>
+                        <p>$00.00</p>
+                    </div>
+                    <div class="stat">
+                        <h6>Orders</h6>
+                        <p>00</p>
+                    </div>
+                    <div class="stat">
+                        <h6>Points</h6>
+                        <p>00</p>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'logout' %}" class="btn btn-danger">Déconnexion</a>
+                    {% else %}
+                        <a href="{% url 'connexion' %}" class="btn btn-dark me-2">Connexion</a>
+                        <a href="{% url 'enregistrement' %}" class="btn btn-dark">Inscription</a>
+                    {% endif %}
+                    <a href="{% url 'home' %}" class="btn btn-primary">Retour a l'acceuil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
+</body>
+</html>
