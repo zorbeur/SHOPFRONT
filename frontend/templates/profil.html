@@ -1,3 +1,5 @@
+<!-- profile.html -->
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -55,10 +57,13 @@
         <div class="col-md-8 col-lg-6">
             <div class="profile-card">
                 <div class="profile-info">
-                    <img src="https://th.bing.com/th/id/OIP.x7rwEJkms37ZHEARSI6a1wHaHa?w=157&h=180&c=7&r=0&o=5&dpr=2.3&pid=1.7"
-                         alt="Profil Image" class="profile-image">
-                    <h5>Unknows</h5>
-                    <p>Unknows</p>
+                    {% if user.is_authenticated %}
+                        <img src="https://www.bing.com/th?id=OIP.lG7_GtvmhlgyrUO0q4xfKgHaHk&w=150&h=153&c=8&rs=1&qlt=90&o=6&dpr=2.3&pid=3.1&rm=2" alt="Profil Image" class="profile-image">
+                    {% else %}
+                        <img src="https://th.bing.com/th/id/OIP.x7rwEJkms37ZHEARSI6a1wHaHa?w=157&h=180&c=7&r=0&o=5&dpr=2.3&pid=1.7" alt="Profil Image" class="profile-image">
+                    {% endif %}
+                    <h5>{{ user.username }}</h5>
+                    <p>{{ user.email }}</p>
                 </div>
                 <div class="profile-stats">
                     <div class="stat">
@@ -81,7 +86,12 @@
                         <a href="{% url 'connexion' %}" class="btn btn-dark me-2">Connexion</a>
                         <a href="{% url 'enregistrement' %}" class="btn btn-dark">Inscription</a>
                     {% endif %}
-                    <a href="{% url 'home' %}" class="btn btn-primary">Retour a l'acceuil</a>
+                    
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'home2' %}" class="btn btn-primary">Retour à l'accueil</a>
+                    {% else %}
+                    <a href="{% url 'home' %}" class="btn btn-primary">Retour à l'accueil</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
