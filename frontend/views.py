@@ -4,17 +4,28 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from .forms import UserRegisterForm
 from django.contrib.auth.decorators import login_required
+from adminfront.models import Categorie, Produit
+
+
 
 
 def index(request):
-    return render(request, 'index2.html')
+    Categories=Categorie.objects.all()
+    return render(request, 'index2.html', {Categories:Categories} )
 
 
 def index2(request):
     return render(request, 'index.html')
 
 def shop(request):
-    return render(request, 'shop.html')
+    # Récupérer toutes les catégories avec leurs produits associés
+    categories = Categorie.objects.prefetch_related('produit_set').all()
+    
+    context = {
+        'categories': categories
+    }
+    return render(request, 'shop.html', context)
+
 
 def about(request):
     return render(request, 'checkout.html')
@@ -57,6 +68,7 @@ def enregistrement(request):
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
+            print("Your registration is passed successfully!!!")
             login(request, user)
             messages.success(request, "Votre compte a été créé avec succès ! Vous êtes maintenant connecté.")
             return redirect('home2')
@@ -68,7 +80,40 @@ def enregistrement(request):
 
 
 
+#ajout des vues de gestion du panier
 
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from adminfront.models import Panier
+
+@login_required
+def ajouter_au_panier(request, produit_id):
+    produit = get_object_or_404(Produit, id=produit_id)
+    panier_item, created = Panier.objects.get_or_create(utilisateur=request.user, produit=produit, commande=False)
+
+    if not created:
+        panier_item.quantite += 1
+        panier_item.save()
+
+    messages.success(request, f'{produit.nom} a été ajouté à votre panier.')
+    return redirect('cart')
+
+@login_required
+def afficher_panier(request):
+    panier_items = Panier.objects.filter(utilisateur=request.user, commande=False)
+    total = Panier.get_total_prix_panier(request.user)
+    return render(request, 'cart.html', {'panier_items': panier_items, 'total': total})
+
+@login_required
+def supprimer_du_panier(request, produit_id):
+    panier_item = get_object_or_404(Panier, utilisateur=request.user, produit_id=produit_id, commande=False)
+    panier_item.delete()
+    messages.success(request, 'L\'article a été retiré de votre panier.')
+    return redirect('panier')
+
+def modifier_quantite(request):
+    return render(request, 'index.html')
 
 
 

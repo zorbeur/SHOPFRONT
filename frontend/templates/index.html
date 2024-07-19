@@ -12,19 +12,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="Untree.co">
-    <link rel="shortcut icon" href="{% load static %}{% static 'favicon.png' %}">
+    <link rel="shortcut icon" href="{% load static %}{% static 'images/eshop.png' %}">
 
     <meta name="description" content="" />
     <meta name="keywords" content="bootstrap, bootstrap4" />
 
     {% load static %}
-
+    <style>
+        .product-thumbnail {
+            width: 300px;
+            height: 250px; /* Vous pouvez ajuster cette hauteur selon vos besoins */
+            object-fit: cover; /* Cette propriété permet de s'assurer que l'image remplit le conteneur tout en maintenant son ratio d'aspect */
+        }
+    </style>
     <!-- Bootstrap CSS -->
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="{% static 'css/tiny-slider.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
-    <title>Furni Free Bootstrap 5 Template for Furniture and Interior Design Websites by Untree.co </title>
+    
+    <title>E-SHOP </title>
 </head>
 
 <body>
@@ -33,12 +40,16 @@
     <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
 
         <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">SHOP<span>.</span></a>
-
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'images/eshop.png' %}" alt="Votre Logo" height="200" width="300">
+                <span>.</span>
+            </a>
+            
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni"
                 aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            
 
             <div class="collapse navbar-collapse" id="navbarsFurni">
                 <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
@@ -52,16 +63,24 @@
                     <li><a class="nav-link" href="{% url 'contact' %}">Nous contactez</a></li>
                 </ul>
 
-                <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-                    <li><a class="nav-link" href="{% url 'profil' %}"><img src="{% static 'images/user.svg' %}"></a></li>
-                    <li><a class="nav-link" href="{% url 'cart' %}"><img src="{% static 'images/cart.svg' %}"></a></li>
-                </ul>
+                {% if user.is_authenticated %}
+					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+						<li><a class="nav-link" href="{% url 'profil' %}"><img src="{% static 'images/user.svg' %}"></a></li>
+						<li><a class="nav-link" href="{% url 'cart' %}"><img src="{% static 'images/cart.svg' %}"></a></li>
+					</ul>
+                        
+                    {% else %}
+					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+						<li><a class="nav-link" href="{% url 'profil' %}"><img src="{% static 'images/user.svg' %}"></a></li>
+
+					</ul>
+                    {% endif %}
             </div>
         </div>
 
     </nav>
     <!-- End Header/Navigation -->
-
+    
     <!-- Start Hero Section -->
     <div class="hero">
         <div class="container">
@@ -77,7 +96,7 @@
                 </div>
                 <div class="col-lg-7">
                     <div class="hero-img-wrap">
-                        <img src="{% static 'images/couch.png' %}" class="img-fluid">
+                        <img src="{% static 'images/couche4.png' %}" class="img-fluid">
                     </div>
                 </div>
             </div>
@@ -85,133 +104,184 @@
     </div>
     <!-- End Hero Section -->
 
-    <!-- Start Product Section -->
+    <!-- Start Categories Section -->
     <div class="product-section">
         <div class="container">
             <div class="row">
 
                 <!-- Start Column 1 -->
                 <div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
-                    <h2 class="mb-4 section-title">Crafted with excellent material.</h2>
-                    <p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam
-                        vulputate velit imperdiet dolor tempor tristique. </p>
+                    <h2 class="mb-4 section-title">Découvrez Notre Collection Exclusive.</h2>
+                    <p class="mb-4"> Plongez dans une expérience de shopping exceptionnelle avec notre collection exclusive de produits. Chaque article est soigneusement sélectionné pour sa qualité et son design unique, garantissant que vous trouviez exactement ce que vous recherchez. Explorez nos catégories variées, des dernières tendances en mode aux innovations technologiques, pour trouver des pièces qui vous inspirent et reflètent votre style personnel. </p>
                     <p><a href="shop.html" class="btn">Explore</a></p>
                 </div>
                 <!-- End Column 1 -->
 
                 <!-- Start Column 2 -->
-                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-                    <a class="product-item" href="cart.html">
-                        <img src="{% static 'images/product-1.png' %}" class="img-fluid product-thumbnail">
-                        <h3 class="product-title">Nordic Chair</h3>
-                        <strong class="product-price">$50.00</strong>
-
-                        <span class="icon-cross">
-                            <img src="{% static 'images/cross.svg' %}" class="img-fluid">
-                        </span>
-                    </a>
+                <div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
+                    <h2 class="mb-4 section-title">La Satisfaction Garantie.</h2>
+                    <p class="mb-4">Votre satisfaction est notre priorité absolue. Nous nous engageons à vous offrir une expérience d'achat sans souci grâce à notre politique de satisfaction garantie. Si pour une raison quelconque vous n'êtes pas entièrement satisfait de votre achat, nous vous offrons la possibilité de retourner ou d'échanger vos articles sans tracas. Faites vos achats en toute confiance, sachant que nous sommes là pour vous offrir un service clientèle exceptionnel à chaque étape de votre parcours d'achat. </p>
+                    <p><a href="shop.html" class="btn">Explore</a></p>
                 </div>
                 <!-- End Column 2 -->
 
                 <!-- Start Column 3 -->
-                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-                    <a class="product-item" href="cart.html">
-                        <img src="{% static 'images/product-2.png' %}" class="img-fluid product-thumbnail">
-                        <h3 class="product-title">Kruzo Aero Chair</h3>
-                        <strong class="product-price">$78.00</strong>
-
-                        <span class="icon-cross">
-                            <img src="{% static 'images/cross.svg' %}" class="img-fluid">
-                        </span>
-                    </a>
+                <div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
+                    <h2 class="mb-4 section-title">Offres Spéciales et Promotions Exclusives.</h2>
+                    <p class="mb-4">Profitez d'offres spéciales et de promotions exclusives pour découvrir des économies incroyables sur une sélection de produits. Que ce soit pour mettre à jour votre garde-robe avec les dernières tendances ou pour trouver le cadeau parfait, nos offres vous permettent de trouver des articles de qualité à des prix exceptionnels. Ne manquez pas nos promotions régulières et découvrez comment vous pouvez économiser tout en profitant de produits de haute qualité et de service impeccable. </p>
+                    <p><a href="shop.html" class="btn">Explore</a></p>
                 </div>
                 <!-- End Column 3 -->
 
                 <!-- Start Column 4 -->
+                <div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
+                    <h2 class="mb-4 section-title">L'Opinion de nos Clients.</h2>
+                    <p class="mb-4">La voix de nos clients est au cœur de tout ce que nous faisons. Découvrez ce que nos clients disent à propos de leurs expériences d'achat avec nous. Nos avis clients authentiques vous offrent un aperçu honnête et précieux de la qualité de nos produits et de notre service. Rejoignez notre communauté de clients satisfaits et découvrez pourquoi tant de personnes choisissent notre boutique en ligne pour leurs besoins en matière de shopping. Votre confiance et votre satisfaction sont notre plus grande récompense. </p>
+                    <p><a href="shop.html" class="btn">Explore</a></p>
+                </div>
+
+                <!-- End Column 4 -->
+
                 <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
                     <a class="product-item" href="cart.html">
-                        <img src="{% static 'images/product-3.png' %}" class="img-fluid product-thumbnail">
+                        <img src="/categorie/Réseaux_et_Connectivité.jpeg" class="img-fluid product-thumbnail">
                         <h3 class="product-title">Ergonomic Chair</h3>
                         <strong class="product-price">$43.00</strong>
-
+            
                         <span class="icon-cross">
                             <img src="{% static 'images/cross.svg' %}" class="img-fluid">
                         </span>
                     </a>
                 </div>
-                <!-- End Column 4 -->
+                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                    <a class="product-item" href="cart.html">
+                        <img src="/categorie/Composants_informatiques.jpeg" class="img-fluid product-thumbnail">
+                        <h3 class="product-title">Composants_informatiques</h3>
+                        <strong class="product-price">$43.00</strong>
+            
+                        <span class="icon-cross">
+                            <img src="{% static 'images/cross.svg' %}" class="img-fluid">
+                        </span>
+                    </a>
+                </div>
+                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                    <a class="product-item" href="cart.html">
+                        <img src="/categorie/Autres_Accessoires.jpeg" class="img-fluid product-thumbnail">
+                        <h3 class="product-title">Autres_Accessoires</h3>
+                        <strong class="product-price">$43.00</strong>
+            
+                        <span class="icon-cross">
+                            <img src="{% static 'images/cross.svg' %}" class="img-fluid">
+                        </span>
+                    </a>
+                </div>
+                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                    <a class="product-item" href="cart.html">
+                        <img src="/categorie/Audio_et_Hi-Fi.jpeg" class="img-fluid product-thumbnail">
+                        <h3 class="product-title">Ergonomic Chair</h3>
+                        <strong class="product-price">$43.00</strong>
+            
+                        <span class="icon-cross">
+                            <img src="{% static 'images/cross.svg' %}" class="img-fluid">
+                        </span>
+                    </a>
+                </div>
+                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                    <a class="product-item" href="cart.html">
+                        <img src="/categorie/Drones_et_Accessoires.jpeg" class="img-fluid product-thumbnail">
+                        <h3 class="product-title">Drones_et_Accessoires</h3>
+                        <strong class="product-price">$43.00</strong>
+            
+                        <span class="icon-cross">
+                            <img src="{% static 'images/cross.svg' %}" class="img-fluid">
+                        </span>
+                    </a>
+                </div>
+                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                    <a class="product-item" href="cart.html">
+                        <img src="/categorie/Électronique_Portable.jpeg" class="img-fluid product-thumbnail">
+                        <h3 class="product-title">Electronique_Portable</h3>
+                        <strong class="product-price">$43.00</strong>
+            
+                        <span class="icon-cross">
+                            <img src="{% static 'images/cross.svg' %}" class="img-fluid">
+                        </span>
+                    </a>
+                </div>
+                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                    <a class="product-item" href="cart.html">
+                        <img src="/categorie/Équipement_de_Bureau.jpeg" class="img-fluid product-thumbnail">
+                        <h3 class="product-title">Equipement_de_Bureau</h3>
+                        <strong class="product-price">$43.00</strong>
+            
+                        <span class="icon-cross">
+                            <img src="{% static 'images/cross.svg' %}" class="img-fluid">
+                        </span>
+                    </a>
+                </div>
+                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                    <a class="product-item" href="cart.html">
+                        <img src="/categorie/Jeux_Vidéo.jpeg" class="img-fluid product-thumbnail">
+                        <h3 class="product-title">Jeux_Vidéo</h3>
+                        <strong class="product-price">$43.00</strong>
+            
+                        <span class="icon-cross">
+                            <img src="{% static 'images/cross.svg' %}" class="img-fluid">
+                        </span>
+                    </a>
+                </div>
+                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                    <a class="product-item" href="cart.html">
+                        <img src="/categorie/Maison_Connectée.jpeg" class="img-fluid product-thumbnail">
+                        <h3 class="product-title">Maison_Connectée</h3>
+                        <strong class="product-price">$43.00</strong>
+            
+                        <span class="icon-cross">
+                            <img src="{% static 'images/cross.svg' %}" class="img-fluid">
+                        </span>
+                    </a>
+                </div>
+                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                    <a class="product-item" href="cart.html">
+                        <img src="/categorie/Ordinateurs_et_Périphériques.jpeg" class="img-fluid product-thumbnail">
+                        <h3 class="product-title">Ordinateurs_et_Périphériques</h3>
+                        <strong class="product-price">$43.00</strong>
+            
+                        <span class="icon-cross">
+                            <img src="{% static 'images/cross.svg' %}" class="img-fluid">
+                        </span>
+                    </a>
+                </div>
+                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                    <a class="product-item" href="cart.html">
+                        <img src="/categorie/Réseaux_et_Connectivité.jpeg" class="img-fluid product-thumbnail">
+                        <h3 class="product-title">Réseaux_et_Connectivité</h3>
+                        <strong class="product-price">$43.00</strong>
+            
+                        <span class="icon-cross">
+                            <img src="{% static 'images/cross.svg' %}" class="img-fluid">
+                        </span>
+                    </a>
+                </div>
+                <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                    <a class="product-item" href="cart.html">
+                        <img src="/categorie/Téléphones_et_Accessoires.jpeg" class="img-fluid product-thumbnail">
+                        <h3 class="product-title">Téléphones_et_Accessoires</h3>
+                        <strong class="product-price">$43.00</strong>
+            
+                        <span class="icon-cross">
+                            <img src="{% static 'images/cross.svg' %}" class="img-fluid">
+                        </span>
+                    </a>
+                </div>
+
 
             </div>
         </div>
     </div>
-    <!-- End Product Section -->
-
-    <!-- Start Why Choose Us Section -->
-    <div class="why-choose-section">
-        <div class="container">
-            <div class="row justify-content-between">
-                <div class="col-lg-6">
-                    <h2 class="section-title">Why Choose Us</h2>
-                    <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit
-                        imperdiet dolor tempor tristique.</p>
-
-                    <div class="row my-5">
-                        <div class="col-6 col-md-6">
-                            <div class="feature">
-                                <div class="icon">
-                                    <img src="{% static 'images/truck.svg' %}" alt="Image" class="imf-fluid">
-                                </div>
-                                <h3>Fast &amp; Free Shipping</h3>
-                                <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam
-                                    vulputate.</p>
-                            </div>
-                        </div>
-
-                        <div class="col-6 col-md-6">
-                            <div class="feature">
-                                <div class="icon">
-                                    <img src="{% static 'images/bag.svg' %}" alt="Image" class="imf-fluid">
-                                </div>
-                                <h3>Easy to Shop</h3>
-                                <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam
-                                    vulputate.</p>
-                            </div>
-                        </div>
-
-                        <div class="col-6 col-md-6">
-                            <div class="feature">
-                                <div class="icon">
-                                    <img src="{% static 'images/support.svg' %}" alt="Image" class="imf-fluid">
-                                </div>
-                                <h3>24/7 Support</h3>
-                                <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam
-                                    vulputate.</p>
-                            </div>
-                        </div>
-
-                        <div class="col-6 col-md-6">
-                            <div class="feature">
-                                <div class="icon">
-                                    <img src="{% static 'images/return.svg' %}" alt="Image" class="imf-fluid">
-                                </div>
-                                <h3>Hassle Free Returns</h3>
-                                <p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam
-                                    vulputate.</p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="col-lg-5">
-                    <div class="img-wrap">
-                        <img src="{% static 'images/why-choose-us-img.jpg' %}" alt="Image" class="img-fluid">
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
+    <!-- End Categorie Section -->
+    
+    
     <!-- End Why Choose Us Section -->
 
     <!-- Start We Help Section -->
@@ -220,24 +290,23 @@
             <div class="row justify-content-between">
                 <div class="col-lg-7 mb-5 mb-lg-0">
                     <div class="imgs-grid">
-                        <div class="grid grid-1"><img src="{% static 'images/img-grid-1.jpg' %}" alt="Untree.co"></div>
-                        <div class="grid grid-2"><img src="{% static 'images/img-grid-2.jpg' %}" alt="Untree.co"></div>
-                        <div class="grid grid-3"><img src="{% static 'images/img-grid-3.jpg' %}" alt="Untree.co"></div>
+                        <div class="grid grid-1"><img src="{% static 'images/post1.png' %}" alt="Untree.co"></div>
+                        <div class="grid grid-2"><img src="{% static 'images/post2.png' %}" alt="Untree.co"></div>
+                        <div class="grid grid-3"><img src="{% static 'images/post3.png' %}" alt="Untree.co"></div>
                     </div>
                 </div>
                 <div class="col-lg-5 ps-lg-5">
-                    <h2 class="section-title mb-4">We Help You Make Modern Interior Design</h2>
-                    <p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada.
-                        Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque
-                        habitant morbi tristique senectus et netus et malesuada</p>
+                    <h2 class="section-title mb-4">Avec nous redessinner votre future </h2>
+                    <p>Plongez dans l'univers du gaming avec notre boutique en ligne. Découvrez des accessoires de qualité qui vous feront vivre des aventures inoubliables. Équipez-vous maintenant et devenez le héros de vos jeux préférés. Faites un tour sur notre site et profitez de nos offres exclusives!</p>
 
                     <ul class="list-unstyled custom-list my-4">
-                        <li>Donec vitae odio quis nisl dapibus malesuada</li>
-                        <li>Donec vitae odio quis nisl dapibus malesuada</li>
-                        <li>Donec vitae odio quis nisl dapibus malesuada</li>
-                        <li>Donec vitae odio quis nisl dapibus malesuada</li>
+                        <li>Boostez votre setup avec nos accessoires gaming</li>
+                        <li>Plongez dans des aventures épiques avec notre matériel</li>
+                        <li>Devenez imbattable avec nos produits de qualité</li>
+                        <li>Rejoignez notre boutique et dominez vos jeux</li>
+                        
                     </ul>
-                    <p><a herf="#" class="btn">Explore</a></p>
+                    <p><a herf="#" class="btn">Explorer</a></p>
                 </div>
             </div>
         </div>
@@ -252,12 +321,12 @@
                 <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
                     <div class="product-item-sm d-flex">
                         <div class="thumbnail">
-                            <img src="{% static 'images/product-1.png' %}" alt="Image" class="img-fluid">
+                            <img src="{% static 'images/product1.png' %}" alt="Image" class="img-fluid">
                         </div>
                         <div class="pt-3">
-                            <h3>Nordic Chair</h3>
-                            <p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio </p>
-                            <p><a href="#">Read More</a></p>
+                            <h3>IPHONE 13 pro MAX</h3>
+                            <p>L'un des plus performant de sa generation; un telephone de haut de gamme de chez Apple </p>
+                            <p><a href="#">Découvrir</a></p>
                         </div>
                     </div>
                 </div>
@@ -265,12 +334,12 @@
                 <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
                     <div class="product-item-sm d-flex">
                         <div class="thumbnail">
-                            <img src="{% static 'images/product-2.png' %}" alt="Image" class="img-fluid">
+                            <img src="{% static 'images/product2.png' %}" alt="Image" class="img-fluid">
                         </div>
                         <div class="pt-3">
-                            <h3>Kruzo Aero Chair</h3>
-                            <p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio </p>
-                            <p><a href="#">Read More</a></p>
+                            <h3>X-BOX One Elite2</h3>
+                            <p>Manette de jeux de la marque X-BOX compatible avec Windows, Mac Os, Linux, Android, IOS</p>
+                            <p><a href="#">Decouvrir</a></p>
                         </div>
                     </div>
                 </div>
@@ -278,12 +347,12 @@
                 <div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
                     <div class="product-item-sm d-flex">
                         <div class="thumbnail">
-                            <img src="{% static 'images/product-3.png' %}" alt="Image" class="img-fluid">
+                            <img src="{% static 'images/product3.png' %}" alt="Image" class="img-fluid">
                         </div>
                         <div class="pt-3">
-                            <h3>Ergonomic Chair</h3>
-                            <p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio </p>
-                            <p><a href="#">Read More</a></p>
+                            <h3>DJI Mavic 3</h3>
+                            <p>Surnomme le raptor F2 il fait partie des Appareils de serie de derniere generation de chez Dji</p>
+                            <p><a href="#">Decouvrir</a></p>
                         </div>
                     </div>
                 </div>
@@ -298,7 +367,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-7 mx-auto text-center">
-                    <h2 class="section-title">Testimonials</h2>
+                    <h2 class="section-title">Avis clients</h2>
                 </div>
             </div>
 
@@ -319,21 +388,16 @@
 
                                         <div class="testimonial-block text-center">
                                             <blockquote class="mb-5">
-                                                <p>&ldquo;Donec facilisis quam ut purus rutrum lobortis. Donec vitae
-                                                    odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam
-                                                    vulputate velit imperdiet dolor tempor tristique. Pellentesque
-                                                    habitant morbi tristique senectus et netus et malesuada fames ac
-                                                    turpis egestas. Integer convallis volutpat dui quis
-                                                    scelerisque.&rdquo;</p>
+                                                <p>&ldquo;Le service client est exceptionnel. J'ai reçu mon colis en un temps record et les produits sont parfaits. J'achèterai encore ici sans hésiter. Vraiment satisfait de cette boutique !&rdquo;</p>
                                             </blockquote>
 
                                             <div class="author-info">
                                                 <div class="author-pic">
-                                                    <img src="{% static 'images/person-1.png' %}" alt="Maria Jones"
+                                                    <img src="{% static 'images/person3.png' %}" alt="Maria Jones"
                                                         class="img-fluid">
                                                 </div>
-                                                <h3 class="font-weight-bold">Maria Jones</h3>
-                                                <span class="position d-block mb-3">CEO, Co-Founder, XYZ Inc.</span>
+                                                <h3 class="font-weight-bold">Akossiwa BARRA</h3>
+                                                <span class="position d-block mb-3">Caissiere, Amazon.corp</span>
                                             </div>
                                         </div>
 
@@ -348,12 +412,7 @@
 
                                         <div class="testimonial-block text-center">
                                             <blockquote class="mb-5">
-                                                <p>&ldquo;Donec facilisis quam ut purus rutrum lobortis. Donec vitae
-                                                    odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam
-                                                    vulputate velit imperdiet dolor tempor tristique. Pellentesque
-                                                    habitant morbi tristique senectus et netus et malesuada fames ac
-                                                    turpis egestas. Integer convallis volutpat dui quis
-                                                    scelerisque.&rdquo;</p>
+                                                <p>&ldquo;Une expérience d'achat fluide et agréable. Les articles sont de haute qualité et conformes à la description. Je recommande cette boutique à tous les passionnés de jeux vidéo.&rdquo;</p>
                                             </blockquote>
 
                                             <div class="author-info">
@@ -362,7 +421,7 @@
                                                         class="img-fluid">
                                                 </div>
                                                 <h3 class="font-weight-bold">Maria Jones</h3>
-                                                <span class="position d-block mb-3">CEO, Co-Founder, XYZ Inc.</span>
+                                                <span class="position d-block mb-3">PDG, Analyste, Google_Analytics.</span>
                                             </div>
                                         </div>
 
@@ -377,21 +436,16 @@
 
                                         <div class="testimonial-block text-center">
                                             <blockquote class="mb-5">
-                                                <p>&ldquo;Donec facilisis quam ut purus rutrum lobortis. Donec vitae
-                                                    odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam
-                                                    vulputate velit imperdiet dolor tempor tristique. Pellentesque
-                                                    habitant morbi tristique senectus et netus et malesuada fames ac
-                                                    turpis egestas. Integer convallis volutpat dui quis
-                                                    scelerisque.&rdquo;</p>
+                                                <p>&ldquo;J'ai enfin trouvé les accessoires parfaits pour mon setup. La qualité est au rendez-vous et la livraison a été très rapide. Merci pour ce service impeccable !&rdquo;</p>
                                             </blockquote>
 
                                             <div class="author-info">
                                                 <div class="author-pic">
-                                                    <img src="{% static 'images/person-1.png' %}" alt="Maria Jones"
+                                                    <img src="{% static 'images/person1.png' %}" alt="Maria Jones"
                                                         class="img-fluid">
                                                 </div>
-                                                <h3 class="font-weight-bold">Maria Jones</h3>
-                                                <span class="position d-block mb-3">CEO, Co-Founder, XYZ Inc.</span>
+                                                <h3 class="font-weight-bold">Marck Jones</h3>
+                                                <span class="position d-block mb-3">Analyste, zorbo_corp.inc</span>
                                             </div>
                                         </div>
 
@@ -414,10 +468,10 @@
         <div class="container">
             <div class="row mb-5">
                 <div class="col-md-6">
-                    <h2 class="section-title">Recent Blog</h2>
+                    <h2 class="section-title">Categorie A la une cette semaine</h2>
                 </div>
                 <div class="col-md-6 text-start text-md-end">
-                    <a href="#" class="more">View All Posts</a>
+                    <a href="#" class="more">VOIR TOUS</a>
                 </div>
             </div>
 
@@ -425,7 +479,7 @@
 
                 <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
                     <div class="post-entry">
-                        <a href="#" class="post-thumbnail"><img src="{% static 'images/post-1.jpg' %}" alt="Image"
+                        <a href="#" class="post-thumbnail"><img src="/categorie/Appareils_Photo_et_Caméras.jpeg" alt="Image"
                                 class="img-fluid"></a>
                         <div class="post-content-entry">
                             <h3><a href="#">First Time Home Owner Ideas</a></h3>
@@ -439,7 +493,7 @@
 
                 <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
                     <div class="post-entry">
-                        <a href="#" class="post-thumbnail"><img src="{% static 'images/post-2.jpg' %}" alt="Image"
+                        <a href="#" class="post-thumbnail"><img src="/categorie/Jeux_Vidéo.jpeg" alt="Image"
                                 class="img-fluid"></a>
                         <div class="post-content-entry">
                             <h3><a href="#">How To Keep Your Furniture Clean</a></h3>
@@ -452,7 +506,7 @@
 
                 <div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
                     <div class="post-entry">
-                        <a href="#" class="post-thumbnail"><img src="{% static 'images/post-3.jpg' %}" alt="Image"
+                        <a href="#" class="post-thumbnail"><img src="/categorie/Autres_Accessoires.jpeg" alt="Image"
                                 class="img-fluid"></a>
                         <div class="post-content-entry">
                             <h3><a href="#">Small Space Furniture Apartment Ideas</a></h3>
@@ -474,7 +528,7 @@
         <div class="container relative">
 
             <div class="sofa-img">
-                <img src="{% static 'images/sofa.png' %}" alt="Image" class="img-fluid">
+                <img src="{% static 'images/sourie.png' %}" alt="Image" class="img-fluid">
             </div>
 
             <div class="row">
@@ -504,10 +558,8 @@
 
             <div class="row g-5 mb-5">
                 <div class="col-lg-4">
-                    <div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">Furni<span>.</span></a></div>
-                    <p class="mb-4">Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus
-                        malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.
-                        Pellentesque habitant</p>
+                    <div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo"><E-SHOP>E-SHOP</E-SHOP><span>.</span></a></div>
+                    <p class="mb-4">Chez E-SHOP, Notre engagement est de vous proposer une gamme exceptionnelle de produits électroniques, soigneusement sélectionnés pour répondre à vos besoins modernes. Explorez notre collection pour découvrir des solutions innovantes qui enrichiront votre quotidien technologique.</p>
 
                     <ul class="list-unstyled custom-social">
                         <li><a href="#"><span class="fa fa-brands fa-facebook-f"></span></a></li>
@@ -547,9 +599,9 @@
 
                         <div class="col-6 col-sm-6 col-md-3">
                             <ul class="list-unstyled">
-                                <li><a href="#">Nordic Chair</a></li>
-                                <li><a href="#">Kruzo Aero</a></li>
-                                <li><a href="#">Ergonomic Chair</a></li>
+                                <li><a href="#">Drones_et_Accessoires</a></li>
+                                <li><a href="#">telephone</a></li>
+                                <li><a href="#">Téléphones_et_Accessoires</a></li>
                             </ul>
                         </div>
                     </div>
@@ -562,8 +614,8 @@
                     <div class="col-lg-6">
                         <p class="mb-2 text-center text-lg-start">Copyright &copy;
                             <script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash;
-                            Designed with love by <a href="https://untree.co">Untree.co</a> Distributed By <a
-                                hreff="https://themewagon.com">ThemeWagon</a>
+                            Designed with love by <a href="https://untree.co">zorbo_corp</a> Distributed By <a
+                                hreff="https://themewagon.com">Zorba_corp.inc</a>
                             <!-- License information: https://untree.co/license/ -->
                         </p>
                     </div>

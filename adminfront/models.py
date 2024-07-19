@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
@@ -70,6 +71,63 @@ class Administrateur(AbstractBaseUser, PermissionsMixin):
 #Gestion des fonctionnalites de notre liste deroulante Menus
 
 
+from django.db import models
+from django.utils.text import slugify
+
+class Categorie(models.Model):
+    nom = models.CharField(max_length=100)
+    description = models.TextField()
+    image = models.ImageField(upload_to='categories/', blank=True, null=True)
+    slug = models.SlugField(unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.nom)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.nom
+
+class Produit(models.Model):
+    nom = models.CharField(max_length=100)
+    description = models.TextField()
+    prix = models.DecimalField(max_digits=10, decimal_places=2)
+    image = models.ImageField(upload_to='produits/')
+    quantite = models.IntegerField(default=0)
+    categorie = models.ForeignKey(Categorie, on_delete=models.CASCADE)
+    slug = models.SlugField(unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.nom)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.nom
+
+
+
+class Panier(models.Model):
+    utilisateur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    produit = models.ForeignKey(Produit, on_delete=models.CASCADE)
+    quantite = models.PositiveIntegerField(default=1)
+    date_ajout = models.DateTimeField(auto_now_add=True)
+    commande = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = ('utilisateur', 'produit')
+
+    def __str__(self):
+        return f'{self.produit.nom} ({self.quantite}) dans le panier de {self.utilisateur.nomutilisateur}'
+
+    def get_total_prix(self):
+        return self.produit.prix * self.quantite
+
+    def get_total_prix_panier(utilisateur):
+        panier_items = Panier.objects.filter(utilisateur=utilisateur, commande=False)
+        total = sum([item.get_total_prix() for item in panier_items])
+        return total
+    
 
 
 

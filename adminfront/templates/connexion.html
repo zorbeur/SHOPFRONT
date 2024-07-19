@@ -8,6 +8,47 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css">
     {% load static %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+        .form-outline {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-outline input,
+        .form-outline textarea {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+        }
+
+        .form-outline label {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0 0.25rem;
+            background: #fff;
+            transition: 0.2s;
+            font-size: 1rem;
+            color: #777;
+        }
+
+        .form-outline input:focus + label,
+        .form-outline input:not(:placeholder-shown) + label,
+        .form-outline textarea:focus + label,
+        .form-outline textarea:not(:placeholder-shown) + label {
+            top: -0.75rem;
+            left: 1rem;
+            font-size: 0.75rem;
+            color: #4f6f41;
+        }
+
+        .form-outline .text-danger {
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+    </style>
 </head>
 <body>
 <section class="vh-100" style="background-color: #4f6f41;">

@@ -129,11 +129,22 @@ USE_TZ = True
 
 import os
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Configuration des fichiers statiques
 STATIC_URL = '/static/'
-
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Configuration des fichiers médias
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Chemin pour le dossier 'categorie' à la racine du projet
+CATEGORIE_ROOT = os.path.join(BASE_DIR, 'categories')
 
 
 # Default primary key field type
