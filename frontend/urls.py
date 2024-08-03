@@ -3,23 +3,35 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from . import views
-
+from .views import update_cart_item, delete_cart_item, ajouter_au_panier, cart
+from .views import paiement, process_payment
 
 urlpatterns = [
     path('', views.index, name='home'),
     path('home/', views.index2, name='home2'),
     path('shop/', views.shop, name='shop'),
+    path('commande-status/<int:commande_id>/', views.commande_status, name='commande_status'),
 
-    path('ajouter_au_panier/<int:produit_id>/', views.ajouter_au_panier, name='ajouter_au_panier'),
-    path('panier/', views.afficher_panier, name='panier'),
-    path('supprimer_du_panier/<int:produit_id>/', views.supprimer_du_panier, name='supprimer_du_panier'),
-    path('modifier_quantite/<int:produit_id>/<str:operation>/', views.modifier_quantite, name='modifier_quantite'),
-    
+
+
+
+
+    path('merci/<int:commande_id>/', views.merci, name='merci'),
+    path('paiement/', paiement, name='paiement'),
+    path('process_payment/', process_payment, name='process_payment'),
+
+
+
+
+    path('panier/', cart, name='cart'),
+    path('update-cart-item/<int:item_id>/', update_cart_item, name='update_cart_item'),
+    path('delete-cart-item/<int:item_id>/', delete_cart_item, name='delete_cart_item'),
+    path('ajouter-au-panier/<int:produit_id>/', ajouter_au_panier, name='ajouter_au_panier'),
+
     path('about/', views.about, name='about'),
     path('services/', views.services, name='services'),
     path('blog/', views.blog, name='blog'),
     path('contact/', views.contact, name='contact'),
-    path('cart/', views.cart, name='cart'),
     path('profil/', views.profil, name='profil'),
     path('connexion/', views.connexion, name='connexion'),
     path('enregistrement/', views.enregistrement, name='enregistrement'),

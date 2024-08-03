@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+        .form-outline {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-outline input,
+        .form-outline textarea {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+        }
+
+        .form-outline label {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0 0.25rem;
+            background: #fff;
+            transition: 0.2s;
+            font-size: 1rem;
+            color: #777;
+        }
+
+        .form-outline input:focus + label,
+        .form-outline input:not(:placeholder-shown) + label,
+        .form-outline textarea:focus + label,
+        .form-outline textarea:not(:placeholder-shown) + label {
+            top: -0.75rem;
+            left: 1rem;
+            font-size: 0.75rem;
+            color: #4f6f41;
+        }
+
+        .form-outline .text-danger {
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .card {
+            border-radius: 1rem;
+        }
+
+        .btn-dark {
+            background-color: #4f6f41;
+            border: none;
+        }
+
+        .btn-dark:hover {
+            background-color: #3e5d34;
+        }
+
+        .container {
+            margin-top: 30px;
+        }
+
+        .table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+
+        .table th, .table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .total h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .card-body {
+            background-color: #fff;
+            border-radius: 1rem;
+        }
+    </style>
+</head>
+<body>
+<section class="vh-100" style="background-color: #4f6f41;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col col-xl-10">
+        <div class="card">
+          <div class="row g-0">
+            <div class="col-md-6 col-lg-5 d-none d-md-block">
+              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
+                alt="payment form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+            </div>
+            <div class="col-md-6 col-lg-7 d-flex align-items-center">
+              <div class="card-body p-4 p-lg-5 text-black">
+
+                <form method="POST" action="{% url 'process_payment' %}">
+                  {% csrf_token %}
+
+                  <div class="d-flex align-items-center mb-3 pb-1">
+                    <i class="fas fa-credit-card fa-2x me-3" style="color: #ff6219;"></i>
+                    <span class="h1 fw-bold mb-0">Paiement</span>
+                  </div>
+
+                  <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Veuillez entrer vos informations de paiement</h5>
+
+                  {% if form.errors %}
+                    <div class="alert alert-danger" role="alert">
+                      {% for error in form.non_field_errors %}
+                        <div>{{ error }}</div>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="nom">Nom complet</label>
+                    <input type="text" id="nom" name="nom" class="form-control" value="{{ nom }}" required>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="adresse">Adresse</label>
+                    <input type="text" id="adresse" name="adresse" class="form-control" value="{{ adresse }}" required>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="ville">Ville</label>
+                    <input type="text" id="ville" name="ville" class="form-control" value="{{ ville }}" required>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="code_postal">Code postal</label>
+                    <input type="text" id="code_postal" name="code_postal" class="form-control" value="{{ code_postal }}" required>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="pays">Pays</label>
+                    <input type="text" id="pays" name="pays" class="form-control" value="{{ pays }}" required>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="numero_carte">Numéro de carte</label>
+                    <input type="text" id="numero_carte" name="numero_carte" class="form-control" required>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="date_expiration">Date d'expiration</label>
+                    <input type="text" id="date_expiration" name="date_expiration" class="form-control" placeholder="MM/AA" required>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="cvv">CVV</label>
+                    <input type="text" id="cvv" name="cvv" class="form-control" required>
+                  </div>
+
+                  <button type="submit" class="btn btn-dark btn-lg">Payer </button>
+                </form>
+
+              </div>
+            </div>
+
+            <div class="col-md-12 mt-4">
+              <h2 class="h4 text-black mb-3">Récapitulatif de la commande</h2>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Produit</th>
+                    <th>Quantité</th>
+                    <th>Prix</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in cart_items %}
+                  <tr>
+                    <td>{{ item.nom }}</td>
+                    <td>{{ item.quantite }}</td>
+                    <td>${{ item.total_prix }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <div class="total">
+                <h3>Total: ${{ cart_total }}</h3>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
+</body>
+</html>

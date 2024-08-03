@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmer la suppression de produit</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 2px;
+            border-radius: 0.3rem;
+            text-decoration: none;
+            color: white;
+        }
+        .btn-confirm {
+            background-color: #f44336; /* Red */
+        }
+        .btn-cancel {
+            background-color: #4CAF50; /* Green */
+        }
+        a.btn-cancel {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Confirmer la suppression du produit</h1>
+        <p>Êtes-vous sûr de vouloir supprimer le produit "{{ object.nom }}" ?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-confirm">Oui, supprimer</button>
+        </form>
+        <a href="{% url 'produit_list' %}" class="btn btn-cancel">Non, annuler</a>
+    </div>
+</body>
+</html>

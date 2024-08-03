@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire de catégorie</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        form p {
+            width: 100%;
+            margin: 10px 0;
+        }
+        button {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 2px;
+            border-radius: 0.3rem;
+            background-color: #4CAF50; /* Green */
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        a.btn-cancel {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 2px;
+            border-radius: 0.3rem;
+            background-color: #ffa500; /* Orange */
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{% if object %}Modifier{% else %}Ajouter{% endif %} une catégorie</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Enregistrer</button>
+        </form>
+        <a href="{% url 'categorie_list' %}" class="btn-cancel">Retour à la liste des catégories</a>
+    </div>
+</body>
+</html>

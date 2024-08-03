@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des catégories</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        li:hover {
+            background-color: #f1f1f1;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 2px;
+            border-radius: 0.3rem;
+            text-decoration: none;
+            color: white;
+        }
+        .btn-add {
+            background-color: #4CAF50; /* Green */
+        }
+        .btn-edit {
+            background-color: #ffa500; /* Orange */
+        }
+        .btn-delete {
+            background-color: #f44336; /* Red */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Liste des catégories</h1>
+        <a href="{% url 'categorie_create' %}" class="btn btn-add">Ajouter une nouvelle catégorie</a>
+        <a href="{% url 'admin_index' %}" class="btn btn-add">Retour a l'accueil</a>
+        <ul>
+            {% for categorie in categories %}
+                <li>
+                    {{ categorie.nom }}
+                    <span>
+                        <a href="{% url 'categorie_update' categorie.id %}" class="btn btn-edit">Modifier</a>
+                        <a href="{% url 'categorie_delete' categorie.id %}" class="btn btn-delete">Supprimer</a>
+                    </span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

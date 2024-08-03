@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des commandes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4f6f41;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 2px;
+            border-radius: 0.3rem;
+            text-decoration: none;
+            color: white;
+        }
+        .btn-edit {
+            background-color: #ffa500; /* Orange */
+        }
+        .btn-delete {
+            background-color: #f44336; /* Red */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Liste des commandes</h1>
+        
+        <a href="{% url 'admin_index' %}" >Retour a l'accueil</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>Utilisateur</th>
+                    <th>Date</th>
+                    <th>Statut</th>
+                    <th>Montant</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for commande in commandes %}
+                    <tr>
+                        <td>{{ commande.utilisateur.nomutilisateur }}</td>
+                        <td>{{ commande.date_commande }}</td>
+                        <td>{{ commande.etat_commande }}</td>
+                        <td>{{ commande.total }}</td>
+                        <td>
+                            <a href="{% url 'mettre_a_jour_commande' commande.id %}" class="btn btn-edit">Modifier</a>
+                            <a href="{% url 'supprimer_commande' commande.id %}" class="btn btn-delete">Supprimer</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

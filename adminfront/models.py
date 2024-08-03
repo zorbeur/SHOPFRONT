@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.utils.text import slugify
+from django.utils import timezone
 
 class AdministrateurManager(BaseUserManager):
     def create_user(self, nom, prenom, nomutilisateur, email, password=None, **extra_fields):
@@ -19,6 +21,7 @@ class AdministrateurManager(BaseUserManager):
         )
         user.set_password(password)
         user.save(using=self._db)
+        Cart.objects.create(utilisateur=user)  # Création du panier
         return user
 
     def create_superuser(self, nom, prenom, nomutilisateur, email, password=None, **extra_fields):
@@ -66,14 +69,6 @@ class Administrateur(AbstractBaseUser, PermissionsMixin):
     def get_short_name(self):
         return self.prenom
 
-
-
-#Gestion des fonctionnalites de notre liste deroulante Menus
-
-
-from django.db import models
-from django.utils.text import slugify
-
 class Categorie(models.Model):
     nom = models.CharField(max_length=100)
     description = models.TextField()
@@ -105,36 +100,56 @@ class Produit(models.Model):
     def __str__(self):
         return self.nom
 
-
-
-class Panier(models.Model):
-    utilisateur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    produit = models.ForeignKey(Produit, on_delete=models.CASCADE)
-    quantite = models.PositiveIntegerField(default=1)
-    date_ajout = models.DateTimeField(auto_now_add=True)
-    commande = models.BooleanField(default=False)
-
-    class Meta:
-        unique_together = ('utilisateur', 'produit')
+class Cart(models.Model):
+    utilisateur = models.OneToOneField(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE, 
+        related_name='cart',
+        null=True,  # Rendre le champ nullable
+        blank=True  # Permettre les valeurs vides dans les formulaires
+    )
+    created_at = models.DateTimeField(default=timezone.now)  # Ajout de la valeur par défaut
 
     def __str__(self):
-        return f'{self.produit.nom} ({self.quantite}) dans le panier de {self.utilisateur.nomutilisateur}'
+        return f'Cart for {self.utilisateur.nomutilisateur}'
 
-    def get_total_prix(self):
-        return self.produit.prix * self.quantite
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
+    produit = models.ForeignKey(Produit, on_delete=models.CASCADE)
+    quantite = models.PositiveIntegerField(default=1)
 
-    def get_total_prix_panier(utilisateur):
-        panier_items = Panier.objects.filter(utilisateur=utilisateur, commande=False)
-        total = sum([item.get_total_prix() for item in panier_items])
-        return total
-    
+    def __str__(self):
+        return f'{self.quantite} of {self.produit.nom}'
+
+class Commande(models.Model):
+    utilisateur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='commandes')
+    date_commande = models.DateTimeField(default=timezone.now)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    adresse_livraison = models.CharField(max_length=255)
+    code_postal = models.CharField(max_length=20)
+    ville = models.CharField(max_length=100)
+    pays = models.CharField(max_length=100)
+    etat_commande = models.CharField(max_length=50, choices=[
+        ('EN_ATTENTE', 'En attente'),
+        ('EN_TRAITEMENT', 'En traitement'),
+        ('EXPEDIE', 'Expédié'),
+        ('LIVRE', 'Livré'),
+    ], default='EN_ATTENTE')
+
+    def __str__(self):
+        return f"Commande {self.id} - {self.utilisateur.nomutilisateur}"
 
 
 
+class ElementCommande(models.Model):
+    commande = models.ForeignKey(Commande, on_delete=models.CASCADE, related_name='elements')
+    produit = models.ForeignKey(Produit, on_delete=models.CASCADE)
+    quantite = models.PositiveIntegerField()
+    prix_unitaire = models.DecimalField(max_digits=10, decimal_places=2)
 
+    def __str__(self):
+        return f"Produit {self.produit.nom} - Quantité {self.quantite}"
 
-
-
-
-
-
+    @property
+    def prix_total(self):
+        return self.quantite * self.prix_unitaire

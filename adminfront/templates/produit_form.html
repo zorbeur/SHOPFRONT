@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer un produit</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .form-outline {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        .form-outline input,
+        .form-outline textarea {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+        }
+        .form-outline label {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0 0.25rem;
+            background: #fff;
+            transition: 0.2s;
+            font-size: 1rem;
+            color: #777;
+        }
+        .form-outline input:focus + label,
+        .form-outline input:not(:placeholder-shown) + label,
+        .form-outline textarea:focus + label,
+        .form-outline textarea:not(:placeholder-shown) + label {
+            top: -0.75rem;
+            left: 1rem;
+            font-size: 0.75rem;
+            color: #4f6f41;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            margin-top: 10px;
+            border-radius: 0.3rem;
+            text-decoration: none;
+            color: white;
+            background-color: #4CAF50; /* Green */
+            text-align: center;
+        }
+        .btn-back {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Créer un produit</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-outline">
+                {{ form.nom }}
+                <label for="{{ form.nom.id_for_label }}">{{ form.nom.label }}</label>
+                {% if form.nom.errors %}
+                    <div class="text-danger">{{ form.nom.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-outline">
+                {{ form.description }}
+                <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                {% if form.description.errors %}
+                    <div class="text-danger">{{ form.description.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-outline">
+                {{ form.prix }}
+                <label for="{{ form.prix.id_for_label }}">{{ form.prix.label }}</label>
+                {% if form.prix.errors %}
+                    <div class="text-danger">{{ form.prix.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-outline">
+                {{ form.image }}
+                <label for="{{ form.image.id_for_label }}">{{ form.image.label }}</label>
+                {% if form.image.errors %}
+                    <div class="text-danger">{{ form.image.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-outline">
+                {{ form.quantite }}
+                <label for="{{ form.quantite.id_for_label }}">{{ form.quantite.label }}</label>
+                {% if form.quantite.errors %}
+                    <div class="text-danger">{{ form.quantite.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-outline">
+                {{ form.categorie }}
+                <label for="{{ form.categorie.id_for_label }}">{{ form.categorie.label }}</label>
+                {% if form.categorie.errors %}
+                    <div class="text-danger">{{ form.categorie.errors }}</div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn">Créer</button>
+            <a href="{% url 'produit_list' %}" class="btn btn-back">Retour</a>
+        </form>
+    </div>
+</body>
+</html>

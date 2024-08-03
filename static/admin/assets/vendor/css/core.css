@@ -46,7 +46,7 @@
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.53;
   --bs-body-color: #697a8d;
-  --bs-body-bg: #f5f5f9;
+  --bs-body-bg: #285133;
 }
 
 *,
@@ -74,12 +74,12 @@ body {
   text-align: var(--bs-body-text-align);
   background-color: var(--bs-body-bg);
   -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: rgba(67, 89, 113, 0);
+  -webkit-tap-highlight-color: rgba(69, 113, 67, 0);
 }
 
 hr {
   margin: 1rem 0;
-  color: #d9dee3;
+  color: #325b84;
   background-color: currentColor;
   border: 0;
   opacity: 1;
@@ -204,7 +204,7 @@ small, .small {
 
 mark, .mark {
   padding: 0.2em;
-  background-color: #fcf8e3;
+  background-color: #386949;
 }
 
 sub,
@@ -15216,6 +15216,7 @@ html:not(.layout-menu-fixed) .menu-inner-shadow {
   display: flex;
   flex: 1 1 auto;
   align-items: stretch;
+  background-color: #285133;
 }
 
 .layout-page,

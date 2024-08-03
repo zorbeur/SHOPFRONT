@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmer la suppression de la commande</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+        .confirmation-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            border-radius: 0.3rem;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #e53935;
+        }
+        .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ffa500;
+            color: white;
+            border-radius: 0.3rem;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="confirmation-box">
+            <h1>Confirmer la suppression de la commande</h1>
+            <p>Êtes-vous sûr de vouloir supprimer la commande {{ commande.id }} de {{ commande.utilisateur.nomutilisateur }} ?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit">Oui, supprimer</button>
+            </form>
+            <a href="{% url 'commandes_admin' %}" class="btn-back">Non, annuler</a>
+        </div>
+    </div>
+</body>
+</html>

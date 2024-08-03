@@ -51,7 +51,7 @@
 					{% if user.is_authenticated %}
 					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
 						<li><a class="nav-link" href="{% url 'profil' %}"><img src="{% static 'images/user.svg' %}"></a></li>
-						<li><a class="nav-link" href="cart.html"><img src="{% static 'images/cart.svg' %}"></a></li>
+						<li><a class="nav-link" href="{% url 'cart' %}"><img src="{% static 'images/cart.svg' %}"></a></li>
 					</ul>
                         
                     {% else %}
@@ -138,36 +138,84 @@ $(document).ready(function(){
 </script>
 				
 
-		<div class="untree_co-section product-section before-footer-section">
-			<div class="container">
-				<div class="row">
-					{% for categorie in categories %}
-						<!-- Start Category Column -->
-						<div class="col-12 mb-5">
-							<h2>{{ categorie.nom }}</h2>
-							<div class="row">
-								{% for produit in categorie.produit_set.all %}
-									<div class="col-12 col-md-4 col-lg-3 mb-5">
-										<div class="product-item position-relative">
-											<img src="{{ produit.image.url }}" class="img-fluid product-thumbnail">
-											<h3 class="product-title">{{ produit.nom }}</h3>
-											<strong class="product-price">${{ produit.prix }}</strong>
-											{% if user.is_authenticated %}
-											<a href="{% url 'ajouter_au_panier' %}" class="btn btn-primary add-to-cart-btn position-absolute top-50 start-50 translate-middle" style="display: none;">Ajouter au panier</a>
-										{% else %}
-										<a href="{% url 'connexion' %}" class="btn btn-primary add-to-cart-btn position-absolute top-50 start-50 translate-middle" style="display: none;">Se connecter pour acheter</a>
-										{% endif %}
-											
-										</div>
-									</div>
-								{% endfor %}
-							</div>
-						</div>
-						<!-- End Category Column -->
-					{% endfor %}
-				</div>
-			</div>
-		</div>
+<!-- Product template debut affichage de produits -->
+<!-- Product template -->
+<div class="untree_co-section product-section before-footer-section">
+    <div class="container">
+        <div class="row">
+            {% for categorie in categories %}
+            <!-- Start Category Column -->
+            <div class="col-12 mb-5">
+                <h2>{{ categorie.nom }}</h2>
+                <div class="row">
+                    {% for produit in categorie.produit_set.all %}
+                    <div class="col-12 col-md-4 col-lg-3 mb-5">
+                        <div class="product-item position-relative">
+                            <img src="{{ produit.image.url }}" alt="Image" class="img-fluid">
+                            <div class="product-item-body text-center">
+                                <h3>{{ produit.nom }}</h3>
+                                <p>${{ produit.prix }}</p>
+                                {% if user.is_authenticated %}
+								<button onclick="showPopup('{{ produit.id }}')" class="btn btn-black btn-sm">Ajouter au panier</button>
+                       
+                    			{% else %}
+								<a href="{% url 'login' %}" class="btn btn-black btn-sm">Se connecter</a>
+
+                        
+                   				 {% endif %}
+								
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- End Category Column -->
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Pop-up HTML -->
+<div id="popup" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid black;">
+    <h3>Confirm Quantity</h3>
+    <input type="number" id="quantite" min="1" value="1">
+    <button onclick="addToCart()" class="btn btn-primary btn-sm">Confirm</button>
+    <button onclick="hidePopup()" class="btn btn-secondary btn-sm">Cancel</button>
+</div>
+
+<script>
+function showPopup(produitId) {
+    document.getElementById('popup').style.display = 'block';
+    document.getElementById('popup').dataset.produitId = produitId;
+}
+
+function hidePopup() {
+    document.getElementById('popup').style.display = 'none';
+}
+
+function addToCart() {
+    const produitId = document.getElementById('popup').dataset.produitId;
+    const quantite = document.getElementById('quantite').value;
+    
+    fetch(`/ajouter-au-panier/${produitId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({ quantite: quantite })
+    })
+    .then(response => response.json())
+    .then(data => {
+        hidePopup();
+        alert('Product added to cart!');
+    });
+}
+</script>
+
+
+
 		
 
 

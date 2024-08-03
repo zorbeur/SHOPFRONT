@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merci pour votre commande</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #343a40;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+            text-align: center;
+        }
+        .card {
+            border-radius: 1rem;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #4f6f41;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #3e5d34;
+        }
+        .thanks-message {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="thanks-message">
+                Merci pour votre commande !
+            </div>
+            <p>Nous avons bien reçu votre commande et nous nous occupons de la préparer. Vous recevrez une confirmation par e-mail lorsque votre commande sera expédiée.</p>
+            <a href="{% url 'commande_status' commande_id %}" class="btn btn-primary btn-lg">
+                Voir l'état de ma commande
+            </a>
+            <a href="{% url 'shop' %}" class="btn btn-black btn-sm">Retour à la boutique      
+            </a>
+
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
+</body>
+</html>

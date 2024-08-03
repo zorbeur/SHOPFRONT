@@ -9,6 +9,9 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 
 
+def test(request):
+    return render(request, 'test.html')
+
 def Admin_home(request):
     return render(request, 'admin_acceuil.html')
 
@@ -24,7 +27,7 @@ def inscription_admin(request):
         if form.is_valid():
             administrateur = form.save()
             login(request, administrateur)
-            return redirect(reverse('admin_acceuil'))
+            return redirect(reverse('home_admin'))
     else:
         form = AdministrateurCreationForm()
     
@@ -50,7 +53,7 @@ def connexion_admin(request):
 @login_required
 def deconnexion_admin(request):
     logout(request)
-    return redirect(reverse('Admin_home'))
+    return redirect(reverse('home_admin'))
 
 
 
@@ -59,86 +62,108 @@ def deconnexion_admin(request):
 
 # GESTION DES PRODUITS ET DES CATEGORIES
 
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
-
-from .forms import CategorieForm, ProduitForm
+# views.py
+from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import Categorie, Produit
+from .forms import CategorieForm, ProduitForm
 
-def liste_categories(request):
-    categories = Categorie.objects.all()
-    return render(request, 'categorie/liste_categorie.html', {'categories': categories})
+# Vues pour les catégories
 
+class CategorieListView(ListView):
+    model = Categorie
+    template_name = 'categorie_list.html'
+    context_object_name = 'categories'
 
+class CategorieCreateView(CreateView):
+    model = Categorie
+    form_class = CategorieForm
+    template_name = 'categorie_form.html'
+    success_url = reverse_lazy('categorie_list')
 
-def detail_categorie(request, slug):
-    categorie = get_object_or_404(Categorie, slug=slug)
-    return render(request, 'categorie/detail_categorie.html', {'categorie': categorie})
+class CategorieUpdateView(UpdateView):
+    model = Categorie
+    form_class = CategorieForm
+    template_name = 'categorie_form.html'
+    success_url = reverse_lazy('categorie_list')
 
-def creer_categorie(request):
-    if request.method == 'POST':
-        form = CategorieForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('liste_categories')
-    else:
-        form = CategorieForm()
-    return render(request, 'categorie/formulaire_categorie.html', {'form': form})
-
-def modifier_categorie(request, slug):
-    categorie = get_object_or_404(Categorie, slug=slug)
-    if request.method == 'POST':
-        form = CategorieForm(request.POST, instance=categorie)
-        if form.is_valid():
-            form.save()
-            return redirect('detail_categorie', slug=categorie.slug)
-    else:
-        form = CategorieForm(instance=categorie)
-    return render(request, 'categorie/formulaire_categorie.html', {'form': form})
-
-def supprimer_categorie(request, slug):
-    categorie = get_object_or_404(Categorie, slug=slug)
-    if request.method == 'POST':
-        categorie.delete()
-        return redirect('liste_categories')
-    return render(request, 'categorie/confirmation_suppression_categorie.html', {'categorie': categorie})
+class CategorieDeleteView(DeleteView):
+    model = Categorie
+    template_name = 'categorie_confirm_delete.html'
+    success_url = reverse_lazy('categorie_list')
 
 # Vues pour les produits
-def liste_produits(request):
-    produits = Produit.objects.all()
-    return render(request, 'produit/liste_produits.html', {'produits': produits})
 
-def detail_produit(request, slug):
-    produit = get_object_or_404(Produit, slug=slug)
-    return render(request, 'produit/detail_produit.html', {'produit': produit})
+class ProduitListView(ListView):
+    model = Produit
+    template_name = 'produit_list.html'
+    context_object_name = 'produits'
 
-def creer_produit(request):
-    if request.method == 'POST':
-        form = ProduitForm(request.POST, request.FILES)
+class ProduitCreateView(CreateView):
+    model = Produit
+    form_class = ProduitForm
+    template_name = 'produit_form.html'
+    success_url = reverse_lazy('produit_list')
+
+class ProduitUpdateView(UpdateView):
+    model = Produit
+    form_class = ProduitForm
+    template_name = 'produit_form.html'
+    success_url = reverse_lazy('produit_list')
+
+class ProduitDeleteView(DeleteView):
+    model = Produit
+    template_name = 'produit_confirm_delete.html'
+    success_url = reverse_lazy('produit_list')
+
+from django.shortcuts import render
+from .models import Commande
+
+def commandes_admin(request):
+    commandes = Commande.objects.all()
+    return render(request, 'commande_liste.html', {'commandes': commandes})
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Commande
+from .forms import CommandeForm
+
+def mettre_a_jour_commande(request, commande_id):
+    commande = get_object_or_404(Commande, id=commande_id)
+    if request.method == "POST":
+        form = CommandeForm(request.POST, instance=commande)
         if form.is_valid():
             form.save()
-            return redirect('liste_produits')
+            return redirect('commandes_admin')
     else:
-        form = ProduitForm()
-    return render(request, 'produit/formulaire_produit.html', {'form': form})
+        form = CommandeForm(instance=commande)
+    return render(request, 'commande_update.html', {'form': form, 'commande': commande})
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Commande
 
-def modifier_produit(request, slug):
-    produit = get_object_or_404(Produit, slug=slug)
-    if request.method == 'POST':
-        form = ProduitForm(request.POST, request.FILES, instance=produit)
-        if form.is_valid():
-            form.save()
-            return redirect('detail_produit', slug=produit.slug)
-    else:
-        form = ProduitForm(instance=produit)
-    return render(request, 'produit/formulaire_produit.html', {'form': form})
-
-def supprimer_produit(request, slug):
-    produit = get_object_or_404(Produit, slug=slug)
-    if request.method == 'POST':
-        produit.delete()
-        return redirect('liste_produits')
-    return render(request, 'produit/confirmation_suppression_produit.html', {'produit': produit})
+def supprimer_commande(request, commande_id):
+    commande = get_object_or_404(Commande, id=commande_id)
+    if request.method == "POST":
+        commande.delete()
+        return redirect('commandes_admin')
+    return render(request, 'supprimer_commande.html', {'commande': commande})
 
 
+from django.core.mail import send_mail
+from django.conf import settings
 
+def notify_admin_of_new_order(order):
+    subject = f'Nouvelle commande #{order.id}'
+    message = (
+        f'Une nouvelle commande a été créée.\n\n'
+        f'Détails de la commande:\n'
+        f'ID: {order.id}\n'
+        f'Utilisateur: {order.utilisateur.nomutilisateur}\n'
+        f'Total: {order.total}\n'
+        f'Adresse de livraison: {order.adresse_livraison}, {order.ville}, {order.pays}\n'
+        f'Statut: {order.get_etat_commande_display()}'
+    )
+    from_email = settings.EMAIL_HOST_USER
+    recipient_list = ['amostona82@gmail.com']
+
+    send_mail(subject, message, from_email, recipient_list)

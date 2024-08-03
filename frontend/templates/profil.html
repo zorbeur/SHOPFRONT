@@ -1,5 +1,3 @@
-<!-- profile.html -->
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -49,6 +47,21 @@
         .profile-stats .stat p {
             color: #6c757d;
         }
+        .orders {
+            margin-top: 30px;
+        }
+        .orders table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+        .orders th, .orders td {
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        .text-center a {
+            margin: 5px;
+        }
     </style>
 </head>
 <body>
@@ -68,15 +81,15 @@
                 <div class="profile-stats">
                     <div class="stat">
                         <h6>Balance</h6>
-                        <p>$00.00</p>
+                        <p>$3800.24</p>
                     </div>
                     <div class="stat">
                         <h6>Orders</h6>
-                        <p>00</p>
+                        <p>{{ commandes.count }}</p>
                     </div>
                     <div class="stat">
                         <h6>Points</h6>
-                        <p>00</p>
+                        <p>13600</p>
                     </div>
                 </div>
                 <div class="text-center mt-4">
@@ -93,6 +106,36 @@
                     <a href="{% url 'home' %}" class="btn btn-primary">Retour à l'accueil</a>
                     {% endif %}
                 </div>
+
+                <div class="orders">
+                    <h3 class="text-center">Historique des commandes</h3>
+                    {% if commandes %}
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Numéro de commande</th>
+                                    <th>Date</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for commande in commandes %}
+                                    <tr>
+                                        <td>{{ commande.id }}</td>
+                                        <td>{{ commande.date_commande|date:"d/m/Y" }}</td>
+                                        <td>${{ commande.total }}</td>
+                                        <td>{{ commande.etat_commande }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        <p class="text-center">Vous n'avez passé aucune commande pour le moment.</p>
+                    {% endif %}
+                </div>
+                
+
             </div>
         </div>
     </div>
