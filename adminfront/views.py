@@ -8,6 +8,38 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 
+from django.shortcuts import render
+from django.db.models import Count
+from .models import Produit, Categorie, Commande, Administrateur, Notification
+from .graphs import generate_pie_chart, generate_bar_chart
+
+def admin_index(request):
+    total_produits = Produit.objects.count()
+    total_categories = Categorie.objects.count()
+    total_commandes = Commande.objects.count()
+    total_utilisateurs = Administrateur.objects.count()
+    
+    produits_par_categorie = Produit.objects.values('categorie__nom').annotate(count=Count('id'))
+    
+    pie_chart = generate_pie_chart()
+    bar_chart = generate_bar_chart()
+    
+    commandes_recents = Commande.objects.all().order_by('-date_commande')[:5]
+    
+    notifications_non_lues = Notification.objects.filter(utilisateur=request.user, lu=False).count()
+    
+    return render(request, 'admin_index.html', {
+        'total_produits': total_produits,
+        'total_categories': total_categories,
+        'total_commandes': total_commandes,
+        'total_utilisateurs': total_utilisateurs,
+        'produits_par_categorie': produits_par_categorie,
+        'pie_chart': pie_chart,
+        'bar_chart': bar_chart,
+        'commandes_recents': commandes_recents,
+        'notifications_non_lues': notifications_non_lues
+    })
+
 
 def test(request):
     return render(request, 'test.html')
@@ -15,9 +47,6 @@ def test(request):
 def Admin_home(request):
     return render(request, 'admin_acceuil.html')
 
-@login_required
-def admin_index(request):
-    return render(request, 'admin_index.html')
 
 #inscription des admins:
 @login_required
@@ -100,6 +129,9 @@ class ProduitListView(ListView):
     template_name = 'produit_list.html'
     context_object_name = 'produits'
 
+    def get_queryset(self):
+        return Produit.objects.all().order_by('-id')
+
 class ProduitCreateView(CreateView):
     model = Produit
     form_class = ProduitForm
@@ -121,7 +153,7 @@ from django.shortcuts import render
 from .models import Commande
 
 def commandes_admin(request):
-    commandes = Commande.objects.all()
+    commandes = Commande.objects.all().order_by('-date_commande')
     return render(request, 'commande_liste.html', {'commandes': commandes})
 
 from django.shortcuts import render, redirect, get_object_or_404
@@ -167,3 +199,86 @@ def notify_admin_of_new_order(order):
     recipient_list = ['amostona82@gmail.com']
 
     send_mail(subject, message, from_email, recipient_list)
+
+
+from django.shortcuts import render
+from .models import Administrateur  # Importer le modèle approprié pour les utilisateurs
+
+def liste_clients(request):
+    clients = Administrateur.objects.all()  # Modifier en fonction du modèle approprié pour les clients
+    return render(request, 'client_list.html', {'clients': clients})
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Livraison, Commande
+from .forms import LivraisonForm  # Assurez-vous de créer un formulaire pour la livraison
+
+def afficher_livraison(request, commande_id):
+    livraison = get_object_or_404(Livraison, commande_id=commande_id)
+    return render(request, 'afficher_livraison.html', {'livraison': livraison})
+
+def ajouter_modifier_livraison(request, commande_id=None):
+    if commande_id:
+        livraison = get_object_or_404(Livraison, commande_id=commande_id)
+    else:
+        commande = get_object_or_404(Commande, id=commande_id)
+        livraison = Livraison(commande=commande)
+
+    if request.method == 'POST':
+        form = LivraisonForm(request.POST, instance=livraison)
+        if form.is_valid():
+            form.save()
+            return redirect('afficher_livraison', commande_id=livraison.commande.id)
+    else:
+        form = LivraisonForm(instance=livraison)
+
+    return render(request, 'ajouter_modifier_livraison.html', {'form': form})
+
+
+
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Notification
+from .forms import NotificationForm
+
+@login_required
+def afficher_notifications(request):
+    notifications = request.user.notifications.all()
+    return render(request, 'afficher_notifications.html', {'notifications': notifications})
+
+@login_required
+def creer_notification(request):
+    if request.method == 'POST':
+        form = NotificationForm(request.POST)
+        if form.is_valid():
+            notification = form.save(commit=False)
+            notification.utilisateur = request.user
+            notification.save()
+            return redirect('afficher_notifications')
+    else:
+        form = NotificationForm()
+    return render(request, 'creer_notification.html', {'form': form})
+
+@login_required
+def marquer_comme_lu(request, notification_id):
+    notification = get_object_or_404(Notification, id=notification_id, utilisateur=request.user)
+    notification.lu = True
+    notification.save()
+    return redirect('afficher_notifications')
+
+@login_required
+def supprimer_notification(request, notification_id):
+    notification = get_object_or_404(Notification, id=notification_id, utilisateur=request.user)
+    if request.method == 'POST':
+        notification.delete()
+        return redirect('afficher_notifications')
+    return render(request, 'supprimer_notification.html', {'notification': notification})
+
+
+from django.shortcuts import render
+
+def custom_error_view(request, exception=None):
+    return render(request, '400.html', status=exception.status_code if exception else 400)

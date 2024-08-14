@@ -32,6 +32,7 @@
             transition: 0.2s;
             font-size: 1rem;
             color: #777;
+            pointer-events: none;
         }
 
         .form-outline input:focus + label,
@@ -121,46 +122,46 @@
                   {% endif %}
 
                   <div class="form-outline mb-4">
-                    <label class="form-label" for="nom">Nom complet</label>
                     <input type="text" id="nom" name="nom" class="form-control" value="{{ nom }}" required>
+                    <label class="form-label" for="nom">Nom complet</label>
                   </div>
 
                   <div class="form-outline mb-4">
-                    <label class="form-label" for="adresse">Adresse</label>
                     <input type="text" id="adresse" name="adresse" class="form-control" value="{{ adresse }}" required>
+                    <label class="form-label" for="adresse">Adresse</label>
                   </div>
 
                   <div class="form-outline mb-4">
-                    <label class="form-label" for="ville">Ville</label>
                     <input type="text" id="ville" name="ville" class="form-control" value="{{ ville }}" required>
+                    <label class="form-label" for="ville">Ville</label>
                   </div>
 
                   <div class="form-outline mb-4">
-                    <label class="form-label" for="code_postal">Code postal</label>
                     <input type="text" id="code_postal" name="code_postal" class="form-control" value="{{ code_postal }}" required>
+                    <label class="form-label" for="code_postal">Code postal</label>
                   </div>
 
                   <div class="form-outline mb-4">
-                    <label class="form-label" for="pays">Pays</label>
                     <input type="text" id="pays" name="pays" class="form-control" value="{{ pays }}" required>
+                    <label class="form-label" for="pays">Pays</label>
                   </div>
 
                   <div class="form-outline mb-4">
-                    <label class="form-label" for="numero_carte">Numéro de carte</label>
                     <input type="text" id="numero_carte" name="numero_carte" class="form-control" required>
+                    <label class="form-label" for="numero_carte">Numéro de carte</label>
                   </div>
 
                   <div class="form-outline mb-4">
+                    <input type="month" id="date_expiration" name="date_expiration" class="form-control" required>
                     <label class="form-label" for="date_expiration">Date d'expiration</label>
-                    <input type="text" id="date_expiration" name="date_expiration" class="form-control" placeholder="MM/AA" required>
                   </div>
 
                   <div class="form-outline mb-4">
+                    <input type="text" id="cvv" name="cvv" class="form-control" pattern="\d{3,4}" title="Le CVV doit contenir 3 ou 4 chiffres" minlength="3" maxlength="4" required>
                     <label class="form-label" for="cvv">CVV</label>
-                    <input type="text" id="cvv" name="cvv" class="form-control" required>
                   </div>
 
-                  <button type="submit" class="btn btn-dark btn-lg">Payer </button>
+                  <button type="submit" class="btn btn-dark btn-lg">Payer</button>
                 </form>
 
               </div>
@@ -181,13 +182,13 @@
                   <tr>
                     <td>{{ item.nom }}</td>
                     <td>{{ item.quantite }}</td>
-                    <td>${{ item.total_prix }}</td>
+                    <td>{{ item.total_prix }} FCFA</td>
                   </tr>
                   {% endfor %}
                 </tbody>
               </table>
               <div class="total">
-                <h3>Total: ${{ cart_total }}</h3>
+                <h3>Total: {{ cart_total }} FCFA</h3>
               </div>
             </div>
 

@@ -1,333 +1,265 @@
-<!-- /*
-* Bootstrap 5
-* Template Name: Furni
-* Template Author: Untree.co
-* Template URI: https://untree.co/
-* License: https://creativecommons.org/licenses/by/3.0/
-*/ -->
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="author" content="Untree.co">
-  <link rel="shortcut icon" href="favicon.png">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="Untree.co">
+    <link rel="shortcut icon" href="favicon.png">
 
-  <meta name="description" content="" />
-  <meta name="keywords" content="bootstrap, bootstrap4" />
-  {% load static %}
-		<!-- Bootstrap CSS -->
-		<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-		<link href="{% static 'css/tiny-slider.css' %}" rel="stylesheet">
-		<link href="{% static 'css/style.css' %}" rel="stylesheet">
-		<title> E-SHOP </title>
-	</head>
+    <meta name="description" content="" />
+    <meta name="keywords" content="bootstrap, bootstrap4" />
+    {% load static %}
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="{% static 'css/tiny-slider.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <title>E-SHOP</title>
+</head>
 
-	<body>
+<body>
 
-		<!-- Start Header/Navigation -->
-		<nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+    <!-- Start Header/Navigation -->
+    <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
 
-			<div class="container">
-				
-				<a class="navbar-brand" href="index.html">E-SHOP<span>.</span></a>
+        <div class="container">
 
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
+            <a class="navbar-brand" href="index.html">E-SHOP<span>.</span></a>
 
-				<div class="collapse navbar-collapse" id="navbarsFurni">
-					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-						<li class="nav-item ">
-							<a class="nav-link" href="{% url 'home' %}">Home</a>
-						</li>
-						<li class="active"><a class="nav-link" href="shop.html">Shop</a></li>
-						<li><a class="nav-link" href="about.html">About us</a></li>
-						<li><a class="nav-link" href="services.html">Services</a></li>
-						<li><a class="nav-link" href="blog.html">Blog</a></li>
-						<li><a class="nav-link" href="contact.html">Contact us</a></li>
-					</ul>
-					{% if user.is_authenticated %}
-					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-						<li><a class="nav-link" href="{% url 'profil' %}"><img src="{% static 'images/user.svg' %}"></a></li>
-						<li><a class="nav-link" href="{% url 'cart' %}"><img src="{% static 'images/cart.svg' %}"></a></li>
-					</ul>
-                        
-                    {% else %}
-					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-						<li><a class="nav-link" href="{% url 'profil' %}"><img src="{% static 'images/user.svg' %}"></a></li>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni"
+                aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-					</ul>
-                        
-                    {% endif %}
+            <div class="collapse navbar-collapse" id="navbarsFurni">
+                <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+                    <li class="nav-item ">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="active"><a class="nav-link" href="shop.html">Shop</a></li>
+                    <li><a class="nav-link" href="about.html">About us</a></li>
+                    <li><a class="nav-link" href="services.html">Services</a></li>
+                    <li><a class="nav-link" href="blog.html">Blog</a></li>
+                    <li><a class="nav-link" href="contact.html">Contact us</a></li>
+                </ul>
+                {% if user.is_authenticated %}
+                <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+                    <li><a class="nav-link" href="{% url 'profil' %}"><img src="{% static 'images/user.svg' %}"></a></li>
+                    <li><a class="nav-link" href="{% url 'cart' %}"><img src="{% static 'images/cart.svg' %}"></a></li>
+                </ul>
 
-					
-				</div>
-			</div>
-				
-		</nav>
-		<!-- End Header/Navigation -->
+                {% else %}
+                <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+                    <li><a class="nav-link" href="{% url 'profil' %}"><img src="{% static 'images/user.svg' %}"></a></li>
 
-		<!-- Start Hero Section -->
-			<div class="hero">
-				<div class="container">
-					<div class="row justify-content-between">
-						<div class="col-lg-5">
-							<div class="intro-excerpt">
-								<h1>Shop</h1> 
-								
-							</div>
-							
-						</div>
-						<div class="col-lg-7">
-							<!-- Ici se trouvait Shop3, remplacé par le formulaire de recherche -->
-							<form class="d-flex mb-2 mb-md-0">
-						      <input class="form-control me-2" type="search" placeholder="Rechercher un produit" aria-label="Search">
-						      <button class="btn btn-outline-success" type="submit">Rechercher</button>
-						    </form>
-						</div>
-					</div>
-					<div class="intro-excerpt">
-						
-					</div>
-				</div>
-				<div class="intro-excerpt">
-					
-				</div>
-			</div>
-		<!-- End Hero Section -->
+                </ul>
 
-		<style>
-			.product-item {
-				position: relative;
-			}
-			
-			.product-item:hover .add-to-cart-btn {
-				display: block;
-			}
-			
-			.add-to-cart-btn {
-				background-color: #29352c;
-				border: none;
-				color: white;
-				padding: 10px 20px;
-				text-align: center;
-				text-decoration: none;
-				display: inline-block;
-				font-size: 16px;
-				border-radius: 5px;
-				cursor: pointer;
-			}
-			
-			.add-to-cart-btn:hover {
-				background-color: #28342a;
-			}
-			</style>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function(){
-    $('.product-item').hover(
-        function() {
-            $(this).find('.add-to-cart-btn').fadeIn();
-        }, function() {
-            $(this).find('.add-to-cart-btn').fadeOut();
-        }
-    );
-});
-</script>
-				
+                {% endif %}
 
-<!-- Product template debut affichage de produits -->
-<!-- Product template -->
-<div class="untree_co-section product-section before-footer-section">
-    <div class="container">
-        <div class="row">
-            {% for categorie in categories %}
-            <!-- Start Category Column -->
-            <div class="col-12 mb-5">
-                <h2>{{ categorie.nom }}</h2>
-                <div class="row">
-                    {% for produit in categorie.produit_set.all %}
-                    <div class="col-12 col-md-4 col-lg-3 mb-5">
-                        <div class="product-item position-relative">
-                            <img src="{{ produit.image.url }}" alt="Image" class="img-fluid">
-                            <div class="product-item-body text-center">
-                                <h3>{{ produit.nom }}</h3>
-                                <p>${{ produit.prix }}</p>
-                                {% if user.is_authenticated %}
-								<button onclick="showPopup('{{ produit.id }}')" class="btn btn-black btn-sm">Ajouter au panier</button>
-                       
-                    			{% else %}
-								<a href="{% url 'login' %}" class="btn btn-black btn-sm">Se connecter</a>
 
-                        
-                   				 {% endif %}
-								
-                            </div>
-                        </div>
+            </div>
+        </div>
+
+    </nav>
+    <!-- End Header/Navigation -->
+
+    <!-- Start Hero Section -->
+    <div class="hero">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-5">
+                    <div class="intro-excerpt">
+                        <h1>Shop</h1>
+
                     </div>
-                    {% endfor %}
+
+                </div>
+                <div class="col-lg-7">
+                    <!-- Ici se trouvait Shop3, remplacé par le formulaire de recherche -->
+                    <form class="d-flex mb-2 mb-md-0">
+                        <input class="form-control me-2" type="search" placeholder="Rechercher un produit"
+                            aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Rechercher</button>
+                    </form>
                 </div>
             </div>
-            <!-- End Category Column -->
-            {% endfor %}
+            <div class="intro-excerpt">
+
+            </div>
+        </div>
+        <div class="intro-excerpt">
+
         </div>
     </div>
-</div>
+    <!-- End Hero Section -->
 
-<!-- Pop-up HTML -->
-<div id="popup" style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid black;">
-    <h3>Confirm Quantity</h3>
-    <input type="number" id="quantite" min="1" value="1">
-    <button onclick="addToCart()" class="btn btn-primary btn-sm">Confirm</button>
-    <button onclick="hidePopup()" class="btn btn-secondary btn-sm">Cancel</button>
-</div>
+    <style>
+        .product-item {
+            position: relative;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
-<script>
-function showPopup(produitId) {
-    document.getElementById('popup').style.display = 'block';
-    document.getElementById('popup').dataset.produitId = produitId;
-}
+        .product-item:hover {
+            transform: translateY(-10px);
+        }
 
-function hidePopup() {
-    document.getElementById('popup').style.display = 'none';
-}
+        .product-item img {
+            width: 100%;
+            height: auto;
+            max-height: 200px;
+            object-fit: cover;
+        }
 
-function addToCart() {
-    const produitId = document.getElementById('popup').dataset.produitId;
-    const quantite = document.getElementById('quantite').value;
-    
-    fetch(`/ajouter-au-panier/${produitId}/`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: JSON.stringify({ quantite: quantite })
-    })
-    .then(response => response.json())
-    .then(data => {
-        hidePopup();
-        alert('Product added to cart!');
-    });
-}
-</script>
+        .product-item-body {
+            padding: 15px;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
+        .product-item-body h3 {
+            font-size: 18px;
+            margin: 10px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
+        .product-item-body p {
+            font-size: 16px;
+            color: #555;
+        }
 
-		
+        .add-to-cart-btn {
+            background-color: #29352c;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
 
+        .product-item:hover .add-to-cart-btn {
+            display: block;
+        }
 
-		<!-- Start Footer Section -->
-		<footer class="footer-section">
-			<div class="container relative">
+        .add-to-cart-btn:hover {
+            background-color: #28342a;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.product-item').hover(
+                function () {
+                    $(this).find('.add-to-cart-btn').fadeIn();
+                }, function () {
+                    $(this).find('.add-to-cart-btn').fadeOut();
+                }
+            );
+        });
+    </script>
 
-				<div class="sofa-img">
-					<img src="images/sofa.png" alt="Image" class="img-fluid">
-				</div>
+    <!-- Product template debut affichage de produits -->
+    <!-- Product template -->
+    <div class="untree_co-section product-section before-footer-section">
+        <div class="container">
+            <div class="row">
+                {% for categorie in categories %}
+                <!-- Start Category Column -->
+                <div class="col-12 mb-5">
+                    <h2>{{ categorie.nom }}</h2>
+                    <div class="row">
+                        {% for produit in categorie.produit_set.all %}
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-5">
+                            <div class="product-item position-relative">
+                                <img src="{{ produit.image.url }}" alt="Image" class="img-fluid">
+                                <div class="product-item-body">
+                                    <h3>{{ produit.nom }}</h3>
+                                    <p>{{ produit.prix }} FCFA</p>
+                                    {% if user.is_authenticated %}
+                                    <button onclick="showPopup('{{ produit.id }}')" class="btn btn-black btn-sm add-to-cart-btn">Ajouter au panier</button>
+                                    {% else %}
+                                    <a href="{% url 'login' %}" class="btn btn-black btn-sm add-to-cart-btn">Se connecter</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- End Category Column -->
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 
-				<div class="row">
-					<div class="col-lg-8">
-						<div class="subscription-form">
-							<h3 class="d-flex align-items-center"><span class="me-1"><img src="images/envelope-outline.svg" alt="Image" class="img-fluid"></span><span>Subscribe to Newsletter</span></h3>
+    <!-- Pop-up HTML -->
+    <div id="popup"
+        style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid black;">
+        <h3>Confirm Quantity</h3>
+        <input type="number" id="quantite" min="1" value="1">
+        <button onclick="addToCart()" class="btn btn-primary btn-sm">Confirm</button>
+        <button onclick="hidePopup()" class="btn btn-secondary btn-sm">Cancel</button>
+    </div>
 
-							<form action="#" class="row g-3">
-								<div class="col-auto">
-									<input type="text" class="form-control" placeholder="Enter your name">
-								</div>
-								<div class="col-auto">
-									<input type="email" class="form-control" placeholder="Enter your email">
-								</div>
-								<div class="col-auto">
-									<button class="btn btn-primary">
-										<span class="fa fa-paper-plane"></span>
-									</button>
-								</div>
-							</form>
+    <script>
+        function showPopup(produitId) {
+            document.getElementById('popup').style.display = 'block';
+            document.getElementById('popup').dataset.produitId = produitId;
+        }
 
-						</div>
-					</div>
-				</div>
+        function hidePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
 
-				<div class="row g-5 mb-5">
-					<div class="col-lg-4">
-						<div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">E<span>.</span></a></div>
-						<p class="mb-4">Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant</p>
+        function addToCart() {
+            const produitId = document.getElementById('popup').dataset.produitId;
+            const quantite = document.getElementById('quantite').value;
 
-						<ul class="list-unstyled custom-social">
-							<li><a href="#"><span class="fa fa-brands fa-facebook-f"></span></a></li>
-							<li><a href="#"><span class="fa fa-brands fa-twitter"></span></a></li>
-							<li><a href="#"><span class="fa fa-brands fa-instagram"></span></a></li>
-							<li><a href="#"><span class="fa fa-brands fa-linkedin"></span></a></li>
-						</ul>
-					</div>
+            fetch(`/ajouter-au-panier/${produitId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ quantite: quantite })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    hidePopup();
+                    alert('Produit ajouté au panier');
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+    <!-- Fin Pop-up HTML -->
+    <!-- Product template fin -->
 
-					<div class="col-lg-8">
-						<div class="row links-wrap">
-							<div class="col-6 col-sm-6 col-md-3">
-								<ul class="list-unstyled">
-									<li><a href="#">About us</a></li>
-									<li><a href="#">Services</a></li>
-									<li><a href="#">Blog</a></li>
-									<li><a href="#">Contact us</a></li>
-								</ul>
-							</div>
-
-							<div class="col-6 col-sm-6 col-md-3">
-								<ul class="list-unstyled">
-									<li><a href="#">Support</a></li>
-									<li><a href="#">Knowledge base</a></li>
-									<li><a href="#">Live chat</a></li>
-								</ul>
-							</div>
-
-							<div class="col-6 col-sm-6 col-md-3">
-								<ul class="list-unstyled">
-									<li><a href="#">Jobs</a></li>
-									<li><a href="#">Our team</a></li>
-									<li><a href="#">Leadership</a></li>
-									<li><a href="#">Privacy Policy</a></li>
-								</ul>
-							</div>
-
-							<div class="col-6 col-sm-6 col-md-3">
-								<ul class="list-unstyled">
-									<li><a href="#">Nordic Chair</a></li>
-									<li><a href="#">Kruzo Aero</a></li>
-									<li><a href="#">Ergonomic Chair</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-
-				</div>
-
-				<div class="border-top copyright">
-					<div class="row pt-4">
-						<div class="col-lg-6">
-							<p class="mb-2 text-center text-lg-start">Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; Designed with love by <a href="https://untree.co">Untree.co</a>  Distributed By <a href="https://themewagon.com">ThemeWagon</a> <!-- License information: https://untree.co/license/ -->
-            </p>
-						</div>
-
-						<div class="col-lg-6 text-center text-lg-end">
-							<ul class="list-unstyled d-inline-flex ms-auto">
-								<li class="me-4"><a href="#">Terms &amp; Conditions</a></li>
-								<li><a href="#">Privacy Policy</a></li>
-							</ul>
-						</div>
-
-					</div>
-				</div>
-
-			</div>
-		</footer>
-		<!-- End Footer Section -->	
-
-
-		<script src="js/bootstrap.bundle.min.js"></script>
-		<script src="js/tiny-slider.js"></script>
-		<script src="js/custom.js"></script>
-	</body>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/tiny-slider.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+</body>
 
 </html>

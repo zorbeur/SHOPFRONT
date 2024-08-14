@@ -1,0 +1,15 @@
+{% extends 'test.html' %}
+
+{% block title %}Supprimer Notification{% endblock %}
+
+{% block admin_content %}
+<div class="container">
+    <h1>Supprimer Notification</h1>
+    <p>Êtes-vous sûr de vouloir supprimer cette notification : "{{ notification.message }}" ?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Supprimer</button>
+    </form>
+    <a href="{% url 'afficher_notifications' %}" class="btn">Annuler</a>
+</div>
+{% endblock %}

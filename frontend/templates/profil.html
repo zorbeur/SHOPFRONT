@@ -81,7 +81,7 @@
                 <div class="profile-stats">
                     <div class="stat">
                         <h6>Balance</h6>
-                        <p>$3800.24</p>
+                        <p>3800.24FCFA</p>
                     </div>
                     <div class="stat">
                         <h6>Orders</h6>
@@ -124,7 +124,7 @@
                                     <tr>
                                         <td>{{ commande.id }}</td>
                                         <td>{{ commande.date_commande|date:"d/m/Y" }}</td>
-                                        <td>${{ commande.total }}</td>
+                                        <td>{{ commande.total }}FCFA</td>
                                         <td>{{ commande.etat_commande }}</td>
                                     </tr>
                                 {% endfor %}

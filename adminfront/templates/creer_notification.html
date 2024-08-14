@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Créer une Notification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 50%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label, input, textarea, button {
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 0.3rem;
+        }
+        .btn {
+            text-align: center;
+            display: block;
+            padding: 10px;
+            background-color: #f44336;
+            color: white;
+            text-decoration: none;
+            border-radius: 0.3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Créer une Notification</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Créer</button>
+        </form>
+        <a href="{% url 'afficher_notifications' %}" class="btn">Retour aux notifications</a>
+    </div>
+</body>
+</html>

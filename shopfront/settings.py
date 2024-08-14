@@ -1,3 +1,4 @@
+import os
 """
 Django settings for shopfront project.
 
@@ -27,7 +28,9 @@ SECRET_KEY = 'django-insecure-2*!0trrfq!=6^-oywwl0cf6d!!q5@@+83u^9(*-dra+f@)__=4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']  # Accepte toutes les adresses IP
+
+
 
 
 
@@ -66,7 +69,7 @@ ROOT_URLCONF = 'shopfront.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],  # Indique le répertoire des templates
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -153,11 +156,27 @@ CATEGORIE_ROOT = os.path.join(BASE_DIR, 'categories')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# settings.py
+
+# Délai d'expiration de la session en secondes (600 secondes = 10 minutes)
+SESSION_COOKIE_AGE = 600  # 10 minutes
+
+# Fermer la session lorsque le navigateur est fermé
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Optionnel : Empêcher la session d'être renouvelée à chaque requête
+SESSION_SAVE_EVERY_REQUEST = False
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'amostona82@gmail.com'
-EMAIL_HOST_PASSWORD = 'naos1436'
+
+
+# settings.py
+
+TWILIO_ACCOUNT_SID = 'ACd99da69a4b55ff9ce6523fd7c234c0be'
+TWILIO_AUTH_TOKEN = '587081f1659e443c1d55c693c87a87d5'
+TWILIO_PHONE_NUMBER = '+14433603818'
+
+
+
+
+

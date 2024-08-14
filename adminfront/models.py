@@ -43,6 +43,7 @@ class Administrateur(AbstractBaseUser, PermissionsMixin):
     photo_de_profil = models.ImageField(upload_to='photos_profil/', blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    numero_de_telephone=models.IntegerField(default=22890912367)
 
     groups = models.ManyToManyField(
         'auth.Group',
@@ -153,3 +154,50 @@ class ElementCommande(models.Model):
     @property
     def prix_total(self):
         return self.quantite * self.prix_unitaire
+
+
+
+
+from django.db import models
+from django.utils import timezone
+
+class Livraison(models.Model):
+    commande = models.OneToOneField(Commande, on_delete=models.CASCADE, related_name='livraison')
+    date_livraison = models.DateTimeField(default=timezone.now)
+    adresse_livraison = models.CharField(max_length=255)
+    code_postal = models.CharField(max_length=20)
+    ville = models.CharField(max_length=100)
+    pays = models.CharField(max_length=100)
+    statut = models.CharField(max_length=50, choices=[
+        ('EN_ATTENTE', 'En attente'),
+        ('EN_COURS', 'En cours'),
+        ('LIVREE', 'Livrée'),
+    ], default='EN_ATTENTE')
+
+    def __str__(self):
+        return f'Livraison pour Commande {self.commande.id}'
+
+
+from django.contrib import admin
+from .models import Livraison
+
+@admin.register(Livraison)
+class LivraisonAdmin(admin.ModelAdmin):
+    list_display = ('commande', 'date_livraison', 'adresse_livraison', 'statut')
+    list_filter = ('statut',)
+    search_fields = ('commande__id', 'adresse_livraison')
+
+
+
+from django.conf import settings
+from django.db import models
+from django.utils import timezone
+
+class Notification(models.Model):
+    utilisateur = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notifications')
+    message = models.TextField()
+    date_creation = models.DateTimeField(default=timezone.now)
+    lu = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.message

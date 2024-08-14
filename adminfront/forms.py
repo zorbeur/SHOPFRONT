@@ -32,3 +32,21 @@ class CommandeForm(forms.ModelForm):
         widgets = {
             'date_commande': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
         }
+
+
+from django import forms
+from .models import Livraison
+
+class LivraisonForm(forms.ModelForm):
+    class Meta:
+        model = Livraison
+        fields = ['date_livraison', 'adresse_livraison', 'code_postal', 'ville', 'pays', 'statut']
+
+
+from django import forms
+from .models import Notification
+
+class NotificationForm(forms.ModelForm):
+    class Meta:
+        model = Notification
+        fields = ['message']

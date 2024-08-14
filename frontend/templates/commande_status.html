@@ -42,7 +42,7 @@
             </div>
             <div class="card-body">
                 <p><strong>Commande ID :</strong> {{ commande.id }}</p>
-                <p><strong>Total :</strong>  {{ commande.total|floatformat:2 }} €</p>
+                <p><strong>Total :</strong>  {{ commande.total|floatformat:2 }} FCFA</p>
                 <p><strong>Adresse de livraison :</strong> {{ commande.adresse_livraison }}</p>
                 <p><strong>État de la commande :</strong> {{ commande.get_etat_commande_display }}</p>
                 <!-- Vous pouvez ajouter plus de détails si nécessaire -->
