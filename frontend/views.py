@@ -267,7 +267,7 @@ def process_payment(request):
         client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
 
         message = client.messages.create(
-            body=f"Votre commande  a été passée avec succès ! Total :  FCFA.",
+            body=f"Votre commande #{commande.id} a été passée avec succès ! Total : {total} FCFA.",
             from_=settings.TWILIO_PHONE_NUMBER,
             to='+22897621296'  # Remplacez par le numéro du client si nécessaire
         )
