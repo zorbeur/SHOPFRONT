@@ -26,19 +26,231 @@
         }
     </style>
     <!-- Bootstrap CSS -->
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="{% static 'css/tiny-slider.css' %}" rel="stylesheet">
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+   <link href="{% static 'css/tiny-slider.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet"> 
     
     <title>E-SHOP </title>
 </head>
 
 <body>
+    <STYLE>
+    .navigation {
+    position: relative;
+    width: 100%; /* Ajustez la largeur selon vos besoins */
+    height: 150px;
+    background-color: #6e5959;
+    background: linear-gradient(155deg, #00fffc, #646262);
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Assure que le contenu est centré verticalement */
+    border-radius: 10px;
+    z-index: 1;
+}
+
+.custom-navbar-nav {
+    display: flex;
+    list-style: none;
+    margin: 0; /* Élimine les marges par défaut */
+    padding: 0; /* Élimine les espacements par défaut */
+}
+
+.custom-navbar-nav li {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    list-style: none;
+    display: flex;
+    align-items: center; /* Centre le contenu verticalement */
+    justify-content: center; /* Centre le contenu horizontalement */
+}
+
+.custom-navbar-nav .nav-link {
+    text-align: center;
+    color: #000; /* Couleur des liens, ajustez si nécessaire */
+    text-decoration: none;
+}
+
+.custom-navbar-cta img {
+    width: 24px; /* Ajustez la taille des icônes si nécessaire */
+    height: auto;
+}
+
+/* Style pour les indicateurs */
+.indicator {
+    align-items: center;
+    position: absolute;
+    top: -50%;
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(155deg, #eee, #00fffc);
+    border: 6px solid #060210;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease; /* Ajustez le temps de transition si nécessaire */
+    z-index: 1;
+}
+
+/* Assure que les éléments de menu ne se chevauchent pas */
+.navigation ul {
+    transform: translateY(-32px); /* Ajustez selon la position souhaitée */
+}
+
+.footer-section {
+    background-color: #3c7b59; /* Couleur de fond claire pour le footer */
+    padding: 40px 0; /* Espacement vertical */
+}
+
+.footer-section .container {
+    position: relative;
+}
+
+.footer-section .sofa-img img {
+    max-width: 100%; /* Assure que l'image ne dépasse pas la largeur du conteneur */
+    height: auto;
+}
+
+.subscription-form {
+    margin-bottom: 40px; /* Espacement entre le formulaire et le reste du contenu */
+}
+
+.subscription-form h3 {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    margin-bottom: 20px; /* Espacement sous le titre */
+}
+
+.subscription-form h3 img {
+    margin-right: 10px; /* Espacement entre l'image et le texte */
+}
+
+.subscription-form .form-control {
+    border-radius: 20px; /* Coins arrondis pour les champs de texte */
+}
+
+.subscription-form .btn-primary {
+    border-radius: 20px; /* Coins arrondis pour le bouton */
+    background-color: #00fffc; /* Couleur de fond du bouton */
+    border: none; /* Retire la bordure par défaut */
+    color: #000; /* Couleur du texte du bouton */
+    transition: background-color 0.3s ease; /* Effet de transition pour le survol */
+}
+
+.subscription-form .btn-primary:hover {
+    background-color: #00bcd4; /* Couleur du bouton au survol */
+}
+
+.footer-logo-wrap {
+    margin-bottom: 20px; /* Espacement sous le logo */
+}
+
+.footer-logo {
+    font-size: 36px;
+    color: #333; /* Couleur du texte du logo */
+    text-decoration: none;
+}
+
+.footer-logo span {
+    color: #00fffc; /* Couleur du point */
+}
+
+.footer-section p {
+    font-size: 16px;
+    color: #666; /* Couleur du texte */
+    line-height: 1.6; /* Hauteur de ligne pour améliorer la lisibilité */
+}
+
+.custom-social {
+    padding: 0;
+    list-style: none;
+    display: flex;
+    gap: 15px; /* Espacement entre les icônes */
+}
+
+.custom-social li {
+    display: inline;
+}
+
+.custom-social a {
+    color: #333; /* Couleur des icônes sociales */
+    font-size: 24px; /* Taille des icônes sociales */
+    transition: color 0.3s ease; /* Effet de transition pour le survol */
+}
+
+.custom-social a:hover {
+    color: #00fffc; /* Couleur des icônes sociales au survol */
+}
+
+.links-wrap {
+    margin-bottom: 40px; /* Espacement sous les liens */
+}
+
+.links-wrap ul {
+    padding: 0;
+    list-style: none;
+}
+
+.links-wrap ul li {
+    margin-bottom: 10px; /* Espacement entre les éléments de la liste */
+}
+
+.links-wrap ul li a {
+    color: #333; /* Couleur des liens */
+    text-decoration: none;
+    transition: color 0.3s ease; /* Effet de transition pour le survol */
+}
+
+.links-wrap ul li a:hover {
+    color: #00fffc; /* Couleur des liens au survol */
+}
+
+.border-top {
+    border-top: 1px solid #ddd; /* Bordure en haut du footer */
+}
+
+.copyright {
+    padding-top: 20px; /* Espacement au-dessus du texte de copyright */
+}
+
+.copyright p {
+    font-size: 14px;
+    color: #666; /* Couleur du texte de copyright */
+    margin-bottom: 0; /* Élimine la marge inférieure */
+}
+
+.copyright a {
+    color: #00fffc; /* Couleur des liens dans le texte de copyright */
+    text-decoration: none;
+}
+
+.copyright a:hover {
+    text-decoration: underline; /* Sous-lignage des liens au survol */
+}
+
+.list-unstyled {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.d-inline-flex {
+    display: inline-flex;
+}
+
+.ms-auto {
+    margin-left: auto;
+}
+
+    
+    </STYLE>
 
     <!-- Start Header/Navigation -->
-    <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
-
+     
+    <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark navigation" aria-label="Furni navigation bar">
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}">
                 <img src="{% static 'images/eshop.png' %}" alt="Votre Logo" height="200" width="300">
@@ -50,39 +262,40 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             
-
             <div class="collapse navbar-collapse" id="navbarsFurni">
                 <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
                     <li class="nav-item active">
                         <a class="nav-link" href="{% url 'home' %}">Accueil</a>
                     </li>
                     <li><a class="nav-link" href="{% url 'shop' %}">Shop</a></li>
-                    <li><a class="nav-link" href="{% url 'about' %}">A propos de nous</a></li>
+                    <li><a class="nav-link" href="{% url 'about' %}">A_propos</a></li>
                     <li><a class="nav-link" href="{% url 'services' %}">Services</a></li>
                     <li><a class="nav-link" href="{% url 'blog' %}">Blog</a></li>
-                    <li><a class="nav-link" href="{% url 'contact' %}">Nous contactez</a></li>
+                    <li><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
                 </ul>
-
+    
                 {% if user.is_authenticated %}
-					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-						<li><a class="nav-link" href="{% url 'profil' %}"><img src="{% static 'images/user.svg' %}"></a></li>
-						<li><a class="nav-link" href="{% url 'cart' %}"><img src="{% static 'images/cart.svg' %}"></a></li>
-					</ul>
-                        
-                    {% else %}
-					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-						<li><a class="nav-link" href="{% url 'profil' %}"><img src="{% static 'images/user.svg' %}"></a></li>
-
-					</ul>
-                    {% endif %}
+                    <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+                        <li><a class="nav-link" href="{% url 'profil' %}"><img src="{% static 'images/user.svg' %}"></a></li>
+                        <li><a class="nav-link" href="{% url 'cart' %}"><img src="{% static 'images/cart.svg' %}"></a></li>
+                    </ul>
+                {% else %}
+                    <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+                        <li><a class="nav-link" href="{% url 'profil' %}"><img src="{% static 'images/user.svg' %}"></a></li>
+                    </ul>
+                {% endif %}
             </div>
         </div>
-
     </nav>
+    
     <!-- End Header/Navigation -->
     
     <!-- Start Hero Section -->
-    <div class="hero">
+    <P></P>
+    <P></P>
+    <P></P>
+     <BR></BR>
+    <div class="">
         <div class="container">
             <div class="row justify-content-between">
                 <div class="col-lg-5">
@@ -91,7 +304,7 @@
 
                         <p class="mb-4">Découvrez la qualité à prix abordables. Explorez notre sélection de produits électroniques innovants, conçus pour répondre à vos besoins sans vous ruiner..</p>
                         <p><a href="" class="btn btn-secondary me-2">Acheter maintenant</a><a href="#"
-                                class="btn btn-white-outline">Explorer</a></p>
+                                class="btn btn-secondary me-2">Explorer</a></p>
                     </div>
                 </div>
                 <div class="col-lg-7">
@@ -559,7 +772,7 @@
             <div class="row g-5 mb-5">
                 <div class="col-lg-4">
                     <div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo"><E-SHOP>E-SHOP</E-SHOP><span>.</span></a></div>
-                    <p class="mb-4">Chez E-SHOP, Notre engagement est de vous proposer une gamme exceptionnelle de produits électroniques, soigneusement sélectionnés pour répondre à vos besoins modernes. Explorez notre collection pour découvrir des solutions innovantes qui enrichiront votre quotidien technologique.</p>
+                    <p background>Chez E-SHOP, Notre engagement est de vous proposer une gamme exceptionnelle de produits électroniques, soigneusement sélectionnés pour répondre à vos besoins modernes. Explorez notre collection pour découvrir des solutions innovantes qui enrichiront votre quotidien technologique.</p>
 
                     <ul class="list-unstyled custom-social">
                         <li><a href="#"><span class="fa fa-brands fa-facebook-f"></span></a></li>

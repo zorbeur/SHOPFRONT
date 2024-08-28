@@ -1,10 +1,18 @@
-from django.shortcuts import render, redirect
+import json
+from twilio.rest import Client
+from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from django.shortcuts import render, redirect
 from .forms import UserRegisterForm
+from django.http import JsonResponse
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.views.decorators.http import require_POST
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from adminfront.models import Categorie, Produit
+from adminfront.models import Categorie, Produit ,Commande
+from adminfront.models import Commande, ElementCommande, Cart , Produit
+
 
 
 
@@ -115,12 +123,7 @@ def enregistrement(request):
         form = UserRegisterForm()
     return render(request, 'signup.html', {'form': form})
 
-#ajout des vues de gestion du panier
-from django.http import JsonResponse
-from django.views.decorators.http import require_POST
-from django.shortcuts import get_object_or_404
-from adminfront.models import Produit
-import json
+
 
 @require_POST
 def ajouter_au_panier(request, produit_id):
@@ -137,7 +140,7 @@ def ajouter_au_panier(request, produit_id):
     request.session['panier'] = panier
     return JsonResponse({'status': 'success'})
 
-from django.shortcuts import redirect
+
 
 def update_cart_item(request, item_id):
     if request.method == 'POST':
@@ -163,9 +166,7 @@ def delete_cart_item(request, item_id):
         return redirect('cart')
 
 
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
+
 
 
 @login_required
@@ -207,26 +208,6 @@ def paiement(request):
 
     return render(request, 'paiement.html', context)
 
-from django.shortcuts import redirect
-from django.contrib import messages
-
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from adminfront.models import Commande, ElementCommande, Cart
-# views.py
-
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from adminfront.models import Commande, ElementCommande, Produit
-
-
-
-from twilio.rest import Client
-from django.conf import settings
 
 @login_required
 def process_payment(request):
@@ -300,8 +281,7 @@ def clear_cart(utilisateur):
 def merci(request, commande_id):
     # Vous pouvez récupérer les informations de la commande si nécessaire
     return render(request, 'merci.html', {'commande_id': commande_id})
-from django.shortcuts import render, get_object_or_404
-from adminfront.models import Commande
+
 
 def commande_status(request, commande_id):
     commande = get_object_or_404(Commande, id=commande_id)
