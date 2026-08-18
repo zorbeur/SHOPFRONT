@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: shopfront_web
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+      - SECRET_KEY=django-insecure-2*!0trrfq!=6^-oywwl0cf6d!!q5@@+83u^9(*-dra+f@)__=4
+      - ALLOWED_HOSTS=*
+    volumes:
+      - .:/app
+      - shopfront_db:/app/db.sqlite3
+      - shopfront_media:/app/media
+      - shopfront_static:/app/staticfiles
+
+volumes:
+  shopfront_db:
+  shopfront_media:
+  shopfront_static:

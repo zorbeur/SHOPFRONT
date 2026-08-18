@@ -20,7 +20,8 @@ from adminfront.models import Commande, ElementCommande, Cart , Produit
 
 def index(request):
     Categories=Categorie.objects.all()
-    return render(request, 'index2.html', {Categories:Categories} )
+    return render(request, 'index2.html', {'Categories': Categories, 'categories': Categories})
+
 
 
 def index2(request):
@@ -245,13 +246,16 @@ def process_payment(request):
         request.session['panier'] = {}
 
         # Envoyer un SMS de confirmation
-        client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+        try:
+            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN)
+            message = client.messages.create(
+                body=f"Votre commande #{commande.id} a été passée avec succès ! Total : {total} FCFA.",
+                from_=settings.TWILIO_PHONE_NUMBER,
+                to='+22897621296'  # Remplacez par le numéro du client si nécessaire
+            )
+        except Exception as e:
+            print(f"Notification SMS non envoyée (Twilio exception) : {e}")
 
-        message = client.messages.create(
-            body=f"Votre commande #{commande.id} a été passée avec succès ! Total : {total} FCFA.",
-            from_=settings.TWILIO_PHONE_NUMBER,
-            to='+22897621296'  # Remplacez par le numéro du client si nécessaire
-        )
 
         # Afficher un message de succès
         messages.success(request, 'Votre commande a été passée avec succès !')

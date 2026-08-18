@@ -178,17 +178,6 @@ class Livraison(models.Model):
         return f'Livraison pour Commande {self.commande.id}'
 
 
-from django.contrib import admin
-from .models import Livraison
-
-@admin.register(Livraison)
-class LivraisonAdmin(admin.ModelAdmin):
-    list_display = ('commande', 'date_livraison', 'adresse_livraison', 'statut')
-    list_filter = ('statut',)
-    search_fields = ('commande__id', 'adresse_livraison')
-
-
-
 from django.conf import settings
 from django.db import models
 from django.utils import timezone

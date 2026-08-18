@@ -23,12 +23,32 @@ AUTH_USER_MODEL = 'adminfront.Administrateur'
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-2*!0trrfq!=6^-oywwl0cf6d!!q5@@+83u^9(*-dra+f@)__=4'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-2*!0trrfq!=6^-oywwl0cf6d!!q5@@+83u^9(*-dra+f@)__=4')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 't')
 
-ALLOWED_HOSTS = ['10.10.8.3','192.168.1.78', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+
+
+# Application definition
+
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'frontend',
+    'adminfront',
+    'crispy_forms',
+    'crispy_bootstrap4',
+]
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 
 
 
@@ -131,26 +151,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-# settings.py
-
-import os
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 # Configuration des fichiers statiques
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR / 'static',
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Configuration des fichiers médias
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Chemin pour le dossier 'categorie' à la racine du projet
-CATEGORIE_ROOT = os.path.join(BASE_DIR, 'categories')
+CATEGORIE_ROOT = BASE_DIR / 'categories'
+
 
 
 # Default primary key field type
