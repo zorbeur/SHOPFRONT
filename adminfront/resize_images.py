@@ -2,23 +2,26 @@ from PIL import Image
 import os
 
 def resize_images(input_folder, output_folder, size=(500, 500)):
-    # Crée le dossier de sortie s'il n'existe pas
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    # Parcourt toutes les images du dossier source
+    resample_filter = getattr(Image, 'Resampling', Image).LANCZOS if hasattr(Image, 'Resampling') else getattr(Image, 'ANTIALIAS', Image.BICUBIC)
+
     for filename in os.listdir(input_folder):
-        if filename.endswith(('.jpg', '.jpeg', '.png')):
-            # Ouvre l'image
-            img = Image.open(os.path.join(input_folder, filename))
-            # Redimensionne l'image à la taille spécifiée
-            img = img.resize(size, Image.ANTIALIAS)
-            # Enregistre l'image redimensionnée dans le dossier de sortie
-            img.save(os.path.join(output_folder, filename))
+        if filename.lower().endswith(('.jpg', '.jpeg', '.png', '.webp')):
+            try:
+                img_path = os.path.join(input_folder, filename)
+                with Image.open(img_path) as img:
+                    img = img.convert('RGB')
+                    img = img.resize(size, resample_filter)
+                    img.save(os.path.join(output_folder, filename), quality=90)
+            except Exception as e:
+                print(f"Erreur pour {filename}: {e}")
 
-# Utilisation du script
-input_folder = 'media\produits'  # Remplace par le chemin de ton dossier d'images
-output_folder = 'media\produit'  # Remplace par le chemin de ton dossier de sortie
-size = (500, 500)  # Spécifie la taille souhaitée
+if __name__ == '__main__':
+    input_folder = os.path.join('media', 'produits')
+    output_folder = os.path.join('media', 'produit')
+    size = (500, 500)
+    if os.path.exists(input_folder):
+        resize_images(input_folder, output_folder, size)
 
-resize_images(input_folder, output_folder, size)

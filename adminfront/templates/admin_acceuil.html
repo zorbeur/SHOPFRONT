@@ -1,66 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accueil Administrateur</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    <style>
-        body {
-            background-color: #4f6f41;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .card {
-            border-radius: 1rem;
-            padding: 2rem;
-            text-align: center;
-            color: #fff;
-            background-color: #333;
-        }
-        .btn-custom {
-            margin: 1rem;
-            display: none; /* Cache le bouton au départ */
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="0; url={% url 'connexion_admin' %}">
+  <title>Redirection vers l'Administration</title>
 </head>
 <body>
-    <div class="card">
-        <h1 class="fw-bold">Bienvenue sur _E-SHOP_ ADMIN</h1>
-        <p>Veuillez répondre à la question pour accéder à la connexion cher administrateur.</p>
-        
-        <!-- Formulaire de devinette -->
-        <form id="guess-form">
-            <label for="guess">Quel est le code secret ?</label>
-            <input type="text" id="guess" class="form-control mb-3" placeholder="Entrez le code" required>
-            <button type="button" class="btn btn-primary" onclick="checkGuess()">Valider</button>
-        </form>
-
-        <!-- Bouton de connexion caché -->
-        <a href="{% url 'connexion_admin' %}" id="login-btn" class="btn btn-primary btn-custom">Connexion</a>
-    </div>
-
-    <script>
-        function checkGuess() {
-            const secretCode = "admin2024"; // Code secret que seuls les habitués connaissent
-            const userGuess = document.getElementById('guess').value;
-            const loginBtn = document.getElementById('login-btn');
-
-            if (userGuess === secretCode) {
-                loginBtn.style.display = 'inline-block'; // Affiche le bouton si la réponse est correcte
-                alert("Code correct ! Vous pouvez maintenant vous connecter.");
-            } else {
-                alert("Code incorrect, veuillez réessayer.");
-            }
-        }
-    </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
+  <script>window.location.href = "{% url 'connexion_admin' %}";</script>
 </body>
 </html>

@@ -1,116 +1,99 @@
+﻿{% load static %}
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="light-style customizer-hide" dir="ltr" data-theme="theme-default">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion Administrateur</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    <style>
-        .form-outline {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+  <title>Connexion Administration | E-SHOP</title>
 
-        .form-outline input,
-        .form-outline textarea {
-            width: 100%;
-            padding: 1rem;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 0.5rem;
-        }
-
-        .form-outline label {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            padding: 0 0.25rem;
-            background: #fff;
-            transition: 0.2s;
-            font-size: 1rem;
-            color: #777;
-        }
-
-        .form-outline input:focus + label,
-        .form-outline input:not(:placeholder-shown) + label,
-        .form-outline textarea:focus + label,
-        .form-outline textarea:not(:placeholder-shown) + label {
-            top: -0.75rem;
-            left: 1rem;
-            font-size: 0.75rem;
-            color: #4f6f41;
-        }
-
-        .form-outline .text-danger {
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-    </style>
+  <link rel="icon" type="image/x-icon" href="{% static 'images/eshop.png' %}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'admin/assets/vendor/fonts/boxicons.css' %}" />
+  <link rel="stylesheet" href="{% static 'admin/assets/vendor/css/core.css' %}" />
+  <link rel="stylesheet" href="{% static 'admin/assets/vendor/css/theme-default.css' %}" />
+  <link rel="stylesheet" href="{% static 'admin/assets/vendor/css/pages/page-auth.css' %}" />
 </head>
-<body>
-<section class="vh-100" style="background-color: #4f6f41;">
-  <div class="container py-5 h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col col-xl-10">
-        <div class="card" style="border-radius: 1rem;">
-          <div class="row g-0">
-            <div class="col-md-6 col-lg-5 d-none d-md-block">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
-                alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+
+<body style="background-color: #f5f5f9;">
+  <div class="container-xxl">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+      <div class="authentication-inner">
+        <!-- Carte Connexion Admin -->
+        <div class="card border-0 shadow-lg rounded-4">
+          <div class="card-body p-4 p-md-5">
+            <!-- Logo -->
+            <div class="app-brand justify-content-center mb-4">
+              <a href="{% url 'home' %}" class="app-brand-link gap-2 text-decoration-none">
+                <span class="app-brand-logo demo">
+                  <i class="bx bx-shield-quarter fs-2 text-primary"></i>
+                </span>
+                <span class="app-brand-text demo text-body fw-bolder text-uppercase fs-4">E-SHOP Admin</span>
+              </a>
             </div>
-            <div class="col-md-6 col-lg-7 d-flex align-items-center">
-              <div class="card-body p-4 p-lg-5 text-black">
 
-                <form method="POST">
-                  {% csrf_token %}
+            <h4 class="mb-2 text-dark fw-bold text-center">Espace Administration 🔐</h4>
+            <p class="mb-4 text-muted small text-center">Veuillez vous authentifier pour accéder au backoffice de gestion.</p>
 
-                  <div class="d-flex align-items-center mb-3 pb-1">
-                    <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
-                    <span class="h1 fw-bold mb-0">SHOP</span>
-                  </div>
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'danger' }} alert-dismissible fade show p-2 small" role="alert">
+                  {{ message }}
+                  <button type="button" class="btn-close p-2" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              {% endfor %}
+            {% endif %}
 
-                  <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Connectez-vous à votre compte administrateur</h5>
-
-                  {% if form.errors %}
-                    <div class="alert alert-danger" role="alert">
-                      {% for error in form.non_field_errors %}
-                        <div>{{ error }}</div>
-                      {% endfor %}
-                    </div>
-                  {% endif %}
-
-                  {% for field in form %}
-                  <div class="form-outline mb-4">
-                    {{ field }}
-                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {% if field.errors %}
-                      <div class="text-danger">{{ field.errors }}</div>
-                    {% endif %}
-                  </div>
-                  {% endfor %}
-
-                  <div class="pt-1 mb-4">
-                    <button class="btn btn-dark btn-lg btn-block" type="submit">Se connecter</button>
-                  </div>
-
-                  <a class="small text-muted" href="#">Mot de passe oublié ?</a>
-                  <p class="mb-5 pb-lg-2" style="color: #393f81;">Pas encore de compte ? <a href="tel:+22897621296" style="color: #393f81;">Contacter l'Administrateur</a></p>
-
-                  <a href="#" class="small text-muted">Conditions d'utilisation.</a>
-                  <a href="#" class="small text-muted">Politique de confidentialité</a>
-                </form>
-
+            <form id="formAuthentication" class="mb-3" method="POST" action="{% url 'connexion_admin' %}">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="username" class="form-label fw-semibold">Nom d'utilisateur</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="username"
+                  name="username"
+                  placeholder="Entrez votre identifiant admin"
+                  autofocus
+                  required
+                />
               </div>
+              <div class="mb-4 form-password-toggle">
+                <label class="form-label fw-semibold" for="password">Mot de passe</label>
+                <div class="input-group input-group-merge">
+                  <input
+                    type="password"
+                    id="password"
+                    class="form-control"
+                    name="password"
+                    placeholder="••••••••••••"
+                    required
+                  />
+                  <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                </div>
+              </div>
+              <div class="mb-3">
+                <button class="btn btn-primary d-grid w-100 py-2 fw-semibold" type="submit">
+                  Se Connecter à l'Administration
+                </button>
+              </div>
+            </form>
+
+            <div class="text-center pt-3 border-top">
+              <a href="{% url 'home' %}" class="d-flex align-items-center justify-content-center text-muted small text-decoration-none">
+                <i class="bx bx-chevron-left scaleX-n1-rtl bx-sm"></i>
+                Retourner à la boutique publique
+              </a>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</section>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
+
+  <script src="{% static 'admin/assets/vendor/libs/jquery/jquery.js' %}"></script>
+  <script src="{% static 'admin/assets/vendor/js/bootstrap.js' %}"></script>
+  <script src="{% static 'admin/assets/js/main.js' %}"></script>
 </body>
 </html>

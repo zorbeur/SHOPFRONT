@@ -1,265 +1,222 @@
-<!doctype html>
-<html lang="en">
+﻿{% extends 'base.html' %}
+{% load static %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Untree.co">
-    <link rel="shortcut icon" href="favicon.png">
+{% block title %}E-SHOP | Boutique - Tous nos Produits{% endblock %}
 
-    <meta name="description" content="" />
-    <meta name="keywords" content="bootstrap, bootstrap4" />
-    {% load static %}
-    <!-- Bootstrap CSS -->
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="{% static 'css/tiny-slider.css' %}" rel="stylesheet">
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
-    <title>E-SHOP</title>
-</head>
+{% block content %}
+<!-- En-tête Boutique / Hero -->
+<div class="hero py-4" style="background: var(--primary-color);">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6">
+        <h1 class="text-white fw-bold mb-2">Notre Boutique en Ligne</h1>
+        <p class="text-white-50 mb-0">Découvrez tous nos produits de haute qualité aux meilleurs prix.</p>
+      </div>
+      <div class="col-lg-6 mt-3 mt-lg-0">
+        <!-- Formulaire de recherche intégrée -->
+        <form method="GET" action="{% url 'shop' %}" class="d-flex gap-2">
+          {% if active_category %}
+            <input type="hidden" name="category" value="{{ active_category.slug }}">
+          {% endif %}
+          <div class="input-group shadow-sm rounded-pill overflow-hidden bg-white p-1">
+            <span class="input-group-text bg-white border-0 ps-3 text-muted">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </span>
+            <input type="text" name="q" value="{{ query }}" class="form-control border-0 shadow-none ps-1" placeholder="Rechercher un produit, une marque...">
+            <button class="btn btn-secondary rounded-pill px-4" type="submit">Rechercher</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
-<body>
+<!-- Filtres par catégorie et Tri -->
+<div class="bg-white border-bottom py-3 sticky-top" style="top: 72px; z-index: 100;">
+  <div class="container">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <!-- Filtres Catégories (Pills) -->
+      <div class="d-flex flex-wrap gap-2 align-items-center">
+        <span class="fw-semibold text-dark small me-1"><i class="fa-solid fa-filter me-1 text-success"></i> Rayons :</span>
+        <a href="{% url 'shop' %}{% if query %}?q={{ query }}{% endif %}" class="btn btn-sm rounded-pill px-3 {% if not active_category %}btn-success{% else %}btn-outline-secondary{% endif %}">
+          Tous ({% if total_count %}{{ total_count }}{% else %}0{% endif %})
+        </a>
+        {% for cat in categories %}
+          <a href="{% url 'shop' %}?category={{ cat.slug }}{% if query %}&q={{ query }}{% endif %}" class="btn btn-sm rounded-pill px-3 {% if active_category.slug == cat.slug %}btn-success{% else %}btn-outline-secondary{% endif %}">
+            {{ cat.nom }}
+          </a>
+        {% endfor %}
+      </div>
 
-    <!-- Start Header/Navigation -->
-    <nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+      <!-- Sélecteur de Tri -->
+      <div class="d-flex align-items-center gap-2">
+        <label for="sortSelect" class="small text-muted mb-0 text-nowrap">Trier par :</label>
+        <select id="sortSelect" class="form-select form-select-sm rounded-pill" style="min-width: 180px;" onchange="location = this.value;">
+          <option value="{% url 'shop' %}?{% if active_category %}category={{ active_category.slug }}&{% endif %}{% if query %}q={{ query }}&{% endif %}sort=newest" {% if sort == 'newest' %}selected{% endif %}>Nouveautés d'abord</option>
+          <option value="{% url 'shop' %}?{% if active_category %}category={{ active_category.slug }}&{% endif %}{% if query %}q={{ query }}&{% endif %}sort=price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Prix : Moins cher</option>
+          <option value="{% url 'shop' %}?{% if active_category %}category={{ active_category.slug }}&{% endif %}{% if query %}q={{ query }}&{% endif %}sort=price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Prix : Plus cher</option>
+          <option value="{% url 'shop' %}?{% if active_category %}category={{ active_category.slug }}&{% endif %}{% if query %}q={{ query }}&{% endif %}sort=name_asc" {% if sort == 'name_asc' %}selected{% endif %}>Nom (A-Z)</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
 
-        <div class="container">
+<!-- Grille des Produits -->
+<div class="py-5" style="background-color: #f8faf9;">
+  <div class="container">
+    {% if query or active_category %}
+      <div class="d-flex align-items-center justify-content-between mb-4">
+        <h5 class="text-dark mb-0">
+          Résultats pour : 
+          {% if active_category %}<span class="badge bg-success">{{ active_category.nom }}</span>{% endif %}
+          {% if query %}<span class="badge bg-secondary">« {{ query }} »</span>{% endif %}
+          <small class="text-muted fs-6 ms-2">({{ page_obj.paginator.count }} produit{{ page_obj.paginator.count|pluralize }})</small>
+        </h5>
+        <a href="{% url 'shop' %}" class="btn btn-sm btn-link text-danger text-decoration-none">
+          <i class="fa-solid fa-xmark me-1"></i> Réinitialiser les filtres
+        </a>
+      </div>
+    {% endif %}
 
-            <a class="navbar-brand" href="index.html">E-SHOP<span>.</span></a>
+    <div class="row g-4">
+      {% for produit in produits %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div class="product-card">
+            <!-- Badge statut stock & catégorie -->
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge bg-light text-muted border small text-truncate" style="max-width: 140px;">
+                {{ produit.categorie.nom }}
+              </span>
+              {% if produit.en_stock %}
+                <span class="badge bg-success-subtle text-success small"><i class="fa-solid fa-check me-1"></i>En stock</span>
+              {% else %}
+                <span class="badge bg-danger-subtle text-danger small">Rupture</span>
+              {% endif %}
+            </div>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni"
-                aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <!-- Image Produit -->
+            <div class="my-auto text-center py-2">
+              {% if produit.image %}
+                <img src="{{ produit.image.url }}" class="product-thumbnail" alt="{{ produit.nom }}" data-bs-toggle="modal" data-bs-target="#productModal{{ produit.id }}" style="cursor: pointer;">
+              {% else %}
+                <div class="d-flex align-items-center justify-content-center bg-light rounded" style="height: 200px;">
+                  <i class="fa-solid fa-image fs-1 text-muted opacity-25"></i>
+                </div>
+              {% endif %}
+            </div>
 
-            <div class="collapse navbar-collapse" id="navbarsFurni">
-                <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-                    <li class="nav-item ">
-                        <a class="nav-link" href="{% url 'home' %}">Home</a>
-                    </li>
-                    <li class="active"><a class="nav-link" href="shop.html">Shop</a></li>
-                    <li><a class="nav-link" href="about.html">About us</a></li>
-                    <li><a class="nav-link" href="services.html">Services</a></li>
-                    <li><a class="nav-link" href="blog.html">Blog</a></li>
-                    <li><a class="nav-link" href="contact.html">Contact us</a></li>
-                </ul>
-                {% if user.is_authenticated %}
-                <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-                    <li><a class="nav-link" href="{% url 'profil' %}"><img src="{% static 'images/user.svg' %}"></a></li>
-                    <li><a class="nav-link" href="{% url 'cart' %}"><img src="{% static 'images/cart.svg' %}"></a></li>
-                </ul>
+            <!-- Titre & Prix -->
+            <div class="mt-auto">
+              <h3 class="product-title text-truncate" title="{{ produit.nom }}" data-bs-toggle="modal" data-bs-target="#productModal{{ produit.id }}" style="cursor: pointer;">
+                {{ produit.nom }}
+              </h3>
+              <div class="product-price">{{ produit.prix|floatformat:0 }} <small class="fs-6 fw-normal">FCFA</small></div>
 
+              <!-- Actions -->
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#productModal{{ produit.id }}" title="Détails du produit">
+                  <i class="fa-solid fa-eye"></i>
+                </button>
+                {% if produit.en_stock %}
+                  <button type="button" class="btn btn-primary flex-grow-1 rounded-pill d-flex align-items-center justify-content-center gap-2" onclick="ajouterAuPanierAjax({{ produit.id }})">
+                    <i class="fa-solid fa-cart-plus"></i> Ajouter
+                  </button>
                 {% else %}
-                <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-                    <li><a class="nav-link" href="{% url 'profil' %}"><img src="{% static 'images/user.svg' %}"></a></li>
-
-                </ul>
-
+                  <button type="button" class="btn btn-light flex-grow-1 rounded-pill text-muted" disabled>
+                    Rupture
+                  </button>
                 {% endif %}
-
-
+              </div>
             </div>
-        </div>
+          </div>
 
-    </nav>
-    <!-- End Header/Navigation -->
-
-    <!-- Start Hero Section -->
-    <div class="hero">
-        <div class="container">
-            <div class="row justify-content-between">
-                <div class="col-lg-5">
-                    <div class="intro-excerpt">
-                        <h1>Shop</h1>
-
+          <!-- Modal Détails Produit -->
+          <div class="modal fade" id="productModal{{ produit.id }}" tabindex="-1" aria-labelledby="modalLabel{{ produit.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+              <div class="modal-content border-0 rounded-4 shadow-lg overflow-hidden">
+                <div class="modal-header border-0 pb-0">
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                <div class="modal-body p-4">
+                  <div class="row g-4 align-items-center">
+                    <div class="col-md-6 text-center">
+                      {% if produit.image %}
+                        <img src="{{ produit.image.url }}" class="img-fluid rounded-3" style="max-height: 320px; object-fit: contain;" alt="{{ produit.nom }}">
+                      {% else %}
+                        <div class="bg-light p-5 rounded-3"><i class="fa-solid fa-image fs-1 text-muted"></i></div>
+                      {% endif %}
                     </div>
+                    <div class="col-md-6">
+                      <span class="badge bg-success-subtle text-success mb-2">{{ produit.categorie.nom }}</span>
+                      <h4 class="fw-bold text-dark mb-2">{{ produit.nom }}</h4>
+                      <div class="fs-3 fw-bold text-success mb-3">{{ produit.prix|floatformat:0 }} FCFA</div>
+                      <p class="text-muted mb-4">{{ produit.description|linebreaksbr }}</p>
 
-                </div>
-                <div class="col-lg-7">
-                    <!-- Ici se trouvait Shop3, remplacé par le formulaire de recherche -->
-                    <form class="d-flex mb-2 mb-md-0">
-                        <input class="form-control me-2" type="search" placeholder="Rechercher un produit"
-                            aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Rechercher</button>
-                    </form>
-                </div>
-            </div>
-            <div class="intro-excerpt">
+                      <div class="mb-3 small text-muted">
+                        <i class="fa-solid fa-box me-1"></i> Stock disponible : <strong>{{ produit.quantite }} unité{{ produit.quantite|pluralize }}</strong>
+                      </div>
 
-            </div>
-        </div>
-        <div class="intro-excerpt">
-
-        </div>
-    </div>
-    <!-- End Hero Section -->
-
-    <style>
-        .product-item {
-            position: relative;
-            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .product-item:hover {
-            transform: translateY(-10px);
-        }
-
-        .product-item img {
-            width: 100%;
-            height: auto;
-            max-height: 200px;
-            object-fit: cover;
-        }
-
-        .product-item-body {
-            padding: 15px;
-            text-align: center;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .product-item-body h3 {
-            font-size: 18px;
-            margin: 10px 0;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .product-item-body p {
-            font-size: 16px;
-            color: #555;
-        }
-
-        .add-to-cart-btn {
-            background-color: #29352c;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            display: none;
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .product-item:hover .add-to-cart-btn {
-            display: block;
-        }
-
-        .add-to-cart-btn:hover {
-            background-color: #28342a;
-        }
-    </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('.product-item').hover(
-                function () {
-                    $(this).find('.add-to-cart-btn').fadeIn();
-                }, function () {
-                    $(this).find('.add-to-cart-btn').fadeOut();
-                }
-            );
-        });
-    </script>
-
-    <!-- Product template debut affichage de produits -->
-    <!-- Product template -->
-    <div class="untree_co-section product-section before-footer-section">
-        <div class="container">
-            <div class="row">
-                {% for categorie in categories %}
-                <!-- Start Category Column -->
-                <div class="col-12 mb-5">
-                    <h2>{{ categorie.nom }}</h2>
-                    <div class="row">
-                        {% for produit in categorie.produit_set.all %}
-                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-5">
-                            <div class="product-item position-relative">
-                                <img src="{{ produit.image.url }}" alt="Image" class="img-fluid">
-                                <div class="product-item-body">
-                                    <h3>{{ produit.nom }}</h3>
-                                    <p>{{ produit.prix }} FCFA</p>
-                                    {% if user.is_authenticated %}
-                                    <button onclick="showPopup('{{ produit.id }}')" class="btn btn-black btn-sm add-to-cart-btn">Ajouter au panier</button>
-                                    {% else %}
-                                    <a href="{% url 'login' %}" class="btn btn-black btn-sm add-to-cart-btn">Se connecter</a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
+                      {% if produit.en_stock %}
+                        <button type="button" class="btn btn-primary btn-lg w-100 rounded-pill" onclick="ajouterAuPanierAjax({{ produit.id }});" data-bs-dismiss="modal">
+                          <i class="fa-solid fa-cart-plus me-2"></i> Ajouter au panier
+                        </button>
+                      {% else %}
+                        <button type="button" class="btn btn-light btn-lg w-100 rounded-pill text-muted" disabled>
+                          Produit en rupture de stock
+                        </button>
+                      {% endif %}
                     </div>
+                  </div>
                 </div>
-                <!-- End Category Column -->
-                {% endfor %}
+              </div>
             </div>
+          </div>
         </div>
+      {% empty %}
+        <div class="col-12 text-center py-5">
+          <i class="fa-solid fa-magnifying-glass fs-1 text-muted mb-3 d-block"></i>
+          <h4>Aucun produit ne correspond à votre recherche</h4>
+          <p class="text-muted">Essayez d'ajuster vos mots-clés ou parcourez nos autres catégories.</p>
+          <a href="{% url 'shop' %}" class="btn btn-primary rounded-pill px-4 mt-2">
+            Voir tous les articles
+          </a>
+        </div>
+      {% endfor %}
     </div>
 
-    <!-- Pop-up HTML -->
-    <div id="popup"
-        style="display:none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid black;">
-        <h3>Confirm Quantity</h3>
-        <input type="number" id="quantite" min="1" value="1">
-        <button onclick="addToCart()" class="btn btn-primary btn-sm">Confirm</button>
-        <button onclick="hidePopup()" class="btn btn-secondary btn-sm">Cancel</button>
-    </div>
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+      <nav class="mt-5 d-flex justify-content-center" aria-label="Pagination boutique">
+        <ul class="pagination pagination-lg">
+          {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link rounded-circle m-1" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if active_category %}&category={{ active_category.slug }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}" aria-label="Précédent">
+                <i class="fa-solid fa-chevron-left"></i>
+              </a>
+            </li>
+          {% endif %}
 
-    <script>
-        function showPopup(produitId) {
-            document.getElementById('popup').style.display = 'block';
-            document.getElementById('popup').dataset.produitId = produitId;
-        }
+          {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+              <li class="page-item active"><span class="page-link rounded-circle m-1 bg-success border-success text-white">{{ num }}</span></li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <li class="page-item">
+                <a class="page-link rounded-circle m-1 text-dark" href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if active_category %}&category={{ active_category.slug }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}">{{ num }}</a>
+              </li>
+            {% endif %}
+          {% endfor %}
 
-        function hidePopup() {
-            document.getElementById('popup').style.display = 'none';
-        }
-
-        function addToCart() {
-            const produitId = document.getElementById('popup').dataset.produitId;
-            const quantite = document.getElementById('quantite').value;
-
-            fetch(`/ajouter-au-panier/${produitId}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify({ quantite: quantite })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    hidePopup();
-                    alert('Produit ajouté au panier');
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-    </script>
-    <!-- Fin Pop-up HTML -->
-    <!-- Product template fin -->
-
-    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'js/tiny-slider.js' %}"></script>
-    <script src="{% static 'js/custom.js' %}"></script>
-</body>
-
-</html>
+          {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link rounded-circle m-1" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if active_category %}&category={{ active_category.slug }}{% endif %}{% if sort %}&sort={{ sort }}{% endif %}" aria-label="Suivant">
+                <i class="fa-solid fa-chevron-right"></i>
+              </a>
+            </li>
+          {% endif %}
+        </ul>
+      </nav>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

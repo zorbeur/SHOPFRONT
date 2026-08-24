@@ -1,0 +1,348 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html
+  lang="fr"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="{% static 'admin/assets/' %}"
+  data-template="vertical-menu-template-free"
+>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+  <title>{% block title %}Administration | E-SHOP{% endblock %}</title>
+
+  <link rel="icon" type="image/x-icon" href="{% static 'images/eshop.png' %}" />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{% static 'admin/assets/vendor/fonts/boxicons.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Sneat Core & Theme CSS -->
+  <link rel="stylesheet" href="{% static 'admin/assets/vendor/css/core.css' %}" class="template-customizer-core-css" />
+  <link rel="stylesheet" href="{% static 'admin/assets/vendor/css/theme-default.css' %}" class="template-customizer-theme-css" />
+  <link rel="stylesheet" href="{% static 'admin/assets/css/demo.css' %}" />
+  <link rel="stylesheet" href="{% static 'admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
+
+  <style>
+    .bg-menu-theme .menu-item.active > .menu-link:not(.menu-toggle) {
+      background-color: #696cff !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 12px rgba(105, 108, 255, 0.4);
+    }
+    .table thead th {
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+    }
+    .card {
+      border-radius: 0.75rem;
+    }
+    .table td, .table th {
+      vertical-align: middle;
+    }
+  </style>
+
+  <!-- Helpers -->
+  <script src="{% static 'admin/assets/vendor/js/helpers.js' %}"></script>
+  <script src="{% static 'admin/assets/js/config.js' %}"></script>
+
+  {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+  <div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+      <!-- Menu Sidebar -->
+      <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+        <div class="app-brand demo py-3">
+          <a href="{% url 'admin_index' %}" class="app-brand-link d-flex align-items-center gap-2">
+            <span class="app-brand-logo demo">
+              <i class="fa-solid fa-bag-shopping fs-3 text-primary"></i>
+            </span>
+            <span class="app-brand-text demo menu-text fw-bolder text-uppercase" style="letter-spacing: -0.5px; font-size: 1.3rem;">E-SHOP Admin</span>
+          </a>
+
+          <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+            <i class="bx bx-chevron-left bx-sm align-middle"></i>
+          </a>
+        </div>
+
+        <div class="menu-inner-shadow"></div>
+
+        <ul class="menu-inner py-1">
+          <!-- Tableau de Bord -->
+          <li class="menu-item {% if request.resolver_match.url_name == 'admin_index' or request.resolver_match.url_name == 'admin_index_legacy' %}active{% endif %}">
+            <a href="{% url 'admin_index' %}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-home-circle"></i>
+              <div data-i18n="Analytics">Tableau de Bord</div>
+            </a>
+          </li>
+
+          <!-- Section CATALOGUE -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Catalogue Produits</span>
+          </li>
+
+          <!-- Produits -->
+          <li class="menu-item {% if 'produit' in request.resolver_match.url_name %}active open{% endif %}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-box"></i>
+              <div>Produits</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item {% if request.resolver_match.url_name == 'produit_list' %}active{% endif %}">
+                <a href="{% url 'produit_list' %}" class="menu-link">
+                  <div>Tous les Produits</div>
+                </a>
+              </li>
+              <li class="menu-item {% if request.resolver_match.url_name == 'produit_create' %}active{% endif %}">
+                <a href="{% url 'produit_create' %}" class="menu-link">
+                  <div>Ajouter un Produit</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Catégories -->
+          <li class="menu-item {% if 'categorie' in request.resolver_match.url_name %}active open{% endif %}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+              <i class="menu-icon tf-icons bx bx-category"></i>
+              <div>Catégories</div>
+            </a>
+            <ul class="menu-sub">
+              <li class="menu-item {% if request.resolver_match.url_name == 'categorie_list' %}active{% endif %}">
+                <a href="{% url 'categorie_list' %}" class="menu-link">
+                  <div>Toutes les Catégories</div>
+                </a>
+              </li>
+              <li class="menu-item {% if request.resolver_match.url_name == 'categorie_create' %}active{% endif %}">
+                <a href="{% url 'categorie_create' %}" class="menu-link">
+                  <div>Nouvelle Catégorie</div>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Section COMMANDES & LOGISTIQUE -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Ventes & Logistique</span>
+          </li>
+
+          <!-- Commandes -->
+          <li class="menu-item {% if 'commande' in request.resolver_match.url_name %}active{% endif %}">
+            <a href="{% url 'commandes_admin' %}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-cart"></i>
+              <div>Commandes</div>
+            </a>
+          </li>
+
+          <!-- Livraisons -->
+          <li class="menu-item {% if 'livraison' in request.resolver_match.url_name %}active{% endif %}">
+            <a href="{% url 'liste_livraisons' %}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-package"></i>
+              <div>Suivi Livraisons</div>
+            </a>
+          </li>
+
+          <!-- Section UTILISATEURS -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Gestion Utilisateurs</span>
+          </li>
+
+          <!-- Clients -->
+          <li class="menu-item {% if request.resolver_match.url_name == 'liste_clients' %}active{% endif %}">
+            <a href="{% url 'liste_clients' %}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-user"></i>
+              <div>Comptes Clients</div>
+            </a>
+          </li>
+
+          <!-- Inscription Admin / Utilisateur -->
+          <li class="menu-item {% if request.resolver_match.url_name == 'inscription_admin' %}active{% endif %}">
+            <a href="{% url 'inscription_admin' %}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-user-plus"></i>
+              <div>Créer un Compte</div>
+            </a>
+          </li>
+
+          <!-- Section NOTIFICATIONS -->
+          <li class="menu-header small text-uppercase">
+            <span class="menu-header-text">Communication</span>
+          </li>
+
+          <!-- Notifications -->
+          <li class="menu-item {% if 'notification' in request.resolver_match.url_name %}active{% endif %}">
+            <a href="{% url 'afficher_notifications' %}" class="menu-link">
+              <i class="menu-icon tf-icons bx bx-bell"></i>
+              <div>Notifications</div>
+            </a>
+          </li>
+
+          <!-- Retour Boutique -->
+          <li class="menu-item mt-4">
+            <a href="{% url 'home' %}" target="_blank" class="menu-link bg-primary text-white rounded-3 mx-3 py-2">
+              <i class="menu-icon tf-icons bx bx-globe text-white"></i>
+              <div>Voir la Boutique</div>
+            </a>
+          </li>
+        </ul>
+      </aside>
+      <!-- / Menu Sidebar -->
+
+      <!-- Layout container -->
+      <div class="layout-page">
+        <!-- Navbar -->
+        <nav
+          class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+          id="layout-navbar"
+        >
+          <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+              <i class="bx bx-menu bx-sm"></i>
+            </a>
+          </div>
+
+          <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+            <div class="navbar-nav align-items-center">
+              <div class="nav-item d-flex align-items-center">
+                <span class="badge bg-label-primary px-3 py-2 fw-semibold">
+                  <i class="bx bx-shield-quarter me-1"></i> Panneau d'Administration
+                </span>
+              </div>
+            </div>
+
+            <ul class="navbar-nav flex-row align-items-center ms-auto gap-3">
+              <!-- Notifications Bell -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link position-relative p-2" href="{% url 'afficher_notifications' %}" title="Notifications">
+                  <i class="bx bx-bell fs-4 text-muted"></i>
+                  {% if notifications_non_lues and notifications_non_lues > 0 %}
+                    <span class="badge bg-danger rounded-pill position-absolute top-0 end-0 px-1 py-0" style="font-size: 10px;">
+                      {{ notifications_non_lues }}
+                    </span>
+                  {% endif %}
+                </a>
+              </li>
+
+              <!-- User Profile Dropdown -->
+              <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                  <div class="avatar avatar-online">
+                    {% if user.photo_de_profil %}
+                      <img src="{{ user.photo_de_profil.url }}" alt class="w-px-40 h-auto rounded-circle" />
+                    {% else %}
+                      <div class="avatar-initial rounded-circle bg-label-primary fw-bold">
+                        {{ user.prenom|slice:":1"|default:user.nomutilisateur|slice:":1"|upper }}
+                      </div>
+                    {% endif %}
+                  </div>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
+                  <li>
+                    <a class="dropdown-item" href="#">
+                      <div class="d-flex">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="avatar avatar-online">
+                            {% if user.photo_de_profil %}
+                              <img src="{{ user.photo_de_profil.url }}" alt class="w-px-40 h-auto rounded-circle" />
+                            {% else %}
+                              <div class="avatar-initial rounded-circle bg-label-primary fw-bold">
+                                {{ user.prenom|slice:":1"|default:user.nomutilisateur|slice:":1"|upper }}
+                              </div>
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <span class="fw-semibold d-block">{{ user.get_full_name }}</span>
+                          <small class="text-muted">Administrateur</small>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                  <li><div class="dropdown-divider"></div></li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'profil' %}" target="_blank">
+                      <i class="bx bx-user me-2"></i>
+                      <span class="align-middle">Mon Profil</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" href="{% url 'afficher_notifications' %}">
+                      <i class="bx bx-bell me-2"></i>
+                      <span class="align-middle">Notifications</span>
+                    </a>
+                  </li>
+                  <li><div class="dropdown-divider"></div></li>
+                  <li>
+                    <a class="dropdown-item text-danger" href="{% url 'deconnexion_admin' %}">
+                      <i class="bx bx-power-off me-2"></i>
+                      <span class="align-middle">Déconnexion</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <!-- / Navbar -->
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+          <div class="container-xxl flex-grow-1 container-p-y">
+            <!-- Messages Flash -->
+            {% if messages %}
+              {% for message in messages %}
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm rounded-3" role="alert">
+                  {{ message }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              {% endfor %}
+            {% endif %}
+
+            {% block content %}{% endblock %}
+          </div>
+          <!-- / Content -->
+
+          <!-- Footer -->
+          <footer class="content-footer footer bg-footer-theme">
+            <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+              <div class="mb-2 mb-md-0 text-muted">
+                © {% now "Y" %} <strong>E-SHOP</strong> Backoffice. Tous droits réservés.
+              </div>
+              <div>
+                <a href="{% url 'home' %}" target="_blank" class="footer-link me-4">Aller à la Boutique</a>
+                <a href="{% url 'commandes_admin' %}" class="footer-link">Gestion Commandes</a>
+              </div>
+            </div>
+          </footer>
+          <!-- / Footer -->
+
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+  </div>
+
+  <!-- Core JS -->
+  <script src="{% static 'admin/assets/vendor/libs/jquery/jquery.js' %}"></script>
+  <script src="{% static 'admin/assets/vendor/libs/popper/popper.js' %}"></script>
+  <script src="{% static 'admin/assets/vendor/js/bootstrap.js' %}"></script>
+  <script src="{% static 'admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+  <script src="{% static 'admin/assets/vendor/js/menu.js' %}"></script>
+  <script src="{% static 'admin/assets/js/main.js' %}"></script>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

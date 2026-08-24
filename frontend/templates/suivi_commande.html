@@ -1,0 +1,118 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}E-SHOP | Suivi de Commande et Colis en Ligne{% endblock %}
+
+{% block content %}
+<div class="hero py-4" style="background: var(--primary-gradient);">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="text-white fw-bold mb-1">Suivre un Colis</h1>
+        <p class="text-white-50 mb-0">Renseignez votre numéro de commande pour connaître l'avancement de votre livraison en temps réel.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="py-5" style="background-color: #f8fafc; min-height: 70vh;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <!-- Formulaire de recherche de commande -->
+        <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white mb-4 text-center">
+          <span class="d-inline-flex p-3 rounded-circle bg-success-subtle text-success fs-2 mb-3 mx-auto">
+            <i class="fa-solid fa-magnifying-glass-location"></i>
+          </span>
+          <h4 class="fw-bold text-dark mb-2">Rechercher une Commande</h4>
+          <p class="text-muted small mb-4">Entrez votre numéro de commande (ex: #12 ou 12) ou votre numéro de téléphone.</p>
+
+          <form method="GET" action="{% url 'suivi_commande_public' %}" class="d-flex gap-2 max-w-lg mx-auto w-100">
+            <div class="input-group input-group-lg rounded-pill overflow-hidden border">
+              <span class="input-group-text bg-white border-0 ps-3 text-muted">
+                <i class="fa-solid fa-hashtag"></i>
+              </span>
+              <input type="text" name="q" value="{{ query }}" class="form-control border-0 shadow-none ps-1" placeholder="Numéro de commande ou tél..." required>
+              <button class="btn btn-secondary px-4 fw-bold" type="submit">Suivre</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Résultat de la Recherche -->
+        {% if recherche_effectuee %}
+          {% if commande %}
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+              <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom gap-2">
+                <div>
+                  <h5 class="fw-bold text-dark mb-1">Commande #{{ commande.id }}</h5>
+                  <span class="text-muted small">Passée le {{ commande.date_commande|date:"d F Y à H:i" }} par {{ commande.utilisateur.get_full_name }}</span>
+                </div>
+                <span class="badge bg-{{ commande.status_badge_class }} fs-6 px-3 py-2 rounded-pill">
+                  {{ commande.get_etat_commande_display }}
+                </span>
+              </div>
+
+              <!-- Stepper Visuel 4 Étapes -->
+              <div class="stepper-wrapper d-flex justify-content-between position-relative my-4 px-2">
+                <div class="stepper-item text-center flex-fill position-relative">
+                  <div class="step-counter rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 {% if commande.etat_commande in 'EN_ATTENTE,EN_TRAITEMENT,EXPEDIE,LIVRE' %}bg-success text-white{% else %}bg-light text-muted{% endif %}" style="width: 40px; height: 40px; font-weight: 700;">
+                    <i class="fa-solid fa-receipt"></i>
+                  </div>
+                  <div class="step-name fw-bold small text-dark">Enregistrée</div>
+                </div>
+
+                <div class="stepper-item text-center flex-fill position-relative">
+                  <div class="step-counter rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 {% if commande.etat_commande in 'EN_TRAITEMENT,EXPEDIE,LIVRE' %}bg-success text-white{% else %}bg-light text-muted{% endif %}" style="width: 40px; height: 40px; font-weight: 700;">
+                    <i class="fa-solid fa-box-open"></i>
+                  </div>
+                  <div class="step-name fw-bold small text-dark">En Préparation</div>
+                </div>
+
+                <div class="stepper-item text-center flex-fill position-relative">
+                  <div class="step-counter rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 {% if commande.etat_commande in 'EXPEDIE,LIVRE' %}bg-success text-white{% else %}bg-light text-muted{% endif %}" style="width: 40px; height: 40px; font-weight: 700;">
+                    <i class="fa-solid fa-truck-fast"></i>
+                  </div>
+                  <div class="step-name fw-bold small text-dark">En Route</div>
+                </div>
+
+                <div class="stepper-item text-center flex-fill position-relative">
+                  <div class="step-counter rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 {% if commande.etat_commande == 'LIVRE' %}bg-success text-white{% else %}bg-light text-muted{% endif %}" style="width: 40px; height: 40px; font-weight: 700;">
+                    <i class="fa-solid fa-house-circle-check"></i>
+                  </div>
+                  <div class="step-name fw-bold small text-dark">Livrée</div>
+                </div>
+              </div>
+
+              <!-- Détails & Articles -->
+              <div class="bg-light rounded-3 p-3 mt-3">
+                <div class="d-flex justify-content-between mb-1 small">
+                  <span class="text-muted">Lieu de livraison :</span>
+                  <strong class="text-dark">{{ commande.adresse_livraison }}, {{ commande.ville }}</strong>
+                </div>
+                <div class="d-flex justify-content-between small">
+                  <span class="text-muted">Total réglé :</span>
+                  <strong class="text-success fs-6">{{ commande.total|floatformat:0 }} FCFA</strong>
+                </div>
+              </div>
+
+              <div class="mt-4 text-center">
+                <a href="{% url 'commande_status' commande.id %}" class="btn btn-primary rounded-pill px-4">
+                  Voir la facture détaillée et le reçu
+                </a>
+              </div>
+            </div>
+          {% else %}
+            <div class="alert alert-warning border-0 rounded-4 shadow-sm p-4 text-center">
+              <i class="fa-solid fa-triangle-exclamation fs-2 text-warning mb-2 d-block"></i>
+              <h5 class="fw-bold text-dark">Aucune commande trouvée</h5>
+              <p class="text-muted small mb-0">
+                Aucune commande ne correspond à la recherche « <strong>{{ query }}</strong> ». Vérifiez votre numéro de commande ou contactez notre support client au +228 90 91 23 67.
+              </p>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

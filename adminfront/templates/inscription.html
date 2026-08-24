@@ -1,106 +1,91 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription Administrateur</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    <style>
-        .form-outline {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
+﻿{% extends 'admin_base.html' %}
+{% load static %}
 
-        .form-outline input,
-        .form-outline textarea {
-            width: 100%;
-            padding: 1rem;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 0.5rem;
-        }
+{% block title %}Créer un Nouvel Utilisateur / Administrateur | E-SHOP Admin{% endblock %}
 
-        .form-outline label {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            padding: 0 0.25rem;
-            background: #fff;
-            transition: 0.2s;
-            font-size: 1rem;
-            color: #777;
-        }
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="card-title m-0 fw-bold text-dark d-flex align-items-center gap-2">
+          <i class="bx bx-user-plus text-primary fs-4"></i>
+          Créer un Nouveau Compte
+        </h5>
+        <a href="{% url 'liste_clients' %}" class="btn btn-sm btn-outline-secondary rounded-pill">
+          <i class="bx bx-arrow-back me-1"></i> Liste des Clients
+        </a>
+      </div>
 
-        .form-outline input:focus + label,
-        .form-outline input:not(:placeholder-shown) + label,
-        .form-outline textarea:focus + label,
-        .form-outline textarea:not(:placeholder-shown) + label {
-            top: -0.75rem;
-            left: 1rem;
-            font-size: 0.75rem;
-            color: #4f6f41;
-        }
+      <div class="card-body p-4">
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
 
-        .form-outline .text-danger {
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-    </style>
-</head>
-<body>
-<section class="vh-100" style="background-color: #4f6f41;">
-  <div class="container py-5 h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col col-xl-10">
-        <div class="card" style="border-radius: 1rem;">
-          <div class="row g-0">
-            <div class="col-md-6 col-lg-5 d-none d-md-block">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
-                alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold text-dark">{{ form.prenom.label }} <span class="text-danger">*</span></label>
+              {{ form.prenom }}
+              {% if form.prenom.errors %}<div class="text-danger small mt-1">{{ form.prenom.errors }}</div>{% endif %}
             </div>
-            <div class="col-md-6 col-lg-7 d-flex align-items-center">
-              <div class="card-body p-4 p-lg-5 text-black">
-
-                <form method="POST" enctype="multipart/form-data">
-                  {% csrf_token %}
-
-                  <div class="d-flex align-items-center mb-3 pb-1">
-                    <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
-                    <span class="h1 fw-bold mb-0">SHOP</span>
-                  </div>
-
-                  <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Ajouter un Utiisateur</h5>
-
-                  {% for field in form %}
-                  <div class="form-outline mb-4">
-                    {{ field }}
-                    <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {% if field.errors %}
-                      <div class="text-danger">{{ field.errors }}</div>
-                    {% endif %}
-                  </div>
-                  {% endfor %}
-
-                  <div class="pt-1 mb-4">
-                    <button class="btn btn-dark btn-lg btn-block" type="submit">L'inscrire</button>
-                  </div>
-
-                  <a class="small text-muted" href="{% url 'connexion_admin' %}">Déjà un compte ? Connectez-vous ici</a>
-                  <a href="#" class="small text-muted">Conditions d'utilisation.</a>
-                  <a href="#" class="small text-muted">Politique de confidentialité</a>
-                </form>
-
-              </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold text-dark">{{ form.nom.label }} <span class="text-danger">*</span></label>
+              {{ form.nom }}
+              {% if form.nom.errors %}<div class="text-danger small mt-1">{{ form.nom.errors }}</div>{% endif %}
             </div>
           </div>
-        </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-dark">{{ form.nomutilisateur.label }} <span class="text-danger">*</span></label>
+            {{ form.nomutilisateur }}
+            {% if form.nomutilisateur.errors %}<div class="text-danger small mt-1">{{ form.nomutilisateur.errors }}</div>{% endif %}
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-dark">{{ form.email.label }} <span class="text-danger">*</span></label>
+            {{ form.email }}
+            {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors }}</div>{% endif %}
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-dark">{{ form.numero_de_telephone.label }}</label>
+            {{ form.numero_de_telephone }}
+            {% if form.numero_de_telephone.errors %}<div class="text-danger small mt-1">{{ form.numero_de_telephone.errors }}</div>{% endif %}
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-dark">{{ form.photo_de_profil.label }}</label>
+            {{ form.photo_de_profil }}
+            {% if form.photo_de_profil.errors %}<div class="text-danger small mt-1">{{ form.photo_de_profil.errors }}</div>{% endif %}
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-dark">Mot de passe <span class="text-danger">*</span></label>
+            <input type="password" name="password1" class="form-control" placeholder="Au moins 6 caractères" required>
+            {% if form.password1.errors %}<div class="text-danger small mt-1">{{ form.password1.errors }}</div>{% endif %}
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold text-dark">Confirmation mot de passe <span class="text-danger">*</span></label>
+            <input type="password" name="password2" class="form-control" placeholder="Retapez le mot de passe" required>
+            {% if form.password2.errors %}<div class="text-danger small mt-1">{{ form.password2.errors }}</div>{% endif %}
+          </div>
+
+          <div class="form-check mb-4">
+            {{ form.is_staff }}
+            <label class="form-check-label fw-semibold text-dark ms-2" for="{{ form.is_staff.id_for_label }}">
+              Accorder les privilèges d'accès au panneau d'administration (Staff)
+            </label>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+            <a href="{% url 'liste_clients' %}" class="btn btn-outline-secondary rounded-pill px-4">Annuler</a>
+            <button type="submit" class="btn btn-primary rounded-pill px-4">
+              <i class="bx bx-check me-1"></i> Créer le Compte
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
-</section>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
-</body>
-</html>
+</div>
+{% endblock %}

@@ -1,77 +1,114 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if form.instance.pk %}Modifier{% else %}Créer{% endif %} une commande</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        h1 {
-            text-align: center;
-            margin: 20px 0;
-        }
-        .container {
-            width: 80%;
-            margin: 0 auto;
-        }
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 0.5rem;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 0.3rem;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 0.3rem;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .btn-back {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #ffa500;
-            color: white;
-            border-radius: 0.3rem;
-            text-decoration: none;
-            margin-top: 20px;
-            display: inline-block;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>{% if form.instance.pk %}Modifier{% else %}Créer{% endif %} une commande</h1>
-        <form method="post">
-            {% csrf_token %}
-            <div class="form-group">
-                {{ form.as_p }}
+﻿{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title %}Modifier Commande #{{ commande.id }} | E-SHOP Admin{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="card-title m-0 fw-bold text-dark d-flex align-items-center gap-2">
+          <i class="bx bx-edit text-primary fs-4"></i>
+          Modifier la Commande #{{ commande.id }}
+        </h5>
+        <a href="{% url 'commandes_admin' %}" class="btn btn-sm btn-outline-secondary rounded-pill">
+          <i class="bx bx-arrow-back me-1"></i> Retour aux commandes
+        </a>
+      </div>
+
+      <div class="card-body p-4">
+        <!-- Informations Client & Produits -->
+        <div class="bg-light rounded-3 p-3 mb-4">
+          <div class="row g-2">
+            <div class="col-sm-6">
+              <small class="text-muted d-block">Client :</small>
+              <strong class="text-dark">{{ commande.utilisateur.get_full_name }} (@{{ commande.utilisateur.nomutilisateur }})</strong>
             </div>
-            <button type="submit">Enregistrer</button>
+            <div class="col-sm-6">
+              <small class="text-muted d-block">Date de Commande :</small>
+              <span class="text-dark">{{ commande.date_commande|date:"d/m/Y à H:i" }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulaire de modification -->
+        <form method="POST">
+          {% csrf_token %}
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold text-dark">{{ form.etat_commande.label }} <span class="text-danger">*</span></label>
+              {{ form.etat_commande }}
+              {% if form.etat_commande.errors %}<div class="text-danger small mt-1">{{ form.etat_commande.errors }}</div>{% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold text-dark">{{ form.total.label }} (FCFA) <span class="text-danger">*</span></label>
+              {{ form.total }}
+              {% if form.total.errors %}<div class="text-danger small mt-1">{{ form.total.errors }}</div>{% endif %}
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-dark">{{ form.adresse_livraison.label }} <span class="text-danger">*</span></label>
+            {{ form.adresse_livraison }}
+            {% if form.adresse_livraison.errors %}<div class="text-danger small mt-1">{{ form.adresse_livraison.errors }}</div>{% endif %}
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-5">
+              <label class="form-label fw-semibold text-dark">{{ form.ville.label }} <span class="text-danger">*</span></label>
+              {{ form.ville }}
+              {% if form.ville.errors %}<div class="text-danger small mt-1">{{ form.ville.errors }}</div>{% endif %}
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold text-dark">{{ form.pays.label }} <span class="text-danger">*</span></label>
+              {{ form.pays }}
+              {% if form.pays.errors %}<div class="text-danger small mt-1">{{ form.pays.errors }}</div>{% endif %}
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold text-dark">{{ form.code_postal.label }}</label>
+              {{ form.code_postal }}
+              {% if form.code_postal.errors %}<div class="text-danger small mt-1">{{ form.code_postal.errors }}</div>{% endif %}
+            </div>
+          </div>
+
+          <!-- Détail des articles -->
+          <div class="mb-4">
+            <h6 class="fw-bold text-dark mb-2">Articles commandés ({{ commande.elements.count }}) :</h6>
+            <div class="table-responsive">
+              <table class="table table-bordered table-sm small">
+                <thead class="table-light">
+                  <tr>
+                    <th>Article</th>
+                    <th class="text-center">Quantité</th>
+                    <th class="text-end">Prix Unitaire</th>
+                    <th class="text-end">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in commande.elements.all %}
+                    <tr>
+                      <td>{{ item.produit.nom }}</td>
+                      <td class="text-center">{{ item.quantite }}</td>
+                      <td class="text-end">{{ item.prix_unitaire|floatformat:0 }} FCFA</td>
+                      <td class="text-end fw-bold">{{ item.prix_total|floatformat:0 }} FCFA</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+            <a href="{% url 'commandes_admin' %}" class="btn btn-outline-secondary rounded-pill px-4">Annuler</a>
+            <button type="submit" class="btn btn-primary rounded-pill px-4">
+              <i class="bx bx-save me-1"></i> Mettre à jour la Commande
+            </button>
+          </div>
         </form>
-        <a href="{% url 'commandes_admin' %}" class="btn-back">Retour à la liste des commandes</a>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+</div>
+{% endblock %}

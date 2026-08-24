@@ -1,204 +1,193 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paiement</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    <style>
-        .form-outline {
-            position: relative;
-            margin-bottom: 1.5rem;
-        }
+﻿{% extends 'base.html' %}
+{% load static %}
 
-        .form-outline input,
-        .form-outline textarea {
-            width: 100%;
-            padding: 1rem;
-            font-size: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 0.5rem;
-        }
+{% block title %}E-SHOP | Finaliser ma Commande et Paiement{% endblock %}
 
-        .form-outline label {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            padding: 0 0.25rem;
-            background: #fff;
-            transition: 0.2s;
-            font-size: 1rem;
-            color: #777;
-            pointer-events: none;
-        }
-
-        .form-outline input:focus + label,
-        .form-outline input:not(:placeholder-shown) + label,
-        .form-outline textarea:focus + label,
-        .form-outline textarea:not(:placeholder-shown) + label {
-            top: -0.75rem;
-            left: 1rem;
-            font-size: 0.75rem;
-            color: #4f6f41;
-        }
-
-        .form-outline .text-danger {
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-
-        .card {
-            border-radius: 1rem;
-        }
-
-        .btn-dark {
-            background-color: #4f6f41;
-            border: none;
-        }
-
-        .btn-dark:hover {
-            background-color: #3e5d34;
-        }
-
-        .container {
-            margin-top: 30px;
-        }
-
-        .table {
-            width: 100%;
-            margin-bottom: 20px;
-            border-collapse: collapse;
-        }
-
-        .table th, .table td {
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
-
-        .total h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .card-body {
-            background-color: #fff;
-            border-radius: 1rem;
-        }
-    </style>
-</head>
-<body>
-<section class="vh-100" style="background-color: #4f6f41;">
-  <div class="container py-5 h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col col-xl-10">
-        <div class="card">
-          <div class="row g-0">
-            <div class="col-md-6 col-lg-5 d-none d-md-block">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
-                alt="payment form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
-            </div>
-            <div class="col-md-6 col-lg-7 d-flex align-items-center">
-              <div class="card-body p-4 p-lg-5 text-black">
-
-                <form method="POST" action="{% url 'process_payment' %}">
-                  {% csrf_token %}
-
-                  <div class="d-flex align-items-center mb-3 pb-1">
-                    <i class="fas fa-credit-card fa-2x me-3" style="color: #ff6219;"></i>
-                    <span class="h1 fw-bold mb-0">Paiement</span>
-                  </div>
-
-                  <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Veuillez entrer vos informations de paiement</h5>
-
-                  {% if form.errors %}
-                    <div class="alert alert-danger" role="alert">
-                      {% for error in form.non_field_errors %}
-                        <div>{{ error }}</div>
-                      {% endfor %}
-                    </div>
-                  {% endif %}
-
-                  <div class="form-outline mb-4">
-                    <input type="text" id="nom" name="nom" class="form-control" value="{{ nom }}" required>
-                    <label class="form-label" for="nom">Nom complet</label>
-                  </div>
-
-                  <div class="form-outline mb-4">
-                    <input type="text" id="adresse" name="adresse" class="form-control" value="{{ adresse }}" required>
-                    <label class="form-label" for="adresse">Adresse</label>
-                  </div>
-
-                  <div class="form-outline mb-4">
-                    <input type="text" id="ville" name="ville" class="form-control" value="{{ ville }}" required>
-                    <label class="form-label" for="ville">Ville</label>
-                  </div>
-
-                  <div class="form-outline mb-4">
-                    <input type="text" id="code_postal" name="code_postal" class="form-control" value="{{ code_postal }}" required>
-                    <label class="form-label" for="code_postal">Code postal</label>
-                  </div>
-
-                  <div class="form-outline mb-4">
-                    <input type="text" id="pays" name="pays" class="form-control" value="{{ pays }}" required>
-                    <label class="form-label" for="pays">Pays</label>
-                  </div>
-
-                  <div class="form-outline mb-4">
-                    <input type="text" id="numero_carte" name="numero_carte" class="form-control" required>
-                    <label class="form-label" for="numero_carte">Numéro de carte</label>
-                  </div>
-
-                  <div class="form-outline mb-4">
-                    <input type="month" id="date_expiration" name="date_expiration" class="form-control" required>
-                    <label class="form-label" for="date_expiration">Date d'expiration</label>
-                  </div>
-
-                  <div class="form-outline mb-4">
-                    <input type="text" id="cvv" name="cvv" class="form-control" pattern="\d{3,4}" title="Le CVV doit contenir 3 ou 4 chiffres" minlength="3" maxlength="4" required>
-                    <label class="form-label" for="cvv">CVV</label>
-                  </div>
-
-                  <button type="submit" class="btn btn-dark btn-lg">Payer</button>
-                </form>
-
-              </div>
-            </div>
-
-            <div class="col-md-12 mt-4">
-              <h2 class="h4 text-black mb-3">Récapitulatif de la commande</h2>
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Produit</th>
-                    <th>Quantité</th>
-                    <th>Prix</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for item in cart_items %}
-                  <tr>
-                    <td>{{ item.nom }}</td>
-                    <td>{{ item.quantite }}</td>
-                    <td>{{ item.total_prix }} FCFA</td>
-                  </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-              <div class="total">
-                <h3>Total: {{ cart_total }} FCFA</h3>
-              </div>
-            </div>
-
-          </div>
-        </div>
+{% block content %}
+<div class="hero py-4" style="background: var(--primary-color);">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="text-white fw-bold mb-1">Passer la Commande</h1>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-white-50 text-decoration-none">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'cart' %}" class="text-white-50 text-decoration-none">Panier</a></li>
+            <li class="breadcrumb-item active text-white" aria-current="page">Paiement</li>
+          </ol>
+        </nav>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
-</body>
-</html>
+<div class="py-5" style="background-color: #f8faf9;">
+  <div class="container">
+    <form method="POST" action="{% url 'paiement' %}">
+      {% csrf_token %}
+      <div class="row g-4">
+        <!-- Informations de Livraison & Mode de Paiement -->
+        <div class="col-lg-7">
+          <!-- Carte 1: Adresse de livraison -->
+          <div class="card border-0 shadow-sm rounded-4 p-4 bg-white mb-4">
+            <h5 class="fw-bold text-dark mb-4 pb-2 border-bottom d-flex align-items-center gap-2">
+              <i class="fa-solid fa-location-dot text-success"></i> 1. Adresse de Livraison
+            </h5>
+
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label fw-semibold text-dark">{{ form.adresse.label }} <span class="text-danger">*</span></label>
+                {{ form.adresse }}
+                {% if form.adresse.errors %}<div class="text-danger small mt-1">{{ form.adresse.errors }}</div>{% endif %}
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-dark">{{ form.ville.label }} <span class="text-danger">*</span></label>
+                {{ form.ville }}
+                {% if form.ville.errors %}<div class="text-danger small mt-1">{{ form.ville.errors }}</div>{% endif %}
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-dark">{{ form.pays.label }} <span class="text-danger">*</span></label>
+                {{ form.pays }}
+                {% if form.pays.errors %}<div class="text-danger small mt-1">{{ form.pays.errors }}</div>{% endif %}
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-dark">{{ form.code_postal.label }}</label>
+                {{ form.code_postal }}
+                {% if form.code_postal.errors %}<div class="text-danger small mt-1">{{ form.code_postal.errors }}</div>{% endif %}
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold text-dark">{{ form.telephone.label }} <span class="text-danger">*</span></label>
+                {{ form.telephone }}
+                {% if form.telephone.errors %}<div class="text-danger small mt-1">{{ form.telephone.errors }}</div>{% endif %}
+              </div>
+
+              <div class="col-12">
+                <label class="form-label fw-semibold text-dark">{{ form.notes.label }}</label>
+                {{ form.notes }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Carte 2: Mode de Paiement -->
+          <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <h5 class="fw-bold text-dark mb-4 pb-2 border-bottom d-flex align-items-center gap-2">
+              <i class="fa-solid fa-credit-card text-success"></i> 2. Mode de Règlement
+            </h5>
+
+            <div class="d-flex flex-column gap-3">
+              <div class="border rounded-3 p-3 bg-light d-flex align-items-center gap-3">
+                <input class="form-check-input" type="radio" name="methode_paiement" id="pay1" value="LIVRAISON" checked>
+                <label class="form-check-label flex-grow-1 cursor-pointer" for="pay1">
+                  <div class="fw-bold text-dark">Paiement à la Livraison</div>
+                  <div class="small text-muted">Réglez en espèces ou par Mobile Money lors de la réception de votre colis.</div>
+                </label>
+                <i class="fa-solid fa-hand-holding-dollar fs-3 text-success"></i>
+              </div>
+
+              <div class="border rounded-3 p-3 bg-white d-flex align-items-center gap-3">
+                <input class="form-check-input" type="radio" name="methode_paiement" id="pay2" value="TMONEY">
+                <label class="form-check-label flex-grow-1 cursor-pointer" for="pay2">
+                  <div class="fw-bold text-dark">T-Money (Togocom)</div>
+                  <div class="small text-muted">Paiement mobile instantané sécurisé par Togocom.</div>
+                </label>
+                <span class="badge bg-warning text-dark fw-bold px-2 py-1">T-Money</span>
+              </div>
+
+              <div class="border rounded-3 p-3 bg-white d-flex align-items-center gap-3">
+                <input class="form-check-input" type="radio" name="methode_paiement" id="pay3" value="FLOOZ">
+                <label class="form-check-label flex-grow-1 cursor-pointer" for="pay3">
+                  <div class="fw-bold text-dark">Flooz (Moov Africa Togo)</div>
+                  <div class="small text-muted">Paiement mobile direct via Moov Money.</div>
+                </label>
+                <span class="badge bg-primary text-white fw-bold px-2 py-1">Flooz</span>
+              </div>
+
+              <div class="border rounded-3 p-3 bg-white d-flex align-items-center gap-3">
+                <input class="form-check-input" type="radio" name="methode_paiement" id="pay4" value="CARTE">
+                <label class="form-check-label flex-grow-1 cursor-pointer" for="pay4">
+                  <div class="fw-bold text-dark">Carte Bancaire (Visa / Mastercard)</div>
+                  <div class="small text-muted">Paiement en ligne sécurisé avec chiffrement SSL.</div>
+                </label>
+                <div class="d-flex gap-1 text-muted fs-4">
+                  <i class="fa-brands fa-cc-visa text-primary"></i>
+                  <i class="fa-brands fa-cc-mastercard text-danger"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Récapitulatif Commande -->
+        <div class="col-lg-5">
+          <div class="card border-0 shadow-sm rounded-4 p-4 bg-white sticky-top" style="top: 90px;">
+            <h5 class="fw-bold text-dark mb-4 pb-2 border-bottom d-flex justify-content-between align-items-center">
+              <span>Votre Commande</span>
+              <span class="badge bg-success-subtle text-success small">{{ cart_count }} article{{ cart_count|pluralize }}</span>
+            </h5>
+
+            <!-- Liste des articles -->
+            <div class="cart-items-preview mb-4" style="max-height: 280px; overflow-y: auto;">
+              {% for item in cart_items %}
+                <div class="d-flex align-items-center gap-3 mb-3 pb-2 border-bottom">
+                  <div class="rounded-3 bg-light p-1 text-center" style="width: 50px; height: 50px;">
+                    {% if item.image %}
+                      <img src="{{ item.image.url }}" alt="{{ item.nom }}" class="img-fluid rounded" style="max-height: 42px; object-fit: contain;">
+                    {% else %}
+                      <i class="fa-solid fa-image text-muted fs-4"></i>
+                    {% endif %}
+                  </div>
+                  <div class="flex-grow-1 text-truncate">
+                    <h6 class="fw-bold mb-0 text-dark small text-truncate">{{ item.nom }}</h6>
+                    <span class="text-muted small">{{ item.quantite }} x {{ item.prix|floatformat:0 }} FCFA</span>
+                  </div>
+                  <div class="fw-bold text-dark small">
+                    {{ item.total_prix|floatformat:0 }} FCFA
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+
+            <!-- Calculs finaux -->
+            <div class="d-flex justify-content-between mb-2 text-muted small">
+              <span>Sous-total articles</span>
+              <span class="fw-semibold text-dark">{{ cart_subtotal|floatformat:0 }} FCFA</span>
+            </div>
+
+            <div class="d-flex justify-content-between mb-3 text-muted small">
+              <span>Frais de livraison</span>
+              {% if frais_livraison == 0 %}
+                <span class="badge bg-success-subtle text-success fw-bold">Offerts</span>
+              {% else %}
+                <span class="fw-semibold text-dark">{{ frais_livraison|floatformat:0 }} FCFA</span>
+              {% endif %}
+            </div>
+
+            <hr class="my-3">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <span class="fw-bold fs-5 text-dark">Montant Total</span>
+              <span class="fw-extrabold fs-4 text-success">{{ cart_total|floatformat:0 }} FCFA</span>
+            </div>
+
+            <!-- Bouton de validation -->
+            <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill fw-bold py-3 shadow d-flex align-items-center justify-content-center gap-2">
+              <i class="fa-solid fa-check"></i>
+              <span>Confirmer ma Commande</span>
+            </button>
+
+            <div class="mt-3 text-center">
+              <small class="text-muted">
+                <i class="fa-solid fa-lock text-success me-1"></i> Vos données sont protégées et cryptées.
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

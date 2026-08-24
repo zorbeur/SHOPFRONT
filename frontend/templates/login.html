@@ -1,77 +1,61 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Connexion</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-</head>
-<body>
-<section class="vh-100" style="background-color: #4f6f41;">
-  <div class="container py-5 h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col col-xl-10">
-        <div class="card" style="border-radius: 1rem;">
-          <div class="row g-0">
-            <div class="col-md-6 col-lg-5 d-none d-md-block">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
-                alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}E-SHOP | Connexion à votre compte{% endblock %}
+
+{% block content %}
+<div class="py-5" style="background-color: #f8faf9; min-height: 80vh;">
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-md-8 col-lg-5">
+        <div class="card border-0 shadow-lg rounded-4 overflow-hidden bg-white p-4 p-md-5">
+          <!-- Logo & Header -->
+          <div class="text-center mb-4">
+            <div class="d-inline-flex p-3 rounded-circle bg-success-subtle text-success fs-3 mb-2">
+              <i class="fa-solid fa-lock"></i>
             </div>
-            <div class="col-md-6 col-lg-7 d-flex align-items-center">
-              <div class="card-body p-4 p-lg-5 text-black">
-
-                <form method="POST" action="{% url 'connexion' %}">
-                  {% csrf_token %}
-
-                  {% if messages %}
-                      <div class="messages">
-                          {% for message in messages %}
-                              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
-                                  <span class="error-message">{{ message }}</span>
-                              </div>
-                          {% endfor %}
-                      </div>
-                  {% endif %}
-
-                  <div class="d-flex align-items-center mb-3 pb-1">
-                    <i class="fas fa-cubes fa-2x me-3" style="color: #ff6219;"></i>
-                    <span class="h1 fw-bold mb-0">SHOP</span>
-                  </div>
-
-                  <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Connectez-vous à votre compte</h5>
-
-                  <div class="form-outline mb-4">
-                    <input type="text" id="username" name="username" class="form-control form-control-lg" required />
-                    <label class="form-label" for="username">Nom d'utilisateur</label>
-                  </div>
-
-                  <div class="form-outline mb-4">
-                    <input type="password" id="password" name="password" class="form-control form-control-lg" required />
-                    <label class="form-label" for="password">Mot de passe</label>
-                  </div>
-
-                  <div class="pt-1 mb-4">
-                    <button class="btn btn-dark btn-lg btn-block" type="submit">Se connecter</button>
-                  </div>
-
-                  <a class="small text-muted" href="#">Mot de passe oublié ?</a>
-                  <p class="mb-5 pb-lg-2" style="color: #393f81;">Pas encore de compte ? <a href="{% url 'enregistrement' %}" style="color: #393f81;">Inscrivez-vous ici</a></p>
-
-                  <a href="#" class="small text-muted">Conditions d'utilisation</a>
-                  <a href="#" class="small text-muted">Politique de confidentialité</a>
-                </form>
-
-              </div>
-            </div>
+            <h3 class="fw-bold text-dark mb-1">Bon retour parmi nous</h3>
+            <p class="text-muted small">Connectez-vous pour accéder à vos commandes et votre panier.</p>
           </div>
+
+          <!-- Formulaire de Connexion -->
+          <form method="POST" action="{% url 'connexion' %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold text-dark small">Nom d'utilisateur</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0 text-muted"><i class="fa-solid fa-user"></i></span>
+                {{ form.username }}
+              </div>
+              {% if form.username.errors %}<div class="text-danger small mt-1">{{ form.username.errors }}</div>{% endif %}
+            </div>
+
+            <div class="mb-4">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <label class="form-label fw-semibold text-dark small mb-0">Mot de passe</label>
+              </div>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0 text-muted"><i class="fa-solid fa-key"></i></span>
+                {{ form.password }}
+              </div>
+              {% if form.password.errors %}<div class="text-danger small mt-1">{{ form.password.errors }}</div>{% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill fw-bold py-3 shadow-sm mb-3">
+              <i class="fa-solid fa-right-to-bracket me-2"></i> Se Connecter
+            </button>
+
+            <div class="text-center pt-3 border-top">
+              <span class="text-muted small">Vous n'avez pas encore de compte ?</span>
+              <a href="{% url 'enregistrement' %}" class="fw-bold text-success text-decoration-none ms-1 small">
+                Créer un compte gratuitement
+              </a>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
-</section>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
-</body>
-</html>
+</div>
+{% endblock %}

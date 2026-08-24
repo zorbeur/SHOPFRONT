@@ -1,58 +1,55 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Merci pour votre commande</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css">
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            color: #343a40;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            margin-top: 50px;
-            text-align: center;
-        }
-        .card {
-            border-radius: 1rem;
-            padding: 20px;
-            background-color: #ffffff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .btn-primary {
-            background-color: #4f6f41;
-            border: none;
-        }
-        .btn-primary:hover {
-            background-color: #3e5d34;
-        }
-        .thanks-message {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="card">
-            <div class="thanks-message">
-                Merci pour votre commande !
-            </div>
-            <p>Nous avons bien reçu votre commande et nous nous occupons de la préparer. Vous recevrez une confirmation par SMS lorsque votre commande sera expédiée.</p>
-            <a href="{% url 'commande_status' commande_id %}" class="btn btn-primary btn-lg">
-                Voir l'état de ma commande
-            </a>
-            <a href="{% url 'shop' %}" class="btn btn-black btn-sm">Retour à la boutique      
-            </a>
+﻿{% extends 'base.html' %}
+{% load static %}
 
+{% block title %}E-SHOP | Merci pour votre Commande !{% endblock %}
+
+{% block content %}
+<div class="py-5" style="background-color: #f8faf9; min-height: 70vh;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+        <div class="card border-0 shadow-lg rounded-4 text-center p-5 bg-white">
+          <div class="mb-4">
+            <span class="d-inline-flex p-4 rounded-circle bg-success text-white fs-1 shadow">
+              <i class="fa-solid fa-check"></i>
+            </span>
+          </div>
+
+          <h2 class="fw-bold text-dark mb-2">Merci pour votre commande !</h2>
+          <p class="text-muted mb-4">
+            Votre commande <strong>#{{ commande.id }}</strong> a été enregistrée avec succès. Notre équipe prépare votre colis avec le plus grand soin.
+          </p>
+
+          <div class="bg-light rounded-4 p-4 mb-4 text-start">
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Numéro de Commande :</span>
+              <strong class="text-dark">#{{ commande.id }}</strong>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Date & Heure :</span>
+              <span class="text-dark">{{ commande.date_commande|date:"d/m/Y à H:i" }}</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span class="text-muted">Adresse de livraison :</span>
+              <span class="text-dark">{{ commande.adresse_livraison }}, {{ commande.ville }} ({{ commande.pays }})</span>
+            </div>
+            <div class="d-flex justify-content-between border-top pt-2 mt-2">
+              <span class="fw-bold text-dark">Montant Total Réglé :</span>
+              <strong class="text-success fs-5">{{ commande.total|floatformat:0 }} FCFA</strong>
+            </div>
+          </div>
+
+          <div class="d-flex flex-wrap justify-content-center gap-3">
+            <a href="{% url 'commande_status' commande.id %}" class="btn btn-primary btn-lg rounded-pill px-4">
+              <i class="fa-solid fa-truck me-2"></i> Suivre ma commande
+            </a>
+            <a href="{% url 'shop' %}" class="btn btn-outline-secondary btn-lg rounded-pill px-4">
+              <i class="fa-solid fa-store me-2"></i> Retourner à la boutique
+            </a>
+          </div>
         </div>
+      </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
-</body>
-</html>
+  </div>
+</div>
+{% endblock %}

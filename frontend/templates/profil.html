@@ -1,145 +1,184 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Utilisateur</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.css">
-    <style>
-        body {
-            background-color: #357e53;
-        }
-        .profile-card {
-            background-color: #6a9b5e;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-top: 50px;
-        }
-        .profile-image {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 20px;
-        }
-        .profile-info {
-            text-align: center;
-        }
-        .profile-info h5 {
-            margin-bottom: 5px;
-        }
-        .profile-info p {
-            color: #6c757d;
-        }
-        .profile-stats {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-        }
-        .profile-stats .stat {
-            text-align: center;
-        }
-        .profile-stats .stat h6 {
-            margin-bottom: 5px;
-        }
-        .profile-stats .stat p {
-            color: #6c757d;
-        }
-        .orders {
-            margin-top: 30px;
-        }
-        .orders table {
-            width: 100%;
-            margin-bottom: 20px;
-            border-collapse: collapse;
-        }
-        .orders th, .orders td {
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
-        .text-center a {
-            margin: 5px;
-        }
-    </style>
-</head>
-<body>
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="profile-card">
-                <div class="profile-info">
-                    {% if user.is_authenticated %}
-                        <img src="https://www.bing.com/th?id=OIP.lG7_GtvmhlgyrUO0q4xfKgHaHk&w=150&h=153&c=8&rs=1&qlt=90&o=6&dpr=2.3&pid=3.1&rm=2" alt="Profil Image" class="profile-image">
-                    {% else %}
-                        <img src="https://th.bing.com/th/id/OIP.x7rwEJkms37ZHEARSI6a1wHaHa?w=157&h=180&c=7&r=0&o=5&dpr=2.3&pid=1.7" alt="Profil Image" class="profile-image">
-                    {% endif %}
-                    <h5>{{ user.username }}</h5>
-                    <p>{{ user.email }}</p>
-                </div>
-                <div class="profile-stats">
-                    <div class="stat">
-                        <h6>Balance</h6>
-                        <p>3800.24FCFA</p>
-                    </div>
-                    <div class="stat">
-                        <h6>Orders</h6>
-                        <p>{{ commandes.count }}</p>
-                    </div>
-                    <div class="stat">
-                        <h6>Points</h6>
-                        <p>13600</p>
-                    </div>
-                </div>
-                <div class="text-center mt-4">
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'logout' %}" class="btn btn-danger">Déconnexion</a>
-                    {% else %}
-                        <a href="{% url 'connexion' %}" class="btn btn-dark me-2">Connexion</a>
-                        <a href="{% url 'enregistrement' %}" class="btn btn-dark">Inscription</a>
-                    {% endif %}
-                    
-                    {% if user.is_authenticated %}
-                    <a href="{% url 'home2' %}" class="btn btn-primary">Retour à l'accueil</a>
-                    {% else %}
-                    <a href="{% url 'home' %}" class="btn btn-primary">Retour à l'accueil</a>
-                    {% endif %}
-                </div>
+﻿{% extends 'base.html' %}
+{% load static %}
 
-                <div class="orders">
-                    <h3 class="text-center">Historique des commandes</h3>
-                    {% if commandes %}
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Numéro de commande</th>
-                                    <th>Date</th>
-                                    <th>Total</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for commande in commandes %}
-                                    <tr>
-                                        <td>{{ commande.id }}</td>
-                                        <td>{{ commande.date_commande|date:"d/m/Y" }}</td>
-                                        <td>{{ commande.total }}FCFA</td>
-                                        <td>{{ commande.etat_commande }}</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    {% else %}
-                        <p class="text-center">Vous n'avez passé aucune commande pour le moment.</p>
-                    {% endif %}
-                </div>
-                
+{% block title %}E-SHOP | Mon Profil & Mes Commandes{% endblock %}
 
-            </div>
-        </div>
+{% block content %}
+<div class="hero py-4" style="background: var(--primary-color);">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-12">
+        <h1 class="text-white fw-bold mb-1">Mon Espace Client</h1>
+        <p class="text-white-50 mb-0">Gérez vos informations personnelles et suivez vos commandes en cours.</p>
+      </div>
     </div>
+  </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.2/mdb.min.js"></script>
-</body>
-</html>
+
+<div class="py-5" style="background-color: #f8faf9;">
+  <div class="container">
+    <div class="row g-4">
+      <!-- Colonne Profil Utilisateur -->
+      <div class="col-lg-4">
+        <!-- Carte Infos Profil -->
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white text-center mb-4">
+          <div class="position-relative d-inline-block mx-auto mb-3">
+            {% if user.photo_de_profil %}
+              <img src="{{ user.photo_de_profil.url }}" alt="{{ user.get_full_name }}" class="rounded-circle shadow" style="width: 120px; height: 120px; object-fit: cover; border: 4px solid var(--light-bg);">
+            {% else %}
+              <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center fw-bold shadow mx-auto fs-1" style="width: 120px; height: 120px;">
+                {{ user.prenom|slice:":1"|default:user.nomutilisateur|slice:":1"|upper }}
+              </div>
+            {% endif %}
+          </div>
+
+          <h5 class="fw-bold text-dark mb-1">{{ user.get_full_name|default:user.nomutilisateur }}</h5>
+          <span class="badge bg-light text-muted border mb-3">@{{ user.nomutilisateur }}</span>
+
+          <ul class="list-unstyled text-start small text-muted border-top pt-3 mb-4">
+            <li class="mb-2 d-flex align-items-center gap-2">
+              <i class="fa-solid fa-envelope text-success"></i>
+              <span class="text-dark fw-medium text-truncate">{{ user.email }}</span>
+            </li>
+            <li class="mb-2 d-flex align-items-center gap-2">
+              <i class="fa-solid fa-phone text-success"></i>
+              <span class="text-dark fw-medium">{{ user.numero_de_telephone|default:"Non renseigné" }}</span>
+            </li>
+            <li class="mb-2 d-flex align-items-center gap-2">
+              <i class="fa-solid fa-calendar-check text-success"></i>
+              <span>Inscrit le {{ user.date_inscription|date:"d/m/Y"|default:"2024" }}</span>
+            </li>
+            {% if user.is_staff or user.is_superuser %}
+              <li class="mt-3">
+                <a href="{% url 'admin_index' %}" class="btn btn-sm btn-dark w-100 rounded-pill text-warning fw-bold">
+                  <i class="fa-solid fa-gauge me-1"></i> Panneau d'Administration
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+
+          <button class="btn btn-outline-success rounded-pill w-100 btn-sm" data-bs-toggle="collapse" data-bs-target="#editProfileCollapse">
+            <i class="fa-solid fa-user-pen me-1"></i> Modifier mes informations
+          </button>
+        </div>
+
+        <!-- Formulaire de modification en accordéon -->
+        <div class="collapse mb-4" id="editProfileCollapse">
+          <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+            <h6 class="fw-bold text-dark mb-3">Mettre à jour mon profil</h6>
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label class="form-label small text-muted">Prénom</label>
+                {{ form.prenom }}
+              </div>
+              <div class="mb-3">
+                <label class="form-label small text-muted">Nom</label>
+                {{ form.nom }}
+              </div>
+              <div class="mb-3">
+                <label class="form-label small text-muted">Email</label>
+                {{ form.email }}
+              </div>
+              <div class="mb-3">
+                <label class="form-label small text-muted">Numéro de téléphone</label>
+                {{ form.numero_de_telephone }}
+              </div>
+              <div class="mb-3">
+                <label class="form-label small text-muted">Photo de profil</label>
+                {{ form.photo_de_profil }}
+              </div>
+              <button type="submit" class="btn btn-primary rounded-pill w-100">Enregistrer les modifications</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Statistiques Résumé -->
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
+          <h6 class="fw-bold text-dark mb-3">Mon Activité</h6>
+          <div class="row g-2 text-center">
+            <div class="col-6">
+              <div class="bg-light rounded-3 p-3">
+                <div class="fs-4 fw-bold text-success">{{ commandes.count }}</div>
+                <div class="small text-muted">Commandes</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="bg-light rounded-3 p-3">
+                <div class="fs-5 fw-bold text-dark">{{ total_depense|floatformat:0 }}</div>
+                <div class="small text-muted">FCFA Dépensés</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Colonne Historique des Commandes -->
+      <div class="col-lg-8" id="commandes">
+        <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden">
+          <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold mb-0 text-dark">
+              <i class="fa-solid fa-boxes-stacked me-2 text-success"></i> Historique de mes Commandes
+            </h5>
+            <span class="badge bg-light text-muted border">{{ commandes.count }} commande{{ commandes.count|pluralize }}</span>
+          </div>
+
+          {% if commandes %}
+            <div class="table-responsive">
+              <table class="table align-middle mb-0">
+                <thead class="table-light text-muted small text-uppercase">
+                  <tr>
+                    <th scope="col" class="ps-4">Commande</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Articles</th>
+                    <th scope="col">Montant</th>
+                    <th scope="col">Statut</th>
+                    <th scope="col" class="text-end pe-4">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for commande in commandes %}
+                    <tr>
+                      <td class="ps-4 py-3 fw-bold text-dark">
+                        #{{ commande.id }}
+                      </td>
+                      <td class="small text-muted">
+                        {{ commande.date_commande|date:"d/m/Y" }}
+                      </td>
+                      <td>
+                        <span class="small text-muted">{{ commande.elements.count }} article{{ commande.elements.count|pluralize }}</span>
+                      </td>
+                      <td class="fw-bold text-success">
+                        {{ commande.total|floatformat:0 }} FCFA
+                      </td>
+                      <td>
+                        <span class="badge bg-{{ commande.status_badge_class }} small">
+                          {{ commande.get_etat_commande_display }}
+                        </span>
+                      </td>
+                      <td class="text-end pe-4">
+                        <a href="{% url 'commande_status' commande.id %}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+                          <i class="fa-solid fa-eye me-1"></i> Suivre
+                        </a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <div class="text-center py-5">
+              <i class="fa-solid fa-box-open fs-1 text-muted opacity-50 mb-3 d-block"></i>
+              <h6 class="fw-bold text-dark">Vous n'avez pas encore passé de commande</h6>
+              <p class="text-muted small mb-3">Toutes vos futures commandes apparaîtront ici.</p>
+              <a href="{% url 'shop' %}" class="btn btn-sm btn-primary rounded-pill px-4">
+                Faire mes premiers achats
+              </a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

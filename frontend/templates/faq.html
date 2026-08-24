@@ -1,0 +1,141 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}E-SHOP | Foire Aux Questions (FAQ){% endblock %}
+
+{% block content %}
+<div class="hero py-4" style="background: var(--primary-gradient);">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <h1 class="text-white fw-bold mb-2">Foire Aux Questions (FAQ)</h1>
+        <p class="text-white-50 mb-0">Retrouvez les réponses aux questions les plus fréquemment posées sur nos commandes, livraisons et paiements.</p>
+      </div>
+      <div class="col-lg-5 text-lg-end mt-3 mt-lg-0">
+        <a href="{% url 'contact' %}" class="btn btn-secondary rounded-pill px-4">
+          <i class="fa-solid fa-headset me-2"></i> Poser une autre question
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="py-5" style="background-color: #f8fafc;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <!-- Section 1 : Commandes & Achats -->
+        <div class="mb-5">
+          <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+            <span class="badge bg-success-subtle text-success p-2 rounded-circle"><i class="fa-solid fa-cart-shopping"></i></span>
+            1. Commandes & Achats en Ligne
+          </h4>
+          <div class="accordion accordion-flush shadow-sm rounded-4 overflow-hidden" id="accordionOrders">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button fw-bold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#order1">
+                  Comment passer une commande sur E-SHOP ?
+                </button>
+              </h2>
+              <div id="order1" class="accordion-collapse collapse show" data-bs-parent="#accordionOrders">
+                <div class="accordion-body text-muted leading-relaxed">
+                  C'est très simple ! Parcourez notre catalogue, cliquez sur <strong>« Ajouter au panier »</strong> pour les articles souhaités, puis rendez-vous dans votre panier. Cliquez ensuite sur <strong>« Passer la commande »</strong>, renseignez votre adresse de livraison et sélectionnez votre moyen de paiement préféré.
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#order2">
+                  Dois-je obligatoirement avoir un compte pour commander ?
+                </button>
+              </h2>
+              <div id="order2" class="accordion-collapse collapse" data-bs-parent="#accordionOrders">
+                <div class="accordion-body text-muted leading-relaxed">
+                  La création d'un compte ne prend que 30 secondes et vous permet de suivre l'avancement de vos colis en direct, de consulter votre historique d'achats et de sauvegarder vos adresses pour vos futures commandes.
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#order3">
+                  Puis-je modifier ou annuler ma commande après validation ?
+                </button>
+              </h2>
+              <div id="order3" class="accordion-collapse collapse" data-bs-parent="#accordionOrders">
+                <div class="accordion-body text-muted leading-relaxed">
+                  Tant que votre commande est à l'état <em>« En attente »</em>, vous pouvez contacter notre service client par WhatsApp ou appel direct au <strong>+228 90 91 23 67</strong> pour ajuster les articles ou l'adresse de destination.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2 : Livraison & Expédition -->
+        <div class="mb-5">
+          <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+            <span class="badge bg-warning-subtle text-warning p-2 rounded-circle"><i class="fa-solid fa-truck-fast"></i></span>
+            2. Livraison & Expédition au Togo
+          </h4>
+          <div class="accordion accordion-flush shadow-sm rounded-4 overflow-hidden" id="accordionShipping">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button fw-bold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#ship1">
+                  Quels sont les délais de livraison ?
+                </button>
+              </h2>
+              <div id="ship1" class="accordion-collapse collapse show" data-bs-parent="#accordionShipping">
+                <div class="accordion-body text-muted leading-relaxed">
+                  Pour Lomé et ses environs immédiats, les commandes sont livrées sous <strong>24 à 48 heures ouvrées</strong>. Pour les villes de l'intérieur (Kpalimé, Atakpamé, Sokodé, Kara, Dapaong), comptez entre 48 et 72 heures.
+                </div>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#ship2">
+                  Combien coûte la livraison ?
+                </button>
+              </h2>
+              <div id="ship2" class="accordion-collapse collapse" data-bs-parent="#accordionShipping">
+                <div class="accordion-body text-muted leading-relaxed">
+                  La livraison est <strong>totalement GRATUITE</strong> pour toute commande à partir de <strong>50 000 FCFA</strong>. Pour les commandes inférieures, un tarif forfaitaire économique de <strong>1 500 FCFA</strong> est appliqué.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3 : Moyens de Paiement -->
+        <div class="mb-5">
+          <h4 class="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+            <span class="badge bg-primary-subtle text-primary p-2 rounded-circle"><i class="fa-solid fa-credit-card"></i></span>
+            3. Moyens de Paiement Acceptés
+          </h4>
+          <div class="accordion accordion-flush shadow-sm rounded-4 overflow-hidden" id="accordionPayment">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button fw-bold text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#pay1">
+                  Quels modes de règlement sont disponibles ?
+                </button>
+              </h2>
+              <div id="pay1" class="accordion-collapse collapse show" data-bs-parent="#accordionPayment">
+                <div class="accordion-body text-muted leading-relaxed">
+                  Nous acceptons plusieurs modes de paiement sécurisés :
+                  <ul class="mt-2 mb-0">
+                    <li><strong>Paiement en espèces ou Mobile Money à la réception du colis</strong> (tranquillité garantie).</li>
+                    <li><strong>T-Money (Togocom)</strong>.</li>
+                    <li><strong>Flooz (Moov Africa Togo)</strong>.</li>
+                    <li><strong>Cartes bancaires (Visa, Mastercard)</strong>.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

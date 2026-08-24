@@ -1,57 +1,141 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>État de la commande</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            margin-top: 50px;
-        }
-        .card {
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-        }
-        .card-header {
-            background-color: #007bff;
-            color: white;
-            font-size: 1.25rem;
-            padding: 10px 15px;
-        }
-        .card-body {
-            padding: 20px;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #004085;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="card">
-            <div class="card-header">
-                État de la commande
-            </div>
-            <div class="card-body">
-                <p><strong>Commande ID :</strong> {{ commande.id }}</p>
-                <p><strong>Total :</strong>  {{ commande.total|floatformat:2 }} FCFA</p>
-                <p><strong>Adresse de livraison :</strong> {{ commande.adresse_livraison }}</p>
-                <p><strong>État de la commande :</strong> {{ commande.get_etat_commande_display }}</p>
-                <!-- Vous pouvez ajouter plus de détails si nécessaire -->
-                <a href="{% url 'shop' %}" class="btn btn-primary">Retour à la boutique</a>
-            </div>
-        </div>
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}E-SHOP | Suivi de Commande #{{ commande.id }}{% endblock %}
+
+{% block content %}
+<div class="hero py-4" style="background: var(--primary-color);">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="text-white fw-bold mb-1">Suivi de votre Commande #{{ commande.id }}</h1>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-white-50 text-decoration-none">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'profil' %}" class="text-white-50 text-decoration-none">Mon Profil</a></li>
+            <li class="breadcrumb-item active text-white" aria-current="page">Suivi #{{ commande.id }}</li>
+          </ol>
+        </nav>
+      </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+  </div>
+</div>
+
+<div class="py-5" style="background-color: #f8faf9;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <!-- Carte Suivi & Étapes -->
+        <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white mb-4">
+          <div class="d-flex flex-wrap justify-content-between align-items-center mb-5 pb-3 border-bottom gap-2">
+            <div>
+              <h4 class="fw-bold text-dark mb-1">Commande #{{ commande.id }}</h4>
+              <span class="text-muted small">Passée le {{ commande.date_commande|date:"d F Y à H:i" }}</span>
+            </div>
+            <div>
+              <span class="badge bg-{{ commande.status_badge_class }} fs-6 px-3 py-2 rounded-pill">
+                {{ commande.get_etat_commande_display }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Timeline Stepper -->
+          <div class="stepper-wrapper d-flex justify-content-between position-relative my-4 px-2">
+            <!-- Step 1: En attente -->
+            <div class="stepper-item text-center flex-fill position-relative">
+              <div class="step-counter rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 {% if commande.etat_commande in 'EN_ATTENTE,EN_TRAITEMENT,EXPEDIE,LIVRE' %}bg-success text-white{% else %}bg-light text-muted{% endif %}" style="width: 44px; height: 44px; font-weight: 700;">
+                <i class="fa-solid fa-receipt"></i>
+              </div>
+              <div class="step-name fw-bold small text-dark">Reçue</div>
+              <div class="step-sub text-muted small d-none d-md-block">En attente</div>
+            </div>
+
+            <!-- Step 2: En traitement -->
+            <div class="stepper-item text-center flex-fill position-relative">
+              <div class="step-counter rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 {% if commande.etat_commande in 'EN_TRAITEMENT,EXPEDIE,LIVRE' %}bg-success text-white{% else %}bg-light text-muted{% endif %}" style="width: 44px; height: 44px; font-weight: 700;">
+                <i class="fa-solid fa-box-open"></i>
+              </div>
+              <div class="step-name fw-bold small text-dark">Préparation</div>
+              <div class="step-sub text-muted small d-none d-md-block">En traitement</div>
+            </div>
+
+            <!-- Step 3: Expédié -->
+            <div class="stepper-item text-center flex-fill position-relative">
+              <div class="step-counter rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 {% if commande.etat_commande in 'EXPEDIE,LIVRE' %}bg-success text-white{% else %}bg-light text-muted{% endif %}" style="width: 44px; height: 44px; font-weight: 700;">
+                <i class="fa-solid fa-truck-fast"></i>
+              </div>
+              <div class="step-name fw-bold small text-dark">Expédiée</div>
+              <div class="step-sub text-muted small d-none d-md-block">En cours de route</div>
+            </div>
+
+            <!-- Step 4: Livré -->
+            <div class="stepper-item text-center flex-fill position-relative">
+              <div class="step-counter rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2 {% if commande.etat_commande == 'LIVRE' %}bg-success text-white{% else %}bg-light text-muted{% endif %}" style="width: 44px; height: 44px; font-weight: 700;">
+                <i class="fa-solid fa-house-circle-check"></i>
+              </div>
+              <div class="step-name fw-bold small text-dark">Livrée</div>
+              <div class="step-sub text-muted small d-none d-md-block">Colis remis</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Détails et Articles -->
+        <div class="row g-4">
+          <div class="col-md-7">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+              <h5 class="fw-bold text-dark mb-4 pb-2 border-bottom">Articles commandés</h5>
+              <div class="table-responsive">
+                <table class="table align-middle mb-0">
+                  <tbody>
+                    {% for elem in commande.elements.all %}
+                      <tr>
+                        <td style="width: 60px;">
+                          {% if elem.produit.image %}
+                            <img src="{{ elem.produit.image.url }}" alt="{{ elem.produit.nom }}" class="img-fluid rounded" style="max-height: 48px; object-fit: contain;">
+                          {% else %}
+                            <i class="fa-solid fa-image text-muted fs-3"></i>
+                          {% endif %}
+                        </td>
+                        <td>
+                          <h6 class="fw-bold mb-0 text-dark small">{{ elem.produit.nom }}</h6>
+                          <span class="text-muted small">{{ elem.quantite }} x {{ elem.prix_unitaire|floatformat:0 }} FCFA</span>
+                        </td>
+                        <td class="text-end fw-bold text-dark">
+                          {{ elem.prix_total|floatformat:0 }} FCFA
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="2" class="fw-bold text-dark fs-6 pt-3">Total de la commande :</td>
+                      <td class="text-end fw-bold text-success fs-5 pt-3">{{ commande.total|floatformat:0 }} FCFA</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-5">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+              <h5 class="fw-bold text-dark mb-4 pb-2 border-bottom">Adresse de Livraison</h5>
+              <ul class="list-unstyled text-muted small mb-4">
+                <li class="mb-2"><strong class="text-dark">Destinataire :</strong> {{ commande.utilisateur.get_full_name }}</li>
+                <li class="mb-2"><strong class="text-dark">Adresse :</strong> {{ commande.adresse_livraison }}</li>
+                <li class="mb-2"><strong class="text-dark">Ville :</strong> {{ commande.ville }}</li>
+                <li class="mb-2"><strong class="text-dark">Pays :</strong> {{ commande.pays }}</li>
+                <li class="mb-2"><strong class="text-dark">Téléphone :</strong> {{ commande.utilisateur.numero_de_telephone }}</li>
+              </ul>
+
+              <a href="{% url 'shop' %}" class="btn btn-primary rounded-pill w-100 py-2 mt-auto">
+                <i class="fa-solid fa-cart-shopping me-2"></i> Poursuivre mes achats
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,169 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ produit.nom }} | E-SHOP Togo{% endblock %}
+
+{% block content %}
+<!-- Fil d'Ariane (Breadcrumb) -->
+<div class="bg-white border-bottom py-3">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0 small">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none text-muted">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'shop' %}" class="text-decoration-none text-muted">Boutique</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'shop' %}?category={{ produit.categorie.slug }}" class="text-decoration-none text-muted">{{ produit.categorie.nom }}</a></li>
+        <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">{{ produit.nom }}</li>
+      </ol>
+    </nav>
+  </div>
+</div>
+
+<!-- Section Principale Détails Produit -->
+<div class="py-5" style="background-color: #f8fafc;">
+  <div class="container">
+    <div class="row g-5">
+      <!-- Visuel Produit -->
+      <div class="col-lg-6">
+        <div class="card border-0 shadow-sm rounded-4 p-4 bg-white text-center position-relative">
+          {% if produit.en_stock %}
+            <span class="badge bg-success-subtle text-success position-absolute top-0 start-0 m-3 px-3 py-2 rounded-pill fw-bold">
+              <i class="fa-solid fa-check me-1"></i> En Stock ({{ produit.quantite }} restant{{ produit.quantite|pluralize }})
+            </span>
+          {% else %}
+            <span class="badge bg-danger position-absolute top-0 start-0 m-3 px-3 py-2 rounded-pill fw-bold">
+              Rupture de Stock
+            </span>
+          {% endif %}
+
+          <div class="py-4">
+            {% if produit.image %}
+              <img src="{{ produit.image.url }}" alt="{{ produit.nom }}" class="img-fluid rounded-3" style="max-height: 420px; object-fit: contain; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.1));">
+            {% else %}
+              <div class="bg-light p-5 rounded-4 d-flex align-items-center justify-content-center" style="height: 350px;">
+                <i class="fa-solid fa-image fs-1 text-muted opacity-25"></i>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Informations & Achat -->
+      <div class="col-lg-6">
+        <div class="ps-lg-3">
+          <div class="mb-2">
+            <a href="{% url 'shop' %}?category={{ produit.categorie.slug }}" class="badge bg-light text-muted border text-decoration-none px-3 py-2 rounded-pill">
+              {{ produit.categorie.nom }}
+            </a>
+          </div>
+
+          <h2 class="fw-bold text-dark mb-2">{{ produit.nom }}</h2>
+
+          <!-- Avis & Étoiles -->
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <div class="text-warning">
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star-half-stroke"></i>
+            </div>
+            <span class="small text-muted fw-semibold">4.8 / 5</span>
+            <span class="text-muted small">&bull; (24 avis vérifiés)</span>
+          </div>
+
+          <!-- Prix -->
+          <div class="d-flex align-items-baseline gap-3 mb-4">
+            <span class="display-6 fw-extrabold text-success">{{ produit.prix|floatformat:0 }} <small class="fs-5 text-muted fw-normal">FCFA</small></span>
+          </div>
+
+          <!-- Description -->
+          <div class="mb-4">
+            <h6 class="fw-bold text-dark mb-2">Description du produit :</h6>
+            <p class="text-muted leading-relaxed">{{ produit.description|linebreaksbr }}</p>
+          </div>
+
+          <!-- Sélecteur Quantité & Boutons d'Action -->
+          <div class="card border-0 shadow-sm rounded-4 p-3 bg-white mb-4">
+            <div class="d-flex flex-wrap align-items-center gap-3">
+              <div class="input-group" style="width: 130px;">
+                <button class="btn btn-outline-secondary" type="button" onclick="let q=document.getElementById('detailQty'); if(parseInt(q.value)>1) q.value=parseInt(q.value)-1;">-</button>
+                <input type="number" id="detailQty" class="form-control text-center fw-bold" value="1" min="1" max="{{ produit.quantite|default:1 }}">
+                <button class="btn btn-outline-secondary" type="button" onclick="let q=document.getElementById('detailQty'); q.value=parseInt(q.value)+1;">+</button>
+              </div>
+
+              {% if produit.en_stock %}
+                <button type="button" class="btn btn-primary rounded-pill px-4 py-2 flex-grow-1 d-flex align-items-center justify-content-center gap-2" onclick="ajouterAuPanierAjax({{ produit.id }}, parseInt(document.getElementById('detailQty').value))">
+                  <i class="fa-solid fa-cart-plus"></i> Ajouter au panier
+                </button>
+              {% else %}
+                <button type="button" class="btn btn-light rounded-pill px-4 py-2 flex-grow-1 text-muted" disabled>
+                  Indisponible
+                </button>
+              {% endif %}
+
+              <a href="{% url 'toggle_wishlist' produit.id %}" class="btn btn-outline-danger rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px;" title="Ajouter aux favoris">
+                <i class="fa-{% if is_in_wishlist %}solid{% else %}regular{% endif %} fa-heart fs-5"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Avantages E-SHOP -->
+          <div class="row g-2 text-muted small">
+            <div class="col-6">
+              <div class="p-2 border rounded-3 bg-white d-flex align-items-center gap-2">
+                <i class="fa-solid fa-truck-fast text-success fs-5"></i>
+                <span>Livraison rapide à Lomé (24-48h)</span>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="p-2 border rounded-3 bg-white d-flex align-items-center gap-2">
+                <i class="fa-solid fa-shield-check text-warning fs-5"></i>
+                <span>Garantie Satisfait ou Remboursé</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section Produits Similaires -->
+    {% if produits_similaires %}
+      <div class="mt-5 pt-4 border-top">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h4 class="fw-bold text-dark mb-0">Articles similaires dans le rayon {{ produit.categorie.nom }}</h4>
+          <a href="{% url 'shop' %}?category={{ produit.categorie.slug }}" class="btn btn-sm btn-outline-success rounded-pill px-3">
+            Voir plus <i class="fa-solid fa-arrow-right ms-1"></i>
+          </a>
+        </div>
+
+        <div class="row g-4">
+          {% for sim in produits_similaires %}
+            <div class="col-6 col-md-3">
+              <div class="product-card">
+                <div class="my-auto text-center py-2">
+                  <a href="{% url 'produit_detail' sim.id %}">
+                    {% if sim.image %}
+                      <img src="{{ sim.image.url }}" class="product-thumbnail" alt="{{ sim.nom }}">
+                    {% else %}
+                      <div class="bg-light rounded p-4 mb-2"><i class="fa-solid fa-image text-muted fs-2"></i></div>
+                    {% endif %}
+                  </a>
+                </div>
+                <div class="mt-auto">
+                  <h3 class="product-title text-truncate">
+                    <a href="{% url 'produit_detail' sim.id %}" class="text-decoration-none text-dark">{{ sim.nom }}</a>
+                  </h3>
+                  <div class="product-price">{{ sim.prix|floatformat:0 }} FCFA</div>
+                  <button type="button" class="btn btn-sm btn-primary w-100 rounded-pill" onclick="ajouterAuPanierAjax({{ sim.id }})">
+                    <i class="fa-solid fa-cart-plus me-1"></i> Ajouter
+                  </button>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

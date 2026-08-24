@@ -1,342 +1,142 @@
+﻿{% extends 'admin_base.html' %}
+{% load static %}
 
+{% block title %}Inventaire des Produits | E-SHOP Admin{% endblock %}
 
-        
-                                        <!DOCTYPE html>
-                                        <html
-                                          {% load static %}
-                                          lang="en"
-                                          class="light-style layout-menu-fixed"
-                                          dir="ltr"
-                                          data-theme="theme-default"
-                                          data-assets-path="{% static 'admin/assets/' %}"
-                                          data-template="vertical-menu-template-free"
-                                        >
-                                        <head>
-                                          <meta charset="utf-8" />
-                                          <meta
-                                            name="viewport"
-                                            content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
-                                          />
-                                        
-                                          <title>ESHOP tableau d'analyse</title>
-                                        
-                                          <meta name="description" content="" />
-                                        
-                                          <link rel="icon" type="image/x-icon" href="{% static 'admin/assets/img/favicon/favicon.ico' %}" />
-                                        
-                                          <link rel="preconnect" href="https://fonts.googleapis.com" />
-                                          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-                                          <link
-                                            href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&display=swap"
-                                            rel="stylesheet"
-                                          />
-                                        
-                                          <link rel="stylesheet" href="{% static 'admin/assets/vendor/fonts/boxicons.css' %}" />
-                                          <link rel="stylesheet" href="{% static 'admin/assets/vendor/css/core.css' %}" class="template-customizer-core-css" />
-                                          <link rel="stylesheet" href="{% static 'admin/assets/vendor/css/theme-default.css' %}" class="template-customizer-theme-css" />
-                                          <link rel="stylesheet" href="{% static 'admin/assets/css/demo.css' %}" />
-                                          <link rel="stylesheet" href="{% static 'admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
-                                          <link rel="stylesheet" href="{% static 'admin/assets/vendor/libs/apex-charts/apex-charts.css' %}" />
-                                        
-                                          <script src="{% static 'admin/assets/vendor/js/helpers.js' %}"></script>
-                                          <script src="{% static 'admin/assets/js/config.js'%}"></script>
-                                        </head>
-                                        
-                                        <body>
-                                          
-                                          <div class="layout-wrapper layout-content-navbar">
-                                            <div class="layout-container">
-                                              <!-- Menu -->
-                                              <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-                                                <div class="app-brand demo">
-                                                  <a href="{% url 'admin_index' %}" class="app-brand-link">
-                                                    <span class="app-brand-logo demo">
-                                                      <svg
-                                                        width="25"
-                                                        viewBox="0 0 25 42"
-                                                        version="1.1"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                      >
-                                                        <!-- SVG paths here -->
-                                                      </svg>
-                                                    </span>
-                                                    <span class="app-brand-text demo menu-text fw-bolder ms-2">ESHOP</span>
-                                                  </a>
-                                        
-                                                  <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-                                                    <i class="bx bx-chevron-left bx-sm align-middle"></i>
-                                                  </a>
-                                                </div>
-                                        
-                                                <div class="menu-inner-shadow"></div>
-                                        
-                                                <ul class="menu-inner py-1">
-                                                  <!-- Dashboard -->
-                                                  <li class="menu-item active">
-                                                    <a href="{% url 'admin_index' %}" class="menu-link">
-                                                      <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                                                      <div data-i18n="Analytics">Dashboard</div>
-                                                    </a>
-                                                  </li>
-                                        
-                                                  <!-- Gestions Produits -->
-                                                  <li class="menu-item">
-                                                    <a href="{% url 'produit_create' %}" class="menu-link">
-                                                      <i class="menu-icon tf-icons bx bx-plus"></i>
-                                                      <div data-i18n="Add Product">Ajouter un produit</div>
-                                                    </a>
-                                                  </li>
-                                                  <li class="menu-item">
-                                                    <a href="{% url 'produit_list' %}" class="menu-link">
-                                                      <i class="menu-icon tf-icons bx bx-cog"></i>
-                                                      <div data-i18n="Manage Products">Gérer les produits</div>
-                                                    </a>
-                                                  </li>
-                                        
-                                                  <!-- Gestions Categories -->
-                                                  <li class="menu-item">
-                                                    <a href="{% url 'categorie_create' %}" class="menu-link">
-                                                      <i class="menu-icon tf-icons bx bx-plus"></i>
-                                                      <div data-i18n="Add Category">Ajouter une catégorie</div>
-                                                    </a>
-                                                  </li>
-                                                  <li class="menu-item">
-                                                    <a href="{% url 'categorie_list' %}" class="menu-link">
-                                                      <i class="menu-icon tf-icons bx bx-cog"></i>
-                                                      <div data-i18n="Manage Categories">Gérer les catégories</div>
-                                                    </a>
-                                                  </li>
-                                        
-                                                  <!-- Gestion Utilisateurs -->
-                                                  <li class="menu-item">
-                                                    <a href="{% url 'inscription_admin' %}" class="menu-link">
-                                                      <i class="menu-icon tf-icons bx bx-user-plus"></i>
-                                                      <div data-i18n="Add User">Ajouter un utilisateur</div>
-                                                    </a>
-                                                  </li>
-                                                  <li class="menu-item">
-                                                    <a href="{% url 'liste_clients' %}" class="menu-link">
-                                                      <i class="menu-icon tf-icons bx bx-user-cog"></i>
-                                                      <div data-i18n="Manage Users">Gérer les utilisateurs</div>
-                                                    </a>
-                                                  </li>
-                                        
-                                                  <!-- Gestion des commandes -->
-                                                  <li class="menu-item">
-                                                    <a href="{% url 'commandes_admin' %}" class="menu-link">
-                                                      <i class="menu-icon tf-icons bx bx-package"></i>
-                                                      <div data-i18n="View Orders">Voir les commandes</div>
-                                                    </a>
-                                                  </li>
-                                                  <li class="menu-item">
-                                                    <a href="{% url 'commandes_admin' %}" class="menu-link">
-                                                      <i class="menu-icon tf-icons bx bx-cog"></i>
-                                                      <div data-i18n="Manage Orders">Gérer les commandes</div>
-                                                    </a>
-                                                  </li>
-                                        
-                                                  <!-- Gestion des livraisons -->
-                                                  <li class="menu-item">
-                                                    <a href="{% url 'commandes_admin' %}" class="menu-link">
-                                                      <i class="menu-icon tf-icons bx bx-truck"></i>
-                                                      <div data-i18n="View Deliveries">Voir les livraisons</div>
-                                                    </a>
-                                                  </li>
-                                                  <li class="menu-item">
-                                                    <a href="{% url 'commandes_admin' %}" class="menu-link">
-                                                      <i class="menu-icon tf-icons bx bx-cog"></i>
-                                                      <div data-i18n="Manage Deliveries">Gérer les livraisons</div>
-                                                    </a>
-                                                  </li>
-                                                </ul>
-                                              </aside>
-                                              <!-- / Menu -->
-                                        
-                                              <!-- Layout container -->
-                                              <div class="layout-page">
-                                                <!-- Navbar -->
-                                                <nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
-                                                  <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-                                                    <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
-                                                      <i class="bx bx-menu bx-sm"></i>
-                                                    </a>
-                                                  </div>
-                                        
-                                                  <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-                                                    <!-- Search -->
-                                                    <div class="navbar-nav align-items-center">
-                                                      <div class="nav-item d-flex align-items-center">
-                                                        <i class="bx bx-search fs-4 lh-0"></i>
-                                                        <input type="text" class="form-control border-0 shadow-none" placeholder="Search..." aria-label="Search..." />
-                                                      </div>
-                                                    </div>
-                                                    <!-- /Search -->
-                                        
-                                                    <ul class="navbar-nav flex-row align-items-center ms-auto">
-                                                      <!-- User -->
-                                                      <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                                                        <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
-                                                          <div class="avatar avatar-online">
-                                                            <img src="{% static 'admin/assets/img/avatars/1.png' %}" alt class="w-px-40 h-auto rounded-circle" />
-                                                          </div>
-                                                        </a>
-                                                        <ul class="dropdown-menu dropdown-menu-end">
-                                                          <li>
-                                                            <a class="dropdown-item" href="#">
-                                                              <div class="d-flex">
-                                                                <div class="flex-shrink-0 me-3">
-                                                                  <div class="avatar avatar-online">
-                                                                    <img src="{% static 'admin/assets/img/avatars/1.png' %}" alt class="w-px-40 h-auto rounded-circle" />
-                                                                  </div>
-                                                                </div>
-                                                                <div class="flex-grow-1">
-                                                                  <span class="fw-semibold d-block">{{ request.user.username }}</span>
-                                                                  <small class="text-muted">Admin</small>
-                                                                </div>
-                                                              </div>
-                                                            </a>
-                                                          </li>
-                                                          <li>
-                                                            <div class="dropdown-divider"></div>
-                                                          </li>
-                                                          <li>
-                                                            <a class="dropdown-item" href="#">
-                                                              <i class="bx bx-user me-2"></i>
-                                                              <span class="align-middle">My Profile</span>
-                                                            </a>
-                                                          </li>
-                                                          <li>
-                                                            <a class="dropdown-item" href="#">
-                                                              <i class="bx bx-cog me-2"></i>
-                                                              <span class="align-middle">Settings</span>
-                                                            </a>
-                                                          </li>
-                                                          <li>
-                                                            <a class="dropdown-item" href="#">
-                                                              <i class="bx bx-credit-card me-2"></i>
-                                                              <span class="align-middle">Billing</span>
-                                                            </a>
-                                                          </li>
-                                                          <li>
-                                                            <div class="dropdown-divider"></div>
-                                                          </li>
-                                                          <li>
-                                                            <a class="dropdown-item" href="{% url 'logout' %}">
-                                                              <i class="bx bx-power-off me-2"></i>
-                                                              <span class="align-middle">Log Out</span>
-                                                            </a>
-                                                          </li>
-                                                        </ul>
-                                                      </li>
-                                                      <!--/ User -->
-                                                    </ul>
-                                                  </div>
-                                                </nav>
-                                                <!-- / Navbar -->
-                                        
-                                                <!-- Content wrapper -->
-                                                <div class="content-wrapper">
-                                                  <!-- Content -->
-                                        
-                                                  <div class="container-xxl flex-grow-1 container-p-y">
-                                                    <div class="row">
-                                                      <div class="col-lg-8 mb-4 order-0">
-                                                        <div class="card">
-                                                          <div class="d-flex align-items-end row">
-                                                            <div class="col-sm-7">
-                                                              <div class="card-body">
-                                                                <h5 class="card-title text-primary">Bienvenu {{ request.user.username }} 🎉</h5>
-                                                                <p class="mb-4">
-                                                                  Voici un aperçu de l'ensemble des produits dans le système.
-                                                                </p>
-                                        
-                                                              </div>
-                                                            </div>
-                                                            <div class="col-sm-5 text-center text-sm-left">
-                                                              <div class="card-body pb-0 px-0 px-md-4">
-                                                                <img
-                                                                  src="{% static 'admin/assets/img/illustrations/man-with-laptop-light.png' %}"
-                                                                  height="140"
-                                                                  alt="View Badge User"
-                                                                  data-app-dark-img="illustrations/man-with-laptop-dark.png"
-                                                                  data-app-light-img="illustrations/man-with-laptop-light.png"
-                                                                />
-                                                              </div>
-                                                            </div>
-                                                          </div>
-                                                        </div>
-                                                      </div>
-                                        
-                                                    </div>
-                                        
-                                                    <div class="row">
-                                                      <!-- Total Revenue -->
-                                                      <div class="col-12 col-md-12 col-lg-12 order-2 order-md-3 order-lg-2 mb-4">
-                                                        <div class="card">
-                                                          <div class="row row-bordered g-0">
-                                                            <div class="col-md-12">
-                                                              <h5 class="card-header m-0 me-2 pb-3">Liste des Produits</h5>
-                                                              <div class="table-responsive">
-                                                                <table class="table table-hover">
-                                                                  <thead>
-                                                                    <tr>
-                                                                      <th>#</th>
-                                                                      <th>Nom</th>
-                                                                      <th>Prix</th>
-                                                                      <th>Quantité</th>
-                                                                      <th>Catégorie</th>
-                                                                      <th>Date d'ajout</th>
-                                                                      <th>Actions</th>
-                                                                    </tr>
-                                                                  </thead>
-                                                                  <tbody>
-                                                                    {% for produit in produits %}
-                                                                    <tr>
-                                                                      <td>{{ forloop.counter }}</td>
-                                                                      <td>{{ produit.nom }}</td>
-                                                                      <td>{{ produit.prix }}</td>
-                                                                      <td>{{ produit.quantite }}</td>
-                                                                      <td>{{ produit.categorie.nom }}</td>
-                                                                      <td>{{ produit.date_ajout }}</td>
-                                                                      <td>
-                                                                        <a href="{% url 'produit_update' produit.id %}" class="btn btn-sm btn-primary">Editer</a>
-                                                                        <a href="{% url 'produit_delete' produit.id %}" class="btn btn-sm btn-danger">Supprimer</a>
-                                                                      </td>
-                                                                    </tr>
-                                                                    {% endfor %}
-                                                                  </tbody>
-                                                                </table>
-                                                              </div>
-                                                            </div>
-                                                          </div>
-                                                        </div>
-                                                      </div>
-                                                      <!--/ Total Revenue -->
-                                                    </div>
-                                                  </div>
-                                                  <!-- / Content -->
-                                                </div>
-                                                <!-- Content wrapper -->
-                                              </div>
-                                              <!-- / Layout page -->
-                                            </div>
-                                        
-                                            <!-- Overlay -->
-                                            <div class="layout-overlay layout-menu-toggle"></div>
-                                          </div>
-                                        
-                                          <script src="{% static 'admin/assets/vendor/libs/jquery/jquery.js' %}"></script>
-                                          <script src="{% static 'admin/assets/vendor/libs/popper/popper.js' %}"></script>
-                                          <script src="{% static 'admin/assets/vendor/js/bootstrap.js' %}"></script>
-                                          <script src="{% static 'admin/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
-                                        
-                                          <script src="{% static 'admin/assets/vendor/js/menu.js' %}"></script>
-                                          <script src="{% static 'admin/assets/vendor/libs/apex-charts/apexcharts.js' %}"></script>
-                                        
-                                          <script src="{% static 'admin/assets/js/main.js' %}"></script>
-                                        
-                                          <script src="{% static 'admin/assets/js/dashboards-analytics.js' %}"></script>
-                                        </body>
-                                        </html>
-                                                                               
+{% block content %}
+<div class="card border-0 shadow-sm">
+  <div class="card-header bg-white py-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
+    <div>
+      <h5 class="card-title m-0 fw-bold text-dark d-flex align-items-center gap-2">
+        <i class="bx bx-box text-primary fs-4"></i> Catalogue des Produits
+      </h5>
+      <small class="text-muted">Gérez vos articles, tarifs et niveaux de stock.</small>
+    </div>
+    <div class="d-flex gap-2">
+      <a href="{% url 'produit_create' %}" class="btn btn-primary rounded-pill d-flex align-items-center gap-1">
+        <i class="bx bx-plus"></i> Nouveau Produit
+      </a>
+    </div>
+  </div>
+
+  <!-- Barre de Recherche et Filtre -->
+  <div class="card-body border-bottom bg-light py-3">
+    <form method="GET" class="row g-2 align-items-center">
+      <div class="col-md-5">
+        <div class="input-group input-group-merge shadow-none bg-white">
+          <span class="input-group-text"><i class="bx bx-search"></i></span>
+          <input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Rechercher par nom ou description...">
+        </div>
+      </div>
+      <div class="col-md-4">
+        <select name="category" class="form-select bg-white" onchange="this.form.submit()">
+          <option value="">Toutes les Catégories</option>
+          {% for cat in categories %}
+            <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.nom }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3 d-flex gap-2">
+        <button type="submit" class="btn btn-primary rounded-pill flex-grow-1">Filtrer</button>
+        {% if search_query or selected_category %}
+          <a href="{% url 'produit_list' %}" class="btn btn-outline-secondary rounded-pill px-3" title="Réinitialiser">
+            <i class="bx bx-reset"></i>
+          </a>
+        {% endif %}
+      </div>
+    </form>
+  </div>
+
+  <!-- Table des Produits -->
+  <div class="table-responsive text-nowrap">
+    <table class="table table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>Visuel</th>
+          <th>Nom du Produit</th>
+          <th>Catégorie</th>
+          <th>Prix (FCFA)</th>
+          <th>Stock</th>
+          <th>Date d'Ajout</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="table-border-bottom-0">
+        {% for produit in produits %}
+          <tr>
+            <td style="width: 70px;">
+              {% if produit.image %}
+                <img src="{{ produit.image.url }}" alt="{{ produit.nom }}" class="rounded shadow-xs" style="width: 48px; height: 48px; object-fit: contain; background: #fff;">
+              {% else %}
+                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                  <i class="bx bx-image text-muted fs-4"></i>
+                </div>
+              {% endif %}
+            </td>
+            <td>
+              <strong class="text-dark d-block text-truncate" style="max-width: 220px;">{{ produit.nom }}</strong>
+              <small class="text-muted">Slug: {{ produit.slug }}</small>
+            </td>
+            <td>
+              <span class="badge bg-label-info">{{ produit.categorie.nom }}</span>
+            </td>
+            <td class="fw-bold text-success">
+              {{ produit.prix|floatformat:0 }} FCFA
+            </td>
+            <td>
+              {% if produit.quantite == 0 %}
+                <span class="badge bg-label-danger"><i class="bx bx-x me-1"></i>Rupture (0)</span>
+              {% elif produit.quantite <= 5 %}
+                <span class="badge bg-label-warning"><i class="bx bx-error me-1"></i>Faible ({{ produit.quantite }})</span>
+              {% else %}
+                <span class="badge bg-label-success"><i class="bx bx-check me-1"></i>En stock ({{ produit.quantite }})</span>
+              {% endif %}
+            </td>
+            <td class="text-muted small">
+              {{ produit.date_ajout|date:"d/m/Y" }}
+            </td>
+            <td class="text-center">
+              <a href="{% url 'produit_update' produit.pk %}" class="btn btn-sm btn-label-primary px-2" title="Modifier">
+                <i class="bx bx-edit-alt"></i>
+              </a>
+              <a href="{% url 'produit_delete' produit.pk %}" class="btn btn-sm btn-label-danger px-2 ms-1" title="Supprimer">
+                <i class="bx bx-trash"></i>
+              </a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7" class="text-center py-5 text-muted">
+              <i class="bx bx-box fs-1 d-block mb-2 text-muted"></i>
+              Aucun produit trouvé dans cette sélection.
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  {% if is_paginated %}
+    <div class="card-footer bg-white border-top d-flex justify-content-center py-3">
+      <nav aria-label="Pagination produits">
+        <ul class="pagination pagination-sm mb-0">
+          {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">&laquo;</a></li>
+          {% endif %}
+          {% for num in paginator.page_range %}
+            {% if page_obj.number == num %}
+              <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+              <li class="page-item"><a class="page-link" href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">{{ num }}</a></li>
+            {% endif %}
+          {% endfor %}
+          {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">&raquo;</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

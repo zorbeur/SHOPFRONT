@@ -1,61 +1,47 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Créer une Notification</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            width: 50%;
-            margin: 20px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 0.5rem;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            margin: 20px 0;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        label, input, textarea, button {
-            margin: 10px 0;
-        }
-        button {
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 0.3rem;
-        }
-        .btn {
-            text-align: center;
-            display: block;
-            padding: 10px;
-            background-color: #f44336;
-            color: white;
-            text-decoration: none;
-            border-radius: 0.3rem;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Créer une Notification</h1>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Créer</button>
+﻿{% extends 'admin_base.html' %}
+{% load static %}
+
+{% block title %}Créer une Notification | E-SHOP Admin{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-6">
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+        <h5 class="card-title m-0 fw-bold text-dark d-flex align-items-center gap-2">
+          <i class="bx bx-bell text-primary fs-4"></i>
+          Diffuser une Notification
+        </h5>
+        <a href="{% url 'afficher_notifications' %}" class="btn btn-sm btn-outline-secondary rounded-pill">
+          <i class="bx bx-arrow-back me-1"></i> Retour
+        </a>
+      </div>
+
+      <div class="card-body p-4">
+        <form method="POST">
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold text-dark">{{ form.utilisateur.label }} <span class="text-danger">*</span></label>
+            {{ form.utilisateur }}
+            {% if form.utilisateur.errors %}<div class="text-danger small mt-1">{{ form.utilisateur.errors }}</div>{% endif %}
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label fw-semibold text-dark">{{ form.message.label }} <span class="text-danger">*</span></label>
+            {{ form.message }}
+            {% if form.message.errors %}<div class="text-danger small mt-1">{{ form.message.errors }}</div>{% endif %}
+          </div>
+
+          <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+            <a href="{% url 'afficher_notifications' %}" class="btn btn-outline-secondary rounded-pill px-4">Annuler</a>
+            <button type="submit" class="btn btn-primary rounded-pill px-4">
+              <i class="bx bx-send me-1"></i> Envoyer la Notification
+            </button>
+          </div>
         </form>
-        <a href="{% url 'afficher_notifications' %}" class="btn">Retour aux notifications</a>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,80 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}E-SHOP | Conditions de Livraison & Retours{% endblock %}
+
+{% block content %}
+<div class="hero py-4" style="background: var(--primary-gradient);">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="text-white fw-bold mb-1">Conditions de Livraison & Retours</h1>
+        <p class="text-white-50 mb-0">Découvrez nos engagements pour acheminer vos commandes en toute sécurité au Togo.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="py-5" style="background-color: #f8fafc;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-9">
+        <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
+          <section class="mb-5">
+            <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-truck text-success me-2"></i> 1. Zones et Délais d'Expédition</h4>
+            <p class="text-muted leading-relaxed">
+              E-SHOP assure la livraison de l'ensemble de ses produits sur tout le territoire togolais.
+            </p>
+            <div class="table-responsive">
+              <table class="table table-bordered small">
+                <thead class="table-light">
+                  <tr>
+                    <th>Zone Géographique</th>
+                    <th>Délai Moyen Constaté</th>
+                    <th>Tarification</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Grand Lomé (Golfe & Agoè-Nyivé)</strong></td>
+                    <td>24 heures ouvrées</td>
+                    <td class="text-success fw-bold">Gratuit dès 50 000 FCFA (sinon 1 500 FCFA)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Région Maritime & Plateaux (Kpalimé, Tsévié, Atakpamé)</strong></td>
+                    <td>24 à 48 heures</td>
+                    <td>Tarif standard coursier</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Régions Centrale, Kara & Savanes (Sokodé, Kara, Dapaong)</strong></td>
+                    <td>48 à 72 heures</td>
+                    <td>Point relais ou livraison domicile</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="mb-5">
+            <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-shield-halved text-warning me-2"></i> 2. Garantie & Politique de Retour sous 7 Jours</h4>
+            <p class="text-muted leading-relaxed">
+              Conformément à notre charte qualité, si un article présente un défaut de fabrication ou ne correspond pas à vos attentes, vous disposez d'un délai de <strong>7 jours calendaires</strong> à compter de la réception pour demander un échange ou un remboursement.
+            </p>
+            <ul class="text-muted small leading-relaxed">
+              <li>Le produit doit être retourné dans son emballage d'origine avec tous ses accessoires.</li>
+              <li>Les appareils électroniques bénéficient de la garantie constructeur de 6 à 12 mois.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-headset text-primary me-2"></i> 3. Assistance & Réclamations</h4>
+            <p class="text-muted leading-relaxed mb-0">
+              Pour toute question relative à votre livraison, contactez directement notre équipe logistique par téléphone ou WhatsApp au <strong>+228 90 91 23 67</strong> ou par email à <strong>support@eshop.tg</strong>.
+            </p>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
