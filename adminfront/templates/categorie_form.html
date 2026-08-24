@@ -1,54 +1,56 @@
 ﻿{% extends 'admin_base.html' %}
 {% load static %}
 
-{% block title %}{% if form.instance.pk %}Modifier Catégorie « {{ form.instance.nom }} »{% else %}Ajouter une Catégorie{% endif %} | E-SHOP Admin{% endblock %}
+{% block title %}{% if form.instance.pk %}Modifier Rayon « {{ form.instance.nom }} »{% else %}Ajouter un Rayon{% endif %} | E-SHOP Admin{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
-  <div class="col-lg-7">
-    <div class="card border-0 shadow-sm">
-      <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-        <h5 class="card-title m-0 fw-bold text-dark d-flex align-items-center gap-2">
-          <i class="bx bx-category text-primary fs-4"></i>
-          {% if form.instance.pk %}Modifier la Catégorie : {{ form.instance.nom }}{% else %}Créer une Nouvelle Catégorie{% endif %}
-        </h5>
-        <a href="{% url 'categorie_list' %}" class="btn btn-sm btn-outline-secondary rounded-pill">
-          <i class="bx bx-arrow-back me-1"></i> Retour à la liste
+  <div class="col-lg-8">
+    <div class="admin-table-card">
+      <div class="p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+          <h4 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+            <i class="fa-solid fa-tags text-warning"></i>
+            {% if form.instance.pk %}Modifier le Rayon : {{ form.instance.nom }}{% else %}Créer un Nouveau Rayon{% endif %}
+          </h4>
+          <p class="text-muted small mb-0">Paramétrez le titre et les visuels de vos catégories de vente.</p>
+        </div>
+        <a href="{% url 'categorie_list' %}" class="btn btn-outline-secondary rounded-pill px-3">
+          <i class="fa-solid fa-arrow-left me-1"></i> Retour aux rayons
         </a>
       </div>
 
-      <div class="card-body p-4">
+      <div class="p-4 p-md-5">
         <form method="POST" enctype="multipart/form-data">
           {% csrf_token %}
 
-          <div class="mb-3">
-            <label class="form-label fw-semibold text-dark">{{ form.nom.label }} <span class="text-danger">*</span></label>
+          <div class="mb-4">
+            <label class="form-label fw-bold text-dark small">Nom du rayon <span class="text-danger">*</span></label>
             {{ form.nom }}
             {% if form.nom.errors %}<div class="text-danger small mt-1">{{ form.nom.errors }}</div>{% endif %}
           </div>
 
-          <div class="mb-3">
-            <label class="form-label fw-semibold text-dark">{{ form.description.label }}</label>
+          <div class="mb-4">
+            <label class="form-label fw-bold text-dark small">Description</label>
             {{ form.description }}
             {% if form.description.errors %}<div class="text-danger small mt-1">{{ form.description.errors }}</div>{% endif %}
           </div>
 
           <div class="mb-4">
-            <label class="form-label fw-semibold text-dark">{{ form.image.label }}</label>
+            <label class="form-label fw-bold text-dark small">Image d'illustration du rayon</label>
             {{ form.image }}
             {% if form.instance.image %}
-              <div class="mt-2 p-2 bg-light rounded d-flex align-items-center gap-3">
-                <img src="{{ form.instance.image.url }}" alt="Visuel actuel" style="height: 50px; object-fit: contain;">
-                <small class="text-muted">Image actuelle</small>
+              <div class="mt-3 p-3 bg-light rounded-3 d-flex align-items-center gap-3 border">
+                <img src="{{ form.instance.image.url }}" alt="{{ form.instance.nom }}" class="rounded border" style="width: 50px; height: 50px; object-fit: contain; background: #fff;">
+                <span class="small text-muted">Image actuelle du rayon</span>
               </div>
             {% endif %}
-            {% if form.image.errors %}<div class="text-danger small mt-1">{{ form.image.errors }}</div>{% endif %}
           </div>
 
-          <div class="d-flex justify-content-end gap-2 pt-3 border-top">
-            <a href="{% url 'categorie_list' %}" class="btn btn-outline-secondary rounded-pill px-4">Annuler</a>
-            <button type="submit" class="btn btn-primary rounded-pill px-4">
-              <i class="bx bx-save me-1"></i> Enregistrer
+          <div class="d-flex justify-content-end gap-3 pt-3 border-top">
+            <a href="{% url 'categorie_list' %}" class="btn btn-light rounded-pill px-4">Annuler</a>
+            <button type="submit" class="btn btn-admin-primary px-4">
+              <i class="fa-solid fa-check me-2"></i> Enregistrer le Rayon
             </button>
           </div>
         </form>

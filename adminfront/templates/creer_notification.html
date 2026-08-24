@@ -5,38 +5,40 @@
 
 {% block content %}
 <div class="row justify-content-center">
-  <div class="col-lg-6">
-    <div class="card border-0 shadow-sm">
-      <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-        <h5 class="card-title m-0 fw-bold text-dark d-flex align-items-center gap-2">
-          <i class="bx bx-bell text-primary fs-4"></i>
-          Diffuser une Notification
-        </h5>
-        <a href="{% url 'afficher_notifications' %}" class="btn btn-sm btn-outline-secondary rounded-pill">
-          <i class="bx bx-arrow-back me-1"></i> Retour
+  <div class="col-lg-7">
+    <div class="admin-table-card">
+      <div class="p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+          <h4 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+            <i class="fa-solid fa-paper-plane text-primary"></i> Diffuser une Notification
+          </h4>
+          <p class="text-muted small mb-0">Envoyez une alerte directe à un client ou à un membre de l'équipe.</p>
+        </div>
+        <a href="{% url 'afficher_notifications' %}" class="btn btn-outline-secondary rounded-pill px-3">
+          <i class="fa-solid fa-arrow-left me-1"></i> Notifications
         </a>
       </div>
 
-      <div class="card-body p-4">
+      <div class="p-4 p-md-5">
         <form method="POST">
           {% csrf_token %}
 
-          <div class="mb-3">
-            <label class="form-label fw-semibold text-dark">{{ form.utilisateur.label }} <span class="text-danger">*</span></label>
+          <div class="mb-4">
+            <label class="form-label fw-bold text-dark small">Destinataire <span class="text-danger">*</span></label>
             {{ form.utilisateur }}
             {% if form.utilisateur.errors %}<div class="text-danger small mt-1">{{ form.utilisateur.errors }}</div>{% endif %}
           </div>
 
           <div class="mb-4">
-            <label class="form-label fw-semibold text-dark">{{ form.message.label }} <span class="text-danger">*</span></label>
+            <label class="form-label fw-bold text-dark small">Message de la notification <span class="text-danger">*</span></label>
             {{ form.message }}
             {% if form.message.errors %}<div class="text-danger small mt-1">{{ form.message.errors }}</div>{% endif %}
           </div>
 
-          <div class="d-flex justify-content-end gap-2 pt-3 border-top">
-            <a href="{% url 'afficher_notifications' %}" class="btn btn-outline-secondary rounded-pill px-4">Annuler</a>
-            <button type="submit" class="btn btn-primary rounded-pill px-4">
-              <i class="bx bx-send me-1"></i> Envoyer la Notification
+          <div class="d-flex justify-content-end gap-3 pt-3 border-top">
+            <a href="{% url 'afficher_notifications' %}" class="btn btn-light rounded-pill px-4">Annuler</a>
+            <button type="submit" class="btn btn-admin-primary px-4">
+              <i class="fa-solid fa-paper-plane me-2"></i> Envoyer la Notification
             </button>
           </div>
         </form>

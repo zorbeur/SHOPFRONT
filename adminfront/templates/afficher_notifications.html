@@ -1,57 +1,53 @@
 ﻿{% extends 'admin_base.html' %}
 {% load static %}
 
-{% block title %}Notifications Administrateur | E-SHOP Admin{% endblock %}
+{% block title %}Centre de Notifications & Alertes | E-SHOP Admin{% endblock %}
 
 {% block content %}
-<div class="card border-0 shadow-sm">
-  <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+<div class="admin-table-card">
+  <div class="p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
     <div>
-      <h5 class="card-title m-0 fw-bold text-dark d-flex align-items-center gap-2">
-        <i class="bx bx-bell text-primary fs-4"></i> Centre de Notifications
-      </h5>
-      <small class="text-muted">Consultez les alertes et messages système liés à vos activités.</small>
+      <h4 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+        <i class="fa-solid fa-bell text-danger"></i> Centre de Notifications & Messages
+      </h4>
+      <p class="text-muted small mb-0">Alertes système, suivis de commandes et messages d'activité commerciale.</p>
     </div>
-    <div>
-      <a href="{% url 'creer_notification' %}" class="btn btn-primary rounded-pill d-flex align-items-center gap-1">
-        <i class="bx bx-plus"></i> Nouvelle Notification
-      </a>
-    </div>
+    <a href="{% url 'creer_notification' %}" class="btn btn-admin-primary">
+      <i class="fa-solid fa-plus me-1"></i> Envoyer une Notification
+    </a>
   </div>
 
-  <div class="card-body p-0">
-    <ul class="list-group list-group-flush">
+  <div class="p-0">
+    <div class="list-group list-group-flush">
       {% for notif in notifications %}
-        <li class="list-group-item p-4 d-flex justify-content-between align-items-center {% if not notif.lu %}bg-light border-start border-primary border-4{% endif %}">
+        <div class="list-group-item p-4 d-flex justify-content-between align-items-center {% if not notif.lu %}bg-light border-start border-4 border-success{% endif %}">
           <div class="d-flex align-items-start gap-3">
-            <div class="avatar avatar-sm">
-              <span class="avatar-initial rounded-circle {% if not notif.lu %}bg-label-primary{% else %}bg-label-secondary{% endif %}">
-                <i class="bx bx-bell"></i>
-              </span>
+            <div class="rounded-circle {% if not notif.lu %}bg-success-subtle text-success{% else %}bg-light text-muted{% endif %} d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; font-size: 16px;">
+              <i class="fa-solid fa-bell"></i>
             </div>
             <div>
-              <p class="mb-1 text-dark fw-medium">{{ notif.message }}</p>
-              <small class="text-muted"><i class="bx bx-time-five me-1"></i>{{ notif.date_creation|date:"d/m/Y à H:i" }}</small>
+              <p class="mb-1 text-dark fw-bold">{{ notif.message }}</p>
+              <small class="text-muted"><i class="fa-regular fa-clock me-1"></i>{{ notif.date_creation|date:"d/m/Y à H:i" }} (il y a {{ notif.date_creation|timesince }})</small>
             </div>
           </div>
           <div class="d-flex gap-2">
             {% if not notif.lu %}
-              <a href="{% url 'marquer_comme_lu' notif.id %}" class="btn btn-sm btn-label-success rounded-pill px-3">
-                <i class="bx bx-check me-1"></i> Marquer comme lu
+              <a href="{% url 'marquer_comme_lu' notif.id %}" class="btn btn-sm btn-outline-success rounded-pill px-3">
+                <i class="fa-solid fa-check me-1"></i> Marquer comme lu
               </a>
             {% endif %}
-            <a href="{% url 'supprimer_notification' notif.id %}" class="btn btn-sm btn-label-danger rounded-pill px-3">
-              <i class="bx bx-trash me-1"></i> Supprimer
+            <a href="{% url 'supprimer_notification' notif.id %}" class="btn btn-sm btn-outline-danger rounded-pill px-3">
+              <i class="fa-solid fa-trash me-1"></i>
             </a>
           </div>
-        </li>
+        </div>
       {% empty %}
-        <li class="list-group-item text-center py-5 text-muted">
-          <i class="bx bx-bell-off fs-1 d-block mb-2 text-muted"></i>
-          Vous n'avez aucune notification pour le moment.
-        </li>
+        <div class="text-center py-5 text-muted">
+          <i class="fa-regular fa-bell-slash fs-1 d-block mb-2 opacity-50"></i>
+          Aucune notification pour le moment.
+        </div>
       {% endfor %}
-    </ul>
+    </div>
   </div>
 </div>
 {% endblock %}

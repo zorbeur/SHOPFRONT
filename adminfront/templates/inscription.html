@@ -1,86 +1,100 @@
 ﻿{% extends 'admin_base.html' %}
 {% load static %}
 
-{% block title %}Créer un Nouvel Utilisateur / Administrateur | E-SHOP Admin{% endblock %}
+{% block title %}Créer un Compte Staff / Admin | E-SHOP Admin{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
-  <div class="col-lg-7">
-    <div class="card border-0 shadow-sm">
-      <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-        <h5 class="card-title m-0 fw-bold text-dark d-flex align-items-center gap-2">
-          <i class="bx bx-user-plus text-primary fs-4"></i>
-          Créer un Nouveau Compte
-        </h5>
-        <a href="{% url 'liste_clients' %}" class="btn btn-sm btn-outline-secondary rounded-pill">
-          <i class="bx bx-arrow-back me-1"></i> Liste des Clients
+  <div class="col-lg-8">
+    <div class="admin-table-card">
+      <div class="p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+          <h4 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+            <i class="fa-solid fa-user-shield text-warning"></i> Créer un Compte Administrateur / Staff
+          </h4>
+          <p class="text-muted small mb-0">Ajoutez un collaborateur pour la gestion des commandes et du catalogue.</p>
+        </div>
+        <a href="{% url 'liste_clients' %}" class="btn btn-outline-secondary rounded-pill px-3">
+          <i class="fa-solid fa-arrow-left me-1"></i> Répertoire Utilisateurs
         </a>
       </div>
 
-      <div class="card-body p-4">
+      <div class="p-4 p-md-5">
         <form method="POST" enctype="multipart/form-data">
           {% csrf_token %}
 
-          <div class="row g-3 mb-3">
+          <div class="row g-3 mb-4">
             <div class="col-md-6">
-              <label class="form-label fw-semibold text-dark">{{ form.prenom.label }} <span class="text-danger">*</span></label>
+              <label class="form-label fw-bold text-dark small">Prénom <span class="text-danger">*</span></label>
               {{ form.prenom }}
               {% if form.prenom.errors %}<div class="text-danger small mt-1">{{ form.prenom.errors }}</div>{% endif %}
             </div>
             <div class="col-md-6">
-              <label class="form-label fw-semibold text-dark">{{ form.nom.label }} <span class="text-danger">*</span></label>
+              <label class="form-label fw-bold text-dark small">Nom de famille <span class="text-danger">*</span></label>
               {{ form.nom }}
               {% if form.nom.errors %}<div class="text-danger small mt-1">{{ form.nom.errors }}</div>{% endif %}
             </div>
           </div>
 
-          <div class="mb-3">
-            <label class="form-label fw-semibold text-dark">{{ form.nomutilisateur.label }} <span class="text-danger">*</span></label>
-            {{ form.nomutilisateur }}
-            {% if form.nomutilisateur.errors %}<div class="text-danger small mt-1">{{ form.nomutilisateur.errors }}</div>{% endif %}
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label fw-bold text-dark small">Nom d'utilisateur unique <span class="text-danger">*</span></label>
+              {{ form.nomutilisateur }}
+              {% if form.nomutilisateur.errors %}<div class="text-danger small mt-1">{{ form.nomutilisateur.errors }}</div>{% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-bold text-dark small">Adresse email <span class="text-danger">*</span></label>
+              {{ form.email }}
+              {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors }}</div>{% endif %}
+            </div>
           </div>
 
-          <div class="mb-3">
-            <label class="form-label fw-semibold text-dark">{{ form.email.label }} <span class="text-danger">*</span></label>
-            {{ form.email }}
-            {% if form.email.errors %}<div class="text-danger small mt-1">{{ form.email.errors }}</div>{% endif %}
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label fw-bold text-dark small">Numéro de téléphone</label>
+              {{ form.numero_de_telephone }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-bold text-dark small">Photo de profil</label>
+              {{ form.photo_de_profil }}
+            </div>
           </div>
 
-          <div class="mb-3">
-            <label class="form-label fw-semibold text-dark">{{ form.numero_de_telephone.label }}</label>
-            {{ form.numero_de_telephone }}
-            {% if form.numero_de_telephone.errors %}<div class="text-danger small mt-1">{{ form.numero_de_telephone.errors }}</div>{% endif %}
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label fw-bold text-dark small">Mot de passe initial <span class="text-danger">*</span></label>
+              {{ form.mot_de_passe1 }}
+              {% if form.mot_de_passe1.errors %}<div class="text-danger small mt-1">{{ form.mot_de_passe1.errors }}</div>{% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-bold text-dark small">Confirmer le mot de passe <span class="text-danger">*</span></label>
+              {{ form.mot_de_passe2 }}
+              {% if form.mot_de_passe2.errors %}<div class="text-danger small mt-1">{{ form.mot_de_passe2.errors }}</div>{% endif %}
+            </div>
           </div>
 
-          <div class="mb-3">
-            <label class="form-label fw-semibold text-dark">{{ form.photo_de_profil.label }}</label>
-            {{ form.photo_de_profil }}
-            {% if form.photo_de_profil.errors %}<div class="text-danger small mt-1">{{ form.photo_de_profil.errors }}</div>{% endif %}
+          <div class="p-3 bg-light rounded-3 mb-4 border">
+            <label class="form-label fw-bold text-dark small mb-2 d-block">Privilèges & Rôles dans le système</label>
+            <div class="d-flex gap-4">
+              <div class="form-check">
+                {{ form.is_staff }}
+                <label class="form-check-label small fw-semibold" for="{{ form.is_staff.id_for_label }}">
+                  Membre Staff (Accès Backoffice)
+                </label>
+              </div>
+              <div class="form-check">
+                {{ form.is_superuser }}
+                <label class="form-check-label small fw-semibold" for="{{ form.is_superuser.id_for_label }}">
+                  Super Administrateur
+                </label>
+              </div>
+            </div>
           </div>
 
-          <div class="mb-3">
-            <label class="form-label fw-semibold text-dark">Mot de passe <span class="text-danger">*</span></label>
-            <input type="password" name="password1" class="form-control" placeholder="Au moins 6 caractères" required>
-            {% if form.password1.errors %}<div class="text-danger small mt-1">{{ form.password1.errors }}</div>{% endif %}
-          </div>
-
-          <div class="mb-4">
-            <label class="form-label fw-semibold text-dark">Confirmation mot de passe <span class="text-danger">*</span></label>
-            <input type="password" name="password2" class="form-control" placeholder="Retapez le mot de passe" required>
-            {% if form.password2.errors %}<div class="text-danger small mt-1">{{ form.password2.errors }}</div>{% endif %}
-          </div>
-
-          <div class="form-check mb-4">
-            {{ form.is_staff }}
-            <label class="form-check-label fw-semibold text-dark ms-2" for="{{ form.is_staff.id_for_label }}">
-              Accorder les privilèges d'accès au panneau d'administration (Staff)
-            </label>
-          </div>
-
-          <div class="d-flex justify-content-end gap-2 pt-3 border-top">
-            <a href="{% url 'liste_clients' %}" class="btn btn-outline-secondary rounded-pill px-4">Annuler</a>
-            <button type="submit" class="btn btn-primary rounded-pill px-4">
-              <i class="bx bx-check me-1"></i> Créer le Compte
+          <div class="d-flex justify-content-end gap-3 pt-3 border-top">
+            <a href="{% url 'liste_clients' %}" class="btn btn-light rounded-pill px-4">Annuler</a>
+            <button type="submit" class="btn btn-admin-primary px-4">
+              <i class="fa-solid fa-user-check me-2"></i> Créer le Compte
             </button>
           </div>
         </form>

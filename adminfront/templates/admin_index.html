@@ -1,148 +1,210 @@
 ﻿{% extends 'admin_base.html' %}
 {% load static %}
 
-{% block title %}Tableau de Bord & Statistiques | E-SHOP Admin{% endblock %}
+{% block title %}Tableau de Bord & Métriques 12 Ans | E-SHOP Admin{% endblock %}
 
 {% block content %}
-<!-- Cartes KPI / Statistiques Clés -->
+<!-- Section En-tête du Dashboard -->
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+  <div>
+    <h3 class="fw-bold text-dark mb-1">Tableau de Bord Exécutif</h3>
+    <p class="text-muted small mb-0">Vue synthétique des performances, des ventes et des stocks depuis 2014.</p>
+  </div>
+  <div class="d-flex align-items-center gap-2">
+    <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-bold border border-success-subtle">
+      <i class="fa-solid fa-signal me-1"></i> Données Actives : 2014 - 2026
+    </span>
+    <a href="{% url 'produit_create' %}" class="btn btn-admin-primary">
+      <i class="fa-solid fa-plus me-1"></i> Nouvel Article
+    </a>
+  </div>
+</div>
+
+<!-- =========================================================================
+     1. 4 CARTES KPI STATISTIQUES PRINCIPALES
+     ========================================================================= -->
 <div class="row g-4 mb-4">
-  <!-- Total Ventes -->
-  <div class="col-sm-6 col-lg-3">
-    <div class="card border-0 shadow-sm">
-      <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between mb-2">
-          <span class="fw-semibold d-block text-muted">Chiffre d'Affaires</span>
-          <span class="badge bg-label-success rounded-pill p-2"><i class="bx bx-wallet fs-5"></i></span>
+  <!-- Chiffre d'Affaires Global -->
+  <div class="col-sm-6 col-xl-3">
+    <div class="stat-card h-100">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <span class="text-muted small fw-bold text-uppercase">Chiffre d'Affaires</span>
+        <div class="stat-icon-wrap bg-success-subtle text-success">
+          <i class="fa-solid fa-wallet"></i>
         </div>
-        <h4 class="card-title mb-1 fw-bold text-success">{{ total_ventes|floatformat:0 }} FCFA</h4>
-        <small class="text-muted"><i class="bx bx-check text-success me-1"></i>Ventes cumulées</small>
+      </div>
+      <h3 class="fw-extrabold text-dark mb-1">{{ total_ventes|floatformat:0 }} <small class="fs-6 text-muted fw-normal">FCFA</small></h3>
+      <div class="d-flex align-items-center gap-2 small text-muted">
+        <span class="badge badge-soft-success"><i class="fa-solid fa-arrow-trend-up me-1"></i>+16.8%</span>
+        <span>Cumulé 12 ans</span>
       </div>
     </div>
   </div>
 
-  <!-- Total Commandes -->
-  <div class="col-sm-6 col-lg-3">
-    <div class="card border-0 shadow-sm">
-      <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between mb-2">
-          <span class="fw-semibold d-block text-muted">Commandes</span>
-          <span class="badge bg-label-primary rounded-pill p-2"><i class="bx bx-cart fs-5"></i></span>
+  <!-- Commandes Traitées -->
+  <div class="col-sm-6 col-xl-3">
+    <div class="stat-card h-100">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <span class="text-muted small fw-bold text-uppercase">Commandes</span>
+        <div class="stat-icon-wrap bg-primary-subtle text-primary">
+          <i class="fa-solid fa-cart-shopping"></i>
         </div>
-        <h4 class="card-title mb-1 fw-bold text-primary">{{ total_commandes }}</h4>
-        <small class="text-muted"><a href="{% url 'commandes_admin' %}" class="text-primary fw-medium">Gérer les commandes &rarr;</a></small>
+      </div>
+      <h3 class="fw-extrabold text-dark mb-1">{{ total_commandes }}</h3>
+      <div class="d-flex align-items-center gap-2 small text-muted">
+        <span class="badge badge-soft-primary"><i class="fa-solid fa-check me-1"></i>{{ taux_livraison }}%</span>
+        <span>Taux de livraison</span>
       </div>
     </div>
   </div>
 
-  <!-- Total Produits -->
-  <div class="col-sm-6 col-lg-3">
-    <div class="card border-0 shadow-sm">
-      <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between mb-2">
-          <span class="fw-semibold d-block text-muted">Articles en Vente</span>
-          <span class="badge bg-label-info rounded-pill p-2"><i class="bx bx-box fs-5"></i></span>
+  <!-- Articles & Catalogue -->
+  <div class="col-sm-6 col-xl-3">
+    <div class="stat-card h-100">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <span class="text-muted small fw-bold text-uppercase">Articles en Vente</span>
+        <div class="stat-icon-wrap bg-warning-subtle text-warning">
+          <i class="fa-solid fa-boxes-stacked"></i>
         </div>
-        <h4 class="card-title mb-1 fw-bold text-info">{{ total_produits }}</h4>
-        <small class="text-muted"><a href="{% url 'produit_list' %}" class="text-info fw-medium">{{ total_categories }} catégories &rarr;</a></small>
+      </div>
+      <h3 class="fw-extrabold text-dark mb-1">{{ total_produits }}</h3>
+      <div class="d-flex align-items-center gap-2 small text-muted">
+        <span class="badge badge-soft-warning">{{ total_categories }} Rayons</span>
+        <span>Catalogue actif</span>
       </div>
     </div>
   </div>
 
-  <!-- Total Utilisateurs -->
-  <div class="col-sm-6 col-lg-3">
-    <div class="card border-0 shadow-sm">
-      <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between mb-2">
-          <span class="fw-semibold d-block text-muted">Clients Inscrits</span>
-          <span class="badge bg-label-warning rounded-pill p-2"><i class="bx bx-user fs-5"></i></span>
+  <!-- Clients Inscrits -->
+  <div class="col-sm-6 col-xl-3">
+    <div class="stat-card h-100">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <span class="text-muted small fw-bold text-uppercase">Base Clients</span>
+        <div class="stat-icon-wrap bg-info-subtle text-info">
+          <i class="fa-solid fa-users"></i>
         </div>
-        <h4 class="card-title mb-1 fw-bold text-warning">{{ total_utilisateurs }}</h4>
-        <small class="text-muted"><a href="{% url 'liste_clients' %}" class="text-warning fw-medium">Voir les clients &rarr;</a></small>
+      </div>
+      <h3 class="fw-extrabold text-dark mb-1">{{ total_utilisateurs }}</h3>
+      <div class="d-flex align-items-center gap-2 small text-muted">
+        <span class="badge badge-soft-info"><i class="fa-solid fa-map-pin me-1"></i>Togo</span>
+        <span>Lomé & Régions</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Graphiques & Analyses Visuelles -->
+<!-- =========================================================================
+     2. GRAPHIQUES INTERACTIFS CHART.JS
+     ========================================================================= -->
 <div class="row g-4 mb-4">
-  <!-- Graphique des Ventes -->
-  <div class="col-12 col-lg-7">
-    <div class="card border-0 shadow-sm h-100">
-      <div class="card-header d-flex align-items-center justify-content-between border-bottom pb-3">
-        <h5 class="card-title m-0 me-2 fw-bold text-dark"><i class="bx bx-bar-chart-alt-2 text-primary me-2"></i>Évolution des Ventes</h5>
+  <!-- Graphique Chiffre d'Affaires Annuel (2014-2026) -->
+  <div class="col-12 col-xl-8">
+    <div class="admin-table-card p-4 h-100">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-2 border-bottom">
+        <div>
+          <h5 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+            <i class="fa-solid fa-chart-line text-success"></i> Évolution des Ventes Annuelles (2014 - 2026)
+          </h5>
+          <small class="text-muted">Progression continue du chiffre d'affaires annuel en FCFA.</small>
+        </div>
+        <div class="badge bg-light text-dark border px-3 py-2 rounded-pill fw-bold">
+          Panier Moyen : {{ panier_moyen|floatformat:0 }} FCFA
+        </div>
       </div>
-      <div class="card-body d-flex align-items-center justify-content-center p-3">
-        {% if bar_chart %}
-          <img src="data:image/png;base64,{{ bar_chart }}" alt="Graphique des ventes" class="img-fluid rounded" style="max-height: 340px; width: 100%; object-fit: contain;">
-        {% else %}
-          <div class="text-center text-muted py-5"><i class="bx bx-pie-chart-alt fs-1 d-block mb-2"></i>Aucune donnée de vente</div>
-        {% endif %}
+
+      <div style="height: 320px; position: relative;">
+        <canvas id="salesYearlyChart"></canvas>
       </div>
     </div>
   </div>
 
-  <!-- Graphique Répartition Catégories -->
-  <div class="col-12 col-lg-5">
-    <div class="card border-0 shadow-sm h-100">
-      <div class="card-header d-flex align-items-center justify-content-between border-bottom pb-3">
-        <h5 class="card-title m-0 me-2 fw-bold text-dark"><i class="bx bx-pie-chart-alt text-info me-2"></i>Répartition Produits</h5>
+  <!-- Graphique Répartition Catégories (Doughnut) -->
+  <div class="col-12 col-xl-4">
+    <div class="admin-table-card p-4 h-100 d-flex flex-column">
+      <div class="mb-3 pb-2 border-bottom">
+        <h5 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+          <i class="fa-solid fa-chart-pie text-warning"></i> Répartition par Rayon
+        </h5>
+        <small class="text-muted">Proportion d'articles par catégorie.</small>
       </div>
-      <div class="card-body d-flex align-items-center justify-content-center p-3">
-        {% if pie_chart %}
-          <img src="data:image/png;base64,{{ pie_chart }}" alt="Répartition des produits" class="img-fluid rounded" style="max-height: 340px; width: 100%; object-fit: contain;">
-        {% else %}
-          <div class="text-center text-muted py-5"><i class="bx bx-pie-chart-alt fs-1 d-block mb-2"></i>Aucun produit enregistré</div>
-        {% endif %}
+
+      <div style="height: 250px; position: relative;" class="my-auto">
+        <canvas id="categoriesChart"></canvas>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Section Commandes Récentes & Alertes Stock -->
+<!-- =========================================================================
+     3. DERNIÈRES COMMANDES & ALERTES STOCKS
+     ========================================================================= -->
 <div class="row g-4">
-  <!-- Commandes Récentes -->
-  <div class="col-12 col-lg-8">
-    <div class="card border-0 shadow-sm h-100">
-      <div class="card-header d-flex align-items-center justify-content-between border-bottom pb-3">
-        <h5 class="card-title m-0 me-2 fw-bold text-dark"><i class="bx bx-shopping-bag text-success me-2"></i>Dernières Commandes</h5>
-        <a href="{% url 'commandes_admin' %}" class="btn btn-sm btn-outline-primary rounded-pill">Toutes les commandes</a>
+  <!-- Tableau des Commandes Récentes -->
+  <div class="col-12 col-xl-8">
+    <div class="admin-table-card">
+      <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+            <i class="fa-solid fa-clock-rotate-left text-primary"></i> Dernières Commandes Reçues
+          </h5>
+          <small class="text-muted">Suivez les achats clients en temps réel.</small>
+        </div>
+        <a href="{% url 'commandes_admin' %}" class="btn btn-sm btn-outline-primary rounded-pill px-3">
+          Voir toutes ({{ total_commandes }}) &rarr;
+        </a>
       </div>
-      <div class="table-responsive text-nowrap">
-        <table class="table table-hover">
-          <thead class="table-light">
+
+      <div class="table-responsive">
+        <table class="table admin-table mb-0">
+          <thead>
             <tr>
-              <th>ID</th>
+              <th>Commande</th>
               <th>Client</th>
-              <th>Date</th>
+              <th>Destination</th>
               <th>Montant</th>
               <th>Statut</th>
-              <th>Actions</th>
+              <th class="text-center">Action</th>
             </tr>
           </thead>
-          <tbody class="table-border-bottom-0">
+          <tbody>
             {% for cmd in commandes_recents %}
               <tr>
-                <td><strong>#{{ cmd.id }}</strong></td>
-                <td>{{ cmd.utilisateur.get_full_name|default:cmd.utilisateur.nomutilisateur }}</td>
-                <td>{{ cmd.date_commande|date:"d/m/Y H:i" }}</td>
-                <td class="fw-bold text-success">{{ cmd.total|floatformat:0 }} FCFA</td>
+                <td>
+                  <strong class="text-dark">#{{ cmd.id }}</strong>
+                  <div class="small text-muted">{{ cmd.date_commande|date:"d/m/Y H:i" }}</div>
+                </td>
+                <td>
+                  <div class="d-flex align-items-center gap-2">
+                    <div class="rounded-circle bg-light text-dark fw-bold d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; font-size: 11px;">
+                      {{ cmd.utilisateur.prenom|slice:":1"|default:cmd.utilisateur.nomutilisateur|slice:":1"|upper }}
+                    </div>
+                    <div>
+                      <span class="fw-bold text-dark d-block">{{ cmd.utilisateur.get_full_name }}</span>
+                      <small class="text-muted">{{ cmd.utilisateur.numero_de_telephone }}</small>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <span class="d-block text-truncate" style="max-width: 140px;">{{ cmd.ville }}</span>
+                  <small class="text-muted">{{ cmd.adresse_livraison|truncatechars:20 }}</small>
+                </td>
+                <td>
+                  <strong class="text-success">{{ cmd.total|floatformat:0 }} FCFA</strong>
+                </td>
                 <td>
                   <span class="badge bg-{{ cmd.status_badge_class }}">
                     {{ cmd.get_etat_commande_display }}
                   </span>
                 </td>
-                <td>
-                  <a href="{% url 'mettre_a_jour_commande' cmd.id %}" class="btn btn-sm btn-label-primary px-2" title="Modifier">
-                    <i class="bx bx-edit-alt"></i>
-                  </a>
-                  <a href="{% url 'afficher_livraison' cmd.id %}" class="btn btn-sm btn-label-info px-2" title="Livraison">
-                    <i class="bx bx-truck"></i>
+                <td class="text-center">
+                  <a href="{% url 'mettre_a_jour_commande' cmd.id %}" class="btn btn-sm btn-light rounded-pill px-2" title="Modifier">
+                    <i class="fa-solid fa-pen-to-square text-primary"></i>
                   </a>
                 </td>
               </tr>
             {% empty %}
               <tr>
-                <td colspan="6" class="text-center text-muted py-4">Aucune commande récente</td>
+                <td colspan="6" class="text-center py-4 text-muted">Aucune commande enregistrée.</td>
               </tr>
             {% endfor %}
           </tbody>
@@ -151,43 +213,140 @@
     </div>
   </div>
 
-  <!-- Alertes Stock Faible -->
-  <div class="col-12 col-lg-4">
-    <div class="card border-0 shadow-sm h-100">
-      <div class="card-header d-flex align-items-center justify-content-between border-bottom pb-3">
-        <h5 class="card-title m-0 me-2 fw-bold text-danger"><i class="bx bx-error-circle text-danger me-2"></i>Stock Faible (≤ 5)</h5>
-        <a href="{% url 'produit_list' %}" class="btn btn-sm btn-outline-danger rounded-pill">Inventaire</a>
+  <!-- Alerte Stocks Faibles -->
+  <div class="col-12 col-xl-4">
+    <div class="admin-table-card p-4">
+      <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+        <div>
+          <h5 class="fw-bold text-danger mb-1 d-flex align-items-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation"></i> Stocks Critiques (&le; 5)
+          </h5>
+          <small class="text-muted">Articles à réapprovisionner rapidement.</small>
+        </div>
       </div>
-      <div class="card-body p-0">
-        <ul class="list-group list-group-flush">
-          {% for prod in produits_stock_faible %}
-            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-              <div class="d-flex align-items-center gap-2">
-                {% if prod.image %}
-                  <img src="{{ prod.image.url }}" alt="{{ prod.nom }}" class="rounded" style="width: 40px; height: 40px; object-fit: contain;">
-                {% else %}
-                  <div class="bg-light rounded p-2"><i class="bx bx-box"></i></div>
-                {% endif %}
-                <div>
-                  <h6 class="mb-0 text-dark small fw-bold text-truncate" style="max-width: 140px;">{{ prod.nom }}</h6>
-                  <small class="text-muted">{{ prod.categorie.nom }}</small>
-                </div>
-              </div>
-              <div>
-                <span class="badge {% if prod.quantite == 0 %}bg-danger{% else %}bg-warning text-dark{% endif %} rounded-pill">
-                  {% if prod.quantite == 0 %}Rupture{% else %}{{ prod.quantite }} restant{{ prod.quantite|pluralize }}{% endif %}
-                </span>
-              </div>
-            </li>
-          {% empty %}
-            <li class="list-group-item text-center text-muted py-4">
-              <i class="bx bx-check-circle fs-2 text-success d-block mb-1"></i>
-              Tous les stocks sont à un niveau satisfaisant !
-            </li>
-          {% endfor %}
-        </ul>
+
+      <div class="d-flex flex-column gap-3">
+        {% for prod in produits_stock_faible %}
+          <div class="p-3 border rounded-3 bg-light">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <strong class="text-dark text-truncate" style="max-width: 180px;">{{ prod.nom }}</strong>
+              <span class="badge {% if prod.quantite == 0 %}bg-danger{% else %}bg-warning text-dark{% endif %} fw-bold">
+                {{ prod.quantite }} restant{{ prod.quantite|pluralize }}
+              </span>
+            </div>
+            <div class="progress" style="height: 6px;">
+              <div class="progress-bar {% if prod.quantite == 0 %}bg-danger{% else %}bg-warning{% endif %}" role="progressbar" style="width: {% widthratio prod.quantite 10 100 %}%;"></div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mt-2 small">
+              <span class="text-muted">{{ prod.categorie.nom }}</span>
+              <a href="{% url 'produit_update' prod.id %}" class="text-primary fw-bold text-decoration-none">
+                Réassortir <i class="fa-solid fa-arrow-right ms-1"></i>
+              </a>
+            </div>
+          </div>
+        {% empty %}
+          <div class="text-center py-4 text-muted">
+            <i class="fa-solid fa-circle-check text-success fs-1 mb-2 d-block"></i>
+            Tous les stocks sont à des niveaux optimaux.
+          </div>
+        {% endfor %}
       </div>
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 1. Graphique Chiffre d'Affaires Annuel (2014-2026)
+    const ctxSales = document.getElementById('salesYearlyChart').getContext('2d');
+    const gradientSales = ctxSales.createLinearGradient(0, 0, 0, 300);
+    gradientSales.addColorStop(0, 'rgba(16, 185, 129, 0.45)');
+    gradientSales.addColorStop(1, 'rgba(16, 185, 129, 0.02)');
+
+    new Chart(ctxSales, {
+      type: 'line',
+      data: {
+        labels: {{ yearly_labels|safe }},
+        datasets: [{
+          label: "Chiffre d'Affaires (FCFA)",
+          data: {{ yearly_totals|safe }},
+          borderColor: '#10b981',
+          borderWidth: 3,
+          backgroundColor: gradientSales,
+          fill: true,
+          tension: 0.35,
+          pointBackgroundColor: '#10b981',
+          pointBorderColor: '#ffffff',
+          pointBorderWidth: 2,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#0f172a',
+            titleFont: { size: 13, weight: 'bold' },
+            bodyFont: { size: 13 },
+            padding: 12,
+            callbacks: {
+              label: function(context) {
+                return ' ' + Number(context.parsed.y).toLocaleString('fr-FR') + ' FCFA';
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { color: '#64748b', font: { weight: '600' } }
+          },
+          y: {
+            grid: { color: '#f1f5f9' },
+            ticks: {
+              color: '#64748b',
+              callback: function(value) {
+                return (value / 1000000).toFixed(1) + ' M FCFA';
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // 2. Graphique Doughnut Catégories
+    const ctxCat = document.getElementById('categoriesChart').getContext('2d');
+    new Chart(ctxCat, {
+      type: 'doughnut',
+      data: {
+        labels: {{ cat_labels|safe }},
+        datasets: [{
+          data: {{ cat_counts|safe }},
+          backgroundColor: [
+            '#10b981', '#3b82f6', '#f59e0b', '#8b5cf6',
+            '#ec4899', '#06b6d4', '#f97316', '#64748b'
+          ],
+          borderWidth: 2,
+          borderColor: '#ffffff'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { boxWidth: 12, font: { size: 11, weight: '500' } }
+          }
+        },
+        cutout: '68%'
+      }
+    });
+  });
+</script>
 {% endblock %}

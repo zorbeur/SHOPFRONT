@@ -1,31 +1,31 @@
 ﻿{% extends 'admin_base.html' %}
 {% load static %}
 
-{% block title %}Gestion des Commandes Clients | E-SHOP Admin{% endblock %}
+{% block title %}Gestion des Commandes | E-SHOP Admin{% endblock %}
 
 {% block content %}
-<div class="card border-0 shadow-sm">
-  <div class="card-header bg-white py-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
+<div class="admin-table-card">
+  <div class="p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
     <div>
-      <h5 class="card-title m-0 fw-bold text-dark d-flex align-items-center gap-2">
-        <i class="bx bx-cart text-primary fs-4"></i> Commandes Clients
-      </h5>
-      <small class="text-muted">Consultez, validez et traitez les commandes passées sur la boutique.</small>
+      <h4 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+        <i class="fa-solid fa-receipt text-primary"></i> Journal des Commandes
+      </h4>
+      <p class="text-muted small mb-0">Consultez, traitez et mettez à jour les statuts des commandes passées.</p>
     </div>
     <div>
-      <span class="badge bg-label-primary px-3 py-2 fs-6">
+      <span class="badge badge-soft-primary px-3 py-2 fs-6">
         Total : {{ total_count }} commande{{ total_count|pluralize }}
       </span>
     </div>
   </div>
 
   <!-- Barre de Recherche et Filtres -->
-  <div class="card-body border-bottom bg-light py-3">
+  <div class="p-3 bg-light border-bottom">
     <form method="GET" class="row g-2 align-items-center">
       <div class="col-md-5">
-        <div class="input-group input-group-merge shadow-none bg-white">
-          <span class="input-group-text"><i class="bx bx-search"></i></span>
-          <input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Rechercher par #ID, client, ville...">
+        <div class="input-group">
+          <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <input type="text" name="q" value="{{ search_query }}" class="form-control border-start-0 bg-white" placeholder="Rechercher par #ID, nom client, ville...">
         </div>
       </div>
       <div class="col-md-4">
@@ -37,10 +37,10 @@
         </select>
       </div>
       <div class="col-md-3 d-flex gap-2">
-        <button type="submit" class="btn btn-primary rounded-pill flex-grow-1">Filtrer</button>
+        <button type="submit" class="btn btn-dark rounded-3 px-3 flex-grow-1">Filtrer</button>
         {% if search_query or selected_statut %}
-          <a href="{% url 'commandes_admin' %}" class="btn btn-outline-secondary rounded-pill px-3" title="Réinitialiser">
-            <i class="bx bx-reset"></i>
+          <a href="{% url 'commandes_admin' %}" class="btn btn-outline-secondary rounded-3 px-3" title="Réinitialiser">
+            <i class="fa-solid fa-rotate-left"></i>
           </a>
         {% endif %}
       </div>
@@ -48,21 +48,21 @@
   </div>
 
   <!-- Table des Commandes -->
-  <div class="table-responsive text-nowrap">
-    <table class="table table-hover">
-      <thead class="table-light">
+  <div class="table-responsive">
+    <table class="table admin-table mb-0">
+      <thead>
         <tr>
           <th>N° Commande</th>
           <th>Client</th>
-          <th>Date</th>
+          <th>Date de Commande</th>
           <th>Destination</th>
           <th>Articles</th>
-          <th>Montant</th>
+          <th>Montant Total</th>
           <th>Statut</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
-      <tbody class="table-border-bottom-0">
+      <tbody>
         {% for commande in commandes %}
           <tr>
             <td>
@@ -70,29 +70,27 @@
             </td>
             <td>
               <div class="d-flex align-items-center gap-2">
-                <div class="avatar avatar-xs">
-                  <span class="avatar-initial rounded-circle bg-label-secondary small">
-                    {{ commande.utilisateur.prenom|slice:":1"|default:commande.utilisateur.nomutilisateur|slice:":1"|upper }}
-                  </span>
+                <div class="rounded-circle bg-light text-dark fw-bold d-flex align-items-center justify-content-center border" style="width: 34px; height: 34px; font-size: 11px;">
+                  {{ commande.utilisateur.prenom|slice:":1"|default:commande.utilisateur.nomutilisateur|slice:":1"|upper }}
                 </div>
                 <div>
-                  <span class="fw-semibold d-block text-dark small">{{ commande.utilisateur.get_full_name }}</span>
+                  <span class="fw-bold text-dark d-block">{{ commande.utilisateur.get_full_name }}</span>
                   <small class="text-muted">{{ commande.utilisateur.numero_de_telephone|default:commande.utilisateur.email }}</small>
                 </div>
               </div>
             </td>
-            <td class="small text-muted">
+            <td class="text-muted small">
               {{ commande.date_commande|date:"d/m/Y H:i" }}
             </td>
-            <td class="small">
-              <span class="d-block text-truncate" style="max-width: 160px;" title="{{ commande.adresse_livraison }}">{{ commande.adresse_livraison }}</span>
-              <small class="text-muted">{{ commande.ville }} ({{ commande.pays }})</small>
+            <td>
+              <span class="d-block text-truncate fw-medium" style="max-width: 170px;">{{ commande.ville }}</span>
+              <small class="text-muted">{{ commande.adresse_livraison|truncatechars:22 }}</small>
             </td>
             <td>
-              <span class="badge bg-label-info">{{ commande.elements.count }} article{{ commande.elements.count|pluralize }}</span>
+              <span class="badge badge-soft-info">{{ commande.elements.count }} article{{ commande.elements.count|pluralize }}</span>
             </td>
-            <td class="fw-bold text-success">
-              {{ commande.total|floatformat:0 }} FCFA
+            <td>
+              <strong class="text-success">{{ commande.total|floatformat:0 }} FCFA</strong>
             </td>
             <td>
               <span class="badge bg-{{ commande.status_badge_class }}">
@@ -100,50 +98,29 @@
               </span>
             </td>
             <td class="text-center">
-              <a href="{% url 'mettre_a_jour_commande' commande.id %}" class="btn btn-sm btn-label-primary px-2" title="Modifier le statut">
-                <i class="bx bx-edit-alt"></i>
-              </a>
-              <a href="{% url 'afficher_livraison' commande.id %}" class="btn btn-sm btn-label-info px-2 ms-1" title="Détails Livraison">
-                <i class="bx bx-truck"></i>
-              </a>
-              <a href="{% url 'supprimer_commande' commande.id %}" class="btn btn-sm btn-label-danger px-2 ms-1" title="Supprimer">
-                <i class="bx bx-trash"></i>
-              </a>
+              <div class="d-inline-flex gap-1">
+                <a href="{% url 'commande_status' commande.id %}" target="_blank" class="btn btn-sm btn-light rounded-circle p-2 text-dark" title="Facture & Reçu">
+                  <i class="fa-solid fa-receipt"></i>
+                </a>
+                <a href="{% url 'mettre_a_jour_commande' commande.id %}" class="btn btn-sm btn-light rounded-circle p-2 text-primary" title="Mettre à jour le statut">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <a href="{% url 'supprimer_commande' commande.id %}" class="btn btn-sm btn-light rounded-circle p-2 text-danger" title="Supprimer">
+                  <i class="fa-solid fa-trash"></i>
+                </a>
+              </div>
             </td>
           </tr>
         {% empty %}
           <tr>
             <td colspan="8" class="text-center py-5 text-muted">
-              <i class="bx bx-cart fs-1 d-block mb-2 text-muted"></i>
-              Aucune commande trouvée pour ces critères.
+              <i class="fa-solid fa-receipt fs-1 d-block mb-2 opacity-50"></i>
+              Aucune commande trouvée.
             </td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
-
-  <!-- Pagination -->
-  {% if page_obj.has_other_pages %}
-    <div class="card-footer bg-white border-top d-flex justify-content-center py-3">
-      <nav aria-label="Pagination commandes">
-        <ul class="pagination pagination-sm mb-0">
-          {% if page_obj.has_previous %}
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_statut %}&statut={{ selected_statut }}{% endif %}">&laquo;</a></li>
-          {% endif %}
-          {% for num in page_obj.paginator.page_range %}
-            {% if page_obj.number == num %}
-              <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-              <li class="page-item"><a class="page-link" href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_statut %}&statut={{ selected_statut }}{% endif %}">{{ num }}</a></li>
-            {% endif %}
-          {% endfor %}
-          {% if page_obj.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_statut %}&statut={{ selected_statut }}{% endif %}">&raquo;</a></li>
-          {% endif %}
-        </ul>
-      </nav>
-    </div>
-  {% endif %}
 </div>
 {% endblock %}

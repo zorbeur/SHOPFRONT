@@ -4,60 +4,58 @@
 {% block title %}Gestion des Catégories | E-SHOP Admin{% endblock %}
 
 {% block content %}
-<div class="card border-0 shadow-sm">
-  <div class="card-header bg-white py-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
+<div class="admin-table-card">
+  <div class="p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
     <div>
-      <h5 class="card-title m-0 fw-bold text-dark d-flex align-items-center gap-2">
-        <i class="bx bx-category text-primary fs-4"></i> Catégories de Produits
-      </h5>
-      <small class="text-muted">Structurez et organisez vos rayons de vente.</small>
+      <h4 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+        <i class="fa-solid fa-tags text-warning"></i> Rayons & Catégories
+      </h4>
+      <p class="text-muted small mb-0">Organisez les rayons de votre boutique pour simplifier la navigation client.</p>
     </div>
-    <div>
-      <a href="{% url 'categorie_create' %}" class="btn btn-primary rounded-pill d-flex align-items-center gap-1">
-        <i class="bx bx-plus"></i> Nouvelle Catégorie
-      </a>
-    </div>
+    <a href="{% url 'categorie_create' %}" class="btn btn-admin-primary">
+      <i class="fa-solid fa-plus me-1"></i> Nouveau Rayon
+    </a>
   </div>
 
   <!-- Recherche -->
-  <div class="card-body border-bottom bg-light py-3">
+  <div class="p-3 bg-light border-bottom">
     <form method="GET" class="row g-2 align-items-center">
       <div class="col-md-8">
-        <div class="input-group input-group-merge shadow-none bg-white">
-          <span class="input-group-text"><i class="bx bx-search"></i></span>
-          <input type="text" name="q" value="{{ request.GET.q }}" class="form-control" placeholder="Rechercher une catégorie...">
+        <div class="input-group">
+          <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <input type="text" name="q" value="{{ request.GET.q|default:'' }}" class="form-control border-start-0 bg-white" placeholder="Rechercher un rayon...">
         </div>
       </div>
       <div class="col-md-4 d-flex gap-2">
-        <button type="submit" class="btn btn-primary rounded-pill flex-grow-1">Rechercher</button>
+        <button type="submit" class="btn btn-dark rounded-3 flex-grow-1">Rechercher</button>
         {% if request.GET.q %}
-          <a href="{% url 'categorie_list' %}" class="btn btn-outline-secondary rounded-pill px-3"><i class="bx bx-reset"></i></a>
+          <a href="{% url 'categorie_list' %}" class="btn btn-outline-secondary rounded-3 px-3"><i class="fa-solid fa-rotate-left"></i></a>
         {% endif %}
       </div>
     </form>
   </div>
 
-  <div class="table-responsive text-nowrap">
-    <table class="table table-hover">
-      <thead class="table-light">
+  <div class="table-responsive">
+    <table class="table admin-table mb-0">
+      <thead>
         <tr>
           <th>Visuel</th>
-          <th>Nom de la Catégorie</th>
-          <th>Slug URL</th>
+          <th>Nom du Rayon</th>
+          <th>Identifiant URL (Slug)</th>
           <th>Description</th>
-          <th>Articles Associés</th>
+          <th>Articles Liés</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
-      <tbody class="table-border-bottom-0">
+      <tbody>
         {% for cat in categories %}
           <tr>
             <td style="width: 70px;">
               {% if cat.image %}
-                <img src="{{ cat.image.url }}" alt="{{ cat.nom }}" class="rounded shadow-xs" style="width: 48px; height: 48px; object-fit: contain; background: #fff;">
+                <img src="{{ cat.image.url }}" alt="{{ cat.nom }}" class="rounded-3 border shadow-xs" style="width: 46px; height: 46px; object-fit: contain; background: #fff;">
               {% else %}
-                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
-                  <i class="bx bx-category text-muted fs-4"></i>
+                <div class="bg-light rounded-3 d-flex align-items-center justify-content-center border" style="width: 46px; height: 46px;">
+                  <i class="fa-solid fa-tags text-muted opacity-50"></i>
                 </div>
               {% endif %}
             </td>
@@ -65,27 +63,29 @@
               <strong class="text-dark">{{ cat.nom }}</strong>
             </td>
             <td>
-              <code>{{ cat.slug }}</code>
+              <code class="text-primary bg-light px-2 py-1 rounded">{{ cat.slug }}</code>
             </td>
             <td class="text-muted small text-truncate" style="max-width: 260px;" title="{{ cat.description }}">
-              {{ cat.description|default:"Aucune description" }}
+              {{ cat.description|default:"Aucune description enregistrée" }}
             </td>
             <td>
-              <span class="badge bg-label-primary">{{ cat.produits_count|default:0 }} produit{{ cat.produits_count|pluralize }}</span>
+              <span class="badge badge-soft-primary">{{ cat.produit_set.count }} article{{ cat.produit_set.count|pluralize }}</span>
             </td>
             <td class="text-center">
-              <a href="{% url 'categorie_update' cat.pk %}" class="btn btn-sm btn-label-primary px-2" title="Modifier">
-                <i class="bx bx-edit-alt"></i>
-              </a>
-              <a href="{% url 'categorie_delete' cat.pk %}" class="btn btn-sm btn-label-danger px-2 ms-1" title="Supprimer">
-                <i class="bx bx-trash"></i>
-              </a>
+              <div class="d-inline-flex gap-1">
+                <a href="{% url 'categorie_update' cat.pk %}" class="btn btn-sm btn-light rounded-circle p-2 text-primary" title="Modifier">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <a href="{% url 'categorie_delete' cat.pk %}" class="btn btn-sm btn-light rounded-circle p-2 text-danger" title="Supprimer">
+                  <i class="fa-solid fa-trash"></i>
+                </a>
+              </div>
             </td>
           </tr>
         {% empty %}
           <tr>
             <td colspan="6" class="text-center py-5 text-muted">
-              <i class="bx bx-category fs-1 d-block mb-2 text-muted"></i>
+              <i class="fa-solid fa-tags fs-1 d-block mb-2 opacity-50"></i>
               Aucune catégorie trouvée.
             </td>
           </tr>

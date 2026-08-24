@@ -1,75 +1,82 @@
 ﻿{% extends 'admin_base.html' %}
 {% load static %}
 
-{% block title %}Détails Livraison Commande #{{ commande.id|default:livraison.commande.id }} | E-SHOP Admin{% endblock %}
+{% block title %}Détails Livraison Commande #{{ livraison.commande.id }} | E-SHOP Admin{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
   <div class="col-lg-8">
-    <div class="card border-0 shadow-sm">
-      <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-        <h5 class="card-title m-0 fw-bold text-dark d-flex align-items-center gap-2">
-          <i class="bx bx-truck text-primary fs-4"></i>
-          Suivi de Livraison : Commande #{{ livraison.commande.id }}
-        </h5>
+    <div class="admin-table-card">
+      <div class="p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
         <div>
-          <a href="{% url 'ajouter_modifier_livraison' livraison.commande.id %}" class="btn btn-sm btn-primary rounded-pill me-1">
-            <i class="bx bx-edit me-1"></i> Modifier Statut
+          <h4 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+            <i class="fa-solid fa-truck-fast text-success"></i>
+            Suivi Colis : Commande #{{ livraison.commande.id }}
+          </h4>
+          <p class="text-muted small mb-0">Fiche de suivi d'acheminement et de distribution.</p>
+        </div>
+        <div class="d-flex gap-2">
+          <a href="{% url 'ajouter_modifier_livraison' livraison.commande.id %}" class="btn btn-admin-primary">
+            <i class="fa-solid fa-pen-to-square me-1"></i> Modifier le Statut
           </a>
-          <a href="{% url 'commandes_admin' %}" class="btn btn-sm btn-outline-secondary rounded-pill">
-            <i class="bx bx-arrow-back me-1"></i> Commandes
+          <a href="{% url 'liste_livraisons' %}" class="btn btn-outline-secondary rounded-pill px-3">
+            <i class="fa-solid fa-arrow-left me-1"></i> Livraisons
           </a>
         </div>
       </div>
 
-      <div class="card-body p-4">
+      <div class="p-4 p-md-5">
         <!-- Badge Statut -->
-        <div class="d-flex align-items-center justify-content-between p-3 rounded-3 bg-light mb-4">
+        <div class="d-flex align-items-center justify-content-between p-3 rounded-4 bg-light mb-4 border">
           <div>
-            <span class="text-muted small d-block">Statut actuel de livraison :</span>
+            <span class="text-muted small d-block">Statut actuel d'acheminement :</span>
             <span class="badge bg-{{ livraison.status_badge_class }} fs-6 mt-1">
               {{ livraison.get_statut_display }}
             </span>
           </div>
           <div class="text-end">
-            <span class="text-muted small d-block">Date estimée / prévue :</span>
+            <span class="text-muted small d-block">Date de livraison :</span>
             <strong class="text-dark">{{ livraison.date_livraison|date:"d/m/Y à H:i" }}</strong>
           </div>
         </div>
 
         <!-- Détails de l'adresse -->
-        <h6 class="fw-bold text-dark mb-3">Informations de destination</h6>
+        <h6 class="fw-bold text-dark mb-3">Informations d'Acheminement</h6>
         <div class="row g-3 mb-4">
           <div class="col-sm-6">
-            <div class="border rounded-3 p-3">
-              <small class="text-muted d-block">Client Destinataire</small>
-              <strong class="text-dark">{{ livraison.commande.utilisateur.get_full_name }}</strong>
-              <div class="small text-muted mt-1"><i class="bx bx-phone me-1"></i>{{ livraison.commande.utilisateur.numero_de_telephone }}</div>
-              <div class="small text-muted"><i class="bx bx-envelope me-1"></i>{{ livraison.commande.utilisateur.email }}</div>
+            <div class="border rounded-4 p-3 bg-white h-100">
+              <small class="text-muted d-block mb-1">Destinataire</small>
+              <strong class="text-dark fs-6">{{ livraison.commande.utilisateur.get_full_name }}</strong>
+              <div class="small text-muted mt-2"><i class="fa-solid fa-phone me-1 text-primary"></i> {{ livraison.commande.utilisateur.numero_de_telephone }}</div>
+              <div class="small text-muted"><i class="fa-solid fa-envelope me-1 text-info"></i> {{ livraison.commande.utilisateur.email }}</div>
             </div>
           </div>
           <div class="col-sm-6">
-            <div class="border rounded-3 p-3">
-              <small class="text-muted d-block">Adresse de livraison</small>
-              <strong class="text-dark">{{ livraison.adresse_livraison }}</strong>
-              <div class="small text-muted mt-1">{{ livraison.ville }}, {{ livraison.pays }}</div>
+            <div class="border rounded-4 p-3 bg-white h-100">
+              <small class="text-muted d-block mb-1">Lieu de livraison</small>
+              <strong class="text-dark fs-6">{{ livraison.adresse_livraison }}</strong>
+              <div class="small text-muted mt-2"><i class="fa-solid fa-location-dot me-1 text-danger"></i> {{ livraison.ville }}, {{ livraison.pays }}</div>
               <div class="small text-muted">Code postal : {{ livraison.code_postal|default:"N/A" }}</div>
             </div>
           </div>
         </div>
 
-        <!-- Récapitulatif commande -->
-        <h6 class="fw-bold text-dark mb-2">Contenu du colis ({{ livraison.commande.elements.count }} articles) :</h6>
-        <ul class="list-group list-group-flush mb-4 border rounded-3">
+        <!-- Contenu de la commande -->
+        <h6 class="fw-bold text-dark mb-3">Articles à Livrer</h6>
+        <ul class="list-group rounded-4 mb-4">
           {% for elem in livraison.commande.elements.all %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              <div>
-                <strong>{{ elem.produit.nom }}</strong>
-                <small class="text-muted d-block">Quantité : {{ elem.quantite }}</small>
+            <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+              <div class="d-flex align-items-center gap-3">
+                <span class="badge badge-soft-primary px-2 py-1">{{ elem.quantite }}x</span>
+                <span class="fw-bold text-dark">{{ elem.produit.nom }}</span>
               </div>
-              <span class="fw-bold text-success">{{ elem.prix_total|floatformat:0 }} FCFA</span>
+              <strong class="text-dark">{{ elem.prix_total|floatformat:0 }} FCFA</strong>
             </li>
           {% endfor %}
+          <li class="list-group-item bg-light d-flex justify-content-between align-items-center py-3">
+            <strong class="text-dark">Total Commande</strong>
+            <strong class="text-success fs-5">{{ livraison.commande.total|floatformat:0 }} FCFA</strong>
+          </li>
         </ul>
       </div>
     </div>

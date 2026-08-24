@@ -37,27 +37,64 @@ def Admin_home(request):
 
 @staff_required
 def admin_index(request):
-    """Tableau de bord d'analyse administratif complet avec graphiques et KPIs."""
+    """Tableau de bord d'analyse administratif moderne avec statistiques sur 12 ans et graphiques interactifs."""
     total_produits = Produit.objects.count()
     total_categories = Categorie.objects.count()
     total_commandes = Commande.objects.count()
     total_utilisateurs = Administrateur.objects.count()
-
     total_ventes = Commande.objects.aggregate(total=Sum('total'))['total'] or 0
+
+    # Panier moyen et taux de livraison
+    commandes_livrees = Commande.objects.filter(etat_commande='LIVRE').count()
+    taux_livraison = round((commandes_livrees / total_commandes * 100), 1) if total_commandes > 0 else 0
+    panier_moyen = round(total_ventes / total_commandes) if total_commandes > 0 else 0
+
+    # Données Chiffre d'Affaires par Année (2014 - 2026) pour Chart.js
+    years_range = list(range(2014, 2027))
+    yearly_labels = [str(y) for y in years_range]
+    yearly_totals = []
+    yearly_orders_count = []
+
+    for y in years_range:
+        y_total = Commande.objects.filter(date_commande__year=y).aggregate(s=Sum('total'))['s'] or 0
+        y_count = Commande.objects.filter(date_commande__year=y).count()
+        yearly_totals.append(float(y_total))
+        yearly_orders_count.append(y_count)
+
+    # Répartition par Catégorie pour Doughnut Chart
+    cat_qs = Categorie.objects.annotate(nb_prods=Count('produit')).order_by('-nb_prods')[:8]
+    cat_labels = [c.nom for c in cat_qs]
+    cat_counts = [c.nb_prods for c in cat_qs]
+
+    # Répartition par Statut de Commande
+    status_dict = {
+        'LIVRE': 'Livrées',
+        'EXPEDIE': 'En Route',
+        'EN_TRAITEMENT': 'En Préparation',
+        'EN_ATTENTE': 'En Attente',
+        'ANNULE': 'Annulées',
+    }
+    status_labels = []
+    status_counts = []
+    for code, label in status_dict.items():
+        cnt = Commande.objects.filter(etat_commande=code).count()
+        status_labels.append(label)
+        status_counts.append(cnt)
 
     # Produits en stock faible (<= 5)
     produits_stock_faible = Produit.objects.filter(quantite__lte=5).order_by('quantite')[:6]
 
-    # Données graphiques
+    # Données graphiques statiques de secours
     pie_chart = generate_pie_chart()
     bar_chart = generate_bar_chart()
     status_chart = generate_status_chart()
 
     # Commandes récentes
-    commandes_recents = Commande.objects.select_related('utilisateur').order_by('-date_commande')[:6]
+    commandes_recents = Commande.objects.select_related('utilisateur').order_by('-date_commande')[:8]
 
     # Notifications non lues pour cet admin
     notifications_non_lues = Notification.objects.filter(utilisateur=request.user, lu=False).count()
+    notifications_list = Notification.objects.filter(utilisateur=request.user).order_by('-date_creation')[:5]
 
     context = {
         'total_produits': total_produits,
@@ -65,12 +102,22 @@ def admin_index(request):
         'total_commandes': total_commandes,
         'total_utilisateurs': total_utilisateurs,
         'total_ventes': total_ventes,
+        'taux_livraison': taux_livraison,
+        'panier_moyen': panier_moyen,
+        'yearly_labels': yearly_labels,
+        'yearly_totals': yearly_totals,
+        'yearly_orders_count': yearly_orders_count,
+        'cat_labels': cat_labels,
+        'cat_counts': cat_counts,
+        'status_labels': status_labels,
+        'status_counts': status_counts,
         'produits_stock_faible': produits_stock_faible,
         'pie_chart': pie_chart,
         'bar_chart': bar_chart,
         'status_chart': status_chart,
         'commandes_recents': commandes_recents,
         'notifications_non_lues': notifications_non_lues,
+        'notifications_list': notifications_list,
     }
     return render(request, 'admin_index.html', context)
 

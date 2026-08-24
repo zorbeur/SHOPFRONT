@@ -5,55 +5,58 @@
 
 {% block content %}
 <div class="row justify-content-center">
-  <div class="col-lg-7">
-    <div class="card border-0 shadow-sm">
-      <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
-        <h5 class="card-title m-0 fw-bold text-dark d-flex align-items-center gap-2">
-          <i class="bx bx-truck text-primary fs-4"></i>
-          Gestion Livraison : Commande #{{ commande.id }}
-        </h5>
-        <a href="{% url 'afficher_livraison' commande.id %}" class="btn btn-sm btn-outline-secondary rounded-pill">
-          <i class="bx bx-arrow-back me-1"></i> Retour
+  <div class="col-lg-8">
+    <div class="admin-table-card">
+      <div class="p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+          <h4 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+            <i class="fa-solid fa-truck-ramp-box text-success"></i>
+            Gestion Expédition : Commande #{{ commande.id }}
+          </h4>
+          <p class="text-muted small mb-0">Modifier l'adresse ou le statut d'acheminement du colis.</p>
+        </div>
+        <a href="{% url 'afficher_livraison' commande.id %}" class="btn btn-outline-secondary rounded-pill px-3">
+          <i class="fa-solid fa-arrow-left me-1"></i> Fiche Colis
         </a>
       </div>
 
-      <div class="card-body p-4">
+      <div class="p-4 p-md-5">
         <form method="POST">
           {% csrf_token %}
 
-          <div class="mb-3">
-            <label class="form-label fw-semibold text-dark">{{ form.statut.label }} <span class="text-danger">*</span></label>
+          <div class="mb-4">
+            <label class="form-label fw-bold text-dark small">Statut de la livraison <span class="text-danger">*</span></label>
             {{ form.statut }}
             {% if form.statut.errors %}<div class="text-danger small mt-1">{{ form.statut.errors }}</div>{% endif %}
           </div>
 
-          <div class="mb-3">
-            <label class="form-label fw-semibold text-dark">{{ form.adresse_livraison.label }} <span class="text-danger">*</span></label>
+          <div class="mb-4">
+            <label class="form-label fw-bold text-dark small">Adresse précise de livraison <span class="text-danger">*</span></label>
             {{ form.adresse_livraison }}
             {% if form.adresse_livraison.errors %}<div class="text-danger small mt-1">{{ form.adresse_livraison.errors }}</div>{% endif %}
           </div>
 
-          <div class="row g-3 mb-3">
+          <div class="row g-3 mb-4">
             <div class="col-md-5">
-              <label class="form-label fw-semibold text-dark">{{ form.ville.label }} <span class="text-danger">*</span></label>
+              <label class="form-label fw-bold text-dark small">Ville / Localité <span class="text-danger">*</span></label>
               {{ form.ville }}
               {% if form.ville.errors %}<div class="text-danger small mt-1">{{ form.ville.errors }}</div>{% endif %}
             </div>
             <div class="col-md-4">
-              <label class="form-label fw-semibold text-dark">{{ form.pays.label }} <span class="text-danger">*</span></label>
+              <label class="form-label fw-bold text-dark small">Pays <span class="text-danger">*</span></label>
               {{ form.pays }}
               {% if form.pays.errors %}<div class="text-danger small mt-1">{{ form.pays.errors }}</div>{% endif %}
             </div>
             <div class="col-md-3">
-              <label class="form-label fw-semibold text-dark">{{ form.code_postal.label }}</label>
+              <label class="form-label fw-bold text-dark small">Code postal</label>
               {{ form.code_postal }}
             </div>
           </div>
 
-          <div class="d-flex justify-content-end gap-2 pt-3 border-top">
-            <a href="{% url 'afficher_livraison' commande.id %}" class="btn btn-outline-secondary rounded-pill px-4">Annuler</a>
-            <button type="submit" class="btn btn-primary rounded-pill px-4">
-              <i class="bx bx-save me-1"></i> Mettre à jour la Livraison
+          <div class="d-flex justify-content-end gap-3 pt-3 border-top">
+            <a href="{% url 'afficher_livraison' commande.id %}" class="btn btn-light rounded-pill px-4">Annuler</a>
+            <button type="submit" class="btn btn-admin-primary px-4">
+              <i class="fa-solid fa-check me-2"></i> Mettre à jour la Livraison
             </button>
           </div>
         </form>

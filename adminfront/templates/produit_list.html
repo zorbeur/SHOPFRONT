@@ -1,46 +1,44 @@
 ﻿{% extends 'admin_base.html' %}
 {% load static %}
 
-{% block title %}Inventaire des Produits | E-SHOP Admin{% endblock %}
+{% block title %}Catalogue des Produits | E-SHOP Admin{% endblock %}
 
 {% block content %}
-<div class="card border-0 shadow-sm">
-  <div class="card-header bg-white py-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
+<div class="admin-table-card">
+  <div class="p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
     <div>
-      <h5 class="card-title m-0 fw-bold text-dark d-flex align-items-center gap-2">
-        <i class="bx bx-box text-primary fs-4"></i> Catalogue des Produits
-      </h5>
-      <small class="text-muted">Gérez vos articles, tarifs et niveaux de stock.</small>
+      <h4 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+        <i class="fa-solid fa-boxes-stacked text-primary"></i> Catalogue des Articles
+      </h4>
+      <p class="text-muted small mb-0">Gestion de l'inventaire, des prix et des seuils d'approvisionnement.</p>
     </div>
-    <div class="d-flex gap-2">
-      <a href="{% url 'produit_create' %}" class="btn btn-primary rounded-pill d-flex align-items-center gap-1">
-        <i class="bx bx-plus"></i> Nouveau Produit
-      </a>
-    </div>
+    <a href="{% url 'produit_create' %}" class="btn btn-admin-primary">
+      <i class="fa-solid fa-plus me-1"></i> Nouveau Produit
+    </a>
   </div>
 
-  <!-- Barre de Recherche et Filtre -->
-  <div class="card-body border-bottom bg-light py-3">
+  <!-- Barre de Recherche et Filtres -->
+  <div class="p-3 bg-light border-bottom">
     <form method="GET" class="row g-2 align-items-center">
       <div class="col-md-5">
-        <div class="input-group input-group-merge shadow-none bg-white">
-          <span class="input-group-text"><i class="bx bx-search"></i></span>
-          <input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Rechercher par nom ou description...">
+        <div class="input-group">
+          <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <input type="text" name="q" value="{{ search_query }}" class="form-control border-start-0 bg-white" placeholder="Rechercher par nom ou référence...">
         </div>
       </div>
       <div class="col-md-4">
         <select name="category" class="form-select bg-white" onchange="this.form.submit()">
-          <option value="">Toutes les Catégories</option>
+          <option value="">Tous les Rayons (Catégories)</option>
           {% for cat in categories %}
             <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.nom }}</option>
           {% endfor %}
         </select>
       </div>
       <div class="col-md-3 d-flex gap-2">
-        <button type="submit" class="btn btn-primary rounded-pill flex-grow-1">Filtrer</button>
+        <button type="submit" class="btn btn-dark rounded-3 px-3 flex-grow-1">Filtrer</button>
         {% if search_query or selected_category %}
-          <a href="{% url 'produit_list' %}" class="btn btn-outline-secondary rounded-pill px-3" title="Réinitialiser">
-            <i class="bx bx-reset"></i>
+          <a href="{% url 'produit_list' %}" class="btn btn-outline-secondary rounded-3 px-3" title="Réinitialiser">
+            <i class="fa-solid fa-rotate-left"></i>
           </a>
         {% endif %}
       </div>
@@ -48,95 +46,77 @@
   </div>
 
   <!-- Table des Produits -->
-  <div class="table-responsive text-nowrap">
-    <table class="table table-hover">
-      <thead class="table-light">
+  <div class="table-responsive">
+    <table class="table admin-table mb-0">
+      <thead>
         <tr>
           <th>Visuel</th>
-          <th>Nom du Produit</th>
-          <th>Catégorie</th>
+          <th>Article</th>
+          <th>Rayon</th>
           <th>Prix (FCFA)</th>
-          <th>Stock</th>
+          <th>Stock Disponible</th>
           <th>Date d'Ajout</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
-      <tbody class="table-border-bottom-0">
+      <tbody>
         {% for produit in produits %}
           <tr>
             <td style="width: 70px;">
               {% if produit.image %}
-                <img src="{{ produit.image.url }}" alt="{{ produit.nom }}" class="rounded shadow-xs" style="width: 48px; height: 48px; object-fit: contain; background: #fff;">
+                <img src="{{ produit.image.url }}" alt="{{ produit.nom }}" class="rounded-3 border shadow-xs" style="width: 46px; height: 46px; object-fit: contain; background: #fff;">
               {% else %}
-                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
-                  <i class="bx bx-image text-muted fs-4"></i>
+                <div class="bg-light rounded-3 d-flex align-items-center justify-content-center border" style="width: 46px; height: 46px;">
+                  <i class="fa-solid fa-image text-muted opacity-50"></i>
                 </div>
               {% endif %}
             </td>
             <td>
-              <strong class="text-dark d-block text-truncate" style="max-width: 220px;">{{ produit.nom }}</strong>
-              <small class="text-muted">Slug: {{ produit.slug }}</small>
+              <strong class="text-dark d-block text-truncate" style="max-width: 260px;">{{ produit.nom }}</strong>
+              <small class="text-muted font-monospace">slug: {{ produit.slug|truncatechars:25 }}</small>
             </td>
             <td>
-              <span class="badge bg-label-info">{{ produit.categorie.nom }}</span>
+              <span class="badge badge-soft-info">{{ produit.categorie.nom }}</span>
             </td>
-            <td class="fw-bold text-success">
-              {{ produit.prix|floatformat:0 }} FCFA
+            <td>
+              <strong class="text-success">{{ produit.prix|floatformat:0 }} FCFA</strong>
             </td>
             <td>
               {% if produit.quantite == 0 %}
-                <span class="badge bg-label-danger"><i class="bx bx-x me-1"></i>Rupture (0)</span>
+                <span class="badge badge-soft-danger"><i class="fa-solid fa-xmark me-1"></i>Rupture (0)</span>
               {% elif produit.quantite <= 5 %}
-                <span class="badge bg-label-warning"><i class="bx bx-error me-1"></i>Faible ({{ produit.quantite }})</span>
+                <span class="badge badge-soft-warning"><i class="fa-solid fa-triangle-exclamation me-1"></i>Faible ({{ produit.quantite }})</span>
               {% else %}
-                <span class="badge bg-label-success"><i class="bx bx-check me-1"></i>En stock ({{ produit.quantite }})</span>
+                <span class="badge badge-soft-success"><i class="fa-solid fa-check me-1"></i>En stock ({{ produit.quantite }})</span>
               {% endif %}
             </td>
             <td class="text-muted small">
               {{ produit.date_ajout|date:"d/m/Y" }}
             </td>
             <td class="text-center">
-              <a href="{% url 'produit_update' produit.pk %}" class="btn btn-sm btn-label-primary px-2" title="Modifier">
-                <i class="bx bx-edit-alt"></i>
-              </a>
-              <a href="{% url 'produit_delete' produit.pk %}" class="btn btn-sm btn-label-danger px-2 ms-1" title="Supprimer">
-                <i class="bx bx-trash"></i>
-              </a>
+              <div class="d-inline-flex gap-1">
+                <a href="{% url 'produit_detail' produit.id %}" target="_blank" class="btn btn-sm btn-light rounded-circle p-2 text-dark" title="Voir sur la boutique">
+                  <i class="fa-solid fa-eye"></i>
+                </a>
+                <a href="{% url 'produit_update' produit.pk %}" class="btn btn-sm btn-light rounded-circle p-2 text-primary" title="Modifier">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+                <a href="{% url 'produit_delete' produit.pk %}" class="btn btn-sm btn-light rounded-circle p-2 text-danger" title="Supprimer">
+                  <i class="fa-solid fa-trash"></i>
+                </a>
+              </div>
             </td>
           </tr>
         {% empty %}
           <tr>
             <td colspan="7" class="text-center py-5 text-muted">
-              <i class="bx bx-box fs-1 d-block mb-2 text-muted"></i>
-              Aucun produit trouvé dans cette sélection.
+              <i class="fa-solid fa-box-open fs-1 d-block mb-2 opacity-50"></i>
+              Aucun produit ne correspond à votre recherche.
             </td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
-
-  <!-- Pagination -->
-  {% if is_paginated %}
-    <div class="card-footer bg-white border-top d-flex justify-content-center py-3">
-      <nav aria-label="Pagination produits">
-        <ul class="pagination pagination-sm mb-0">
-          {% if page_obj.has_previous %}
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">&laquo;</a></li>
-          {% endif %}
-          {% for num in paginator.page_range %}
-            {% if page_obj.number == num %}
-              <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-              <li class="page-item"><a class="page-link" href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">{{ num }}</a></li>
-            {% endif %}
-          {% endfor %}
-          {% if page_obj.has_next %}
-            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">&raquo;</a></li>
-          {% endif %}
-        </ul>
-      </nav>
-    </div>
-  {% endif %}
 </div>
 {% endblock %}

@@ -1,26 +1,26 @@
 ﻿{% extends 'admin_base.html' %}
 {% load static %}
 
-{% block title %}Gestion des Livraisons | E-SHOP Admin{% endblock %}
+{% block title %}Suivi des Expéditions & Livraisons | E-SHOP Admin{% endblock %}
 
 {% block content %}
-<div class="card border-0 shadow-sm">
-  <div class="card-header bg-white py-3 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
+<div class="admin-table-card">
+  <div class="p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
     <div>
-      <h5 class="card-title m-0 fw-bold text-dark d-flex align-items-center gap-2">
-        <i class="bx bx-package text-primary fs-4"></i> Suivi Global des Livraisons
-      </h5>
-      <small class="text-muted">Acheminez et suivez les expéditions de commandes vers les clients.</small>
+      <h4 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
+        <i class="fa-solid fa-truck-fast text-success"></i> Suivi des Expéditions & Colis
+      </h4>
+      <p class="text-muted small mb-0">Contrôlez les livraisons à Lomé et dans toutes les régions du Togo.</p>
     </div>
     <div>
-      <span class="badge bg-label-primary px-3 py-2 fs-6">
-        Total : {{ livraisons.count }} colis
+      <span class="badge badge-soft-success px-3 py-2 fs-6">
+        Total : {{ livraisons.count }} expéditions
       </span>
     </div>
   </div>
 
-  <!-- Filtre par statut -->
-  <div class="card-body border-bottom bg-light py-3">
+  <!-- Filtres par Statut -->
+  <div class="p-3 bg-light border-bottom">
     <form method="GET" class="row g-2 align-items-center">
       <div class="col-md-8">
         <select name="statut" class="form-select bg-white" onchange="this.form.submit()">
@@ -31,10 +31,10 @@
         </select>
       </div>
       <div class="col-md-4 d-flex gap-2">
-        <button type="submit" class="btn btn-primary rounded-pill flex-grow-1">Filtrer</button>
+        <button type="submit" class="btn btn-dark rounded-3 flex-grow-1">Filtrer</button>
         {% if selected_statut %}
-          <a href="{% url 'liste_livraisons' %}" class="btn btn-outline-secondary rounded-pill px-3" title="Réinitialiser">
-            <i class="bx bx-reset"></i>
+          <a href="{% url 'liste_livraisons' %}" class="btn btn-outline-secondary rounded-3 px-3" title="Réinitialiser">
+            <i class="fa-solid fa-rotate-left"></i>
           </a>
         {% endif %}
       </div>
@@ -42,19 +42,19 @@
   </div>
 
   <!-- Table des Livraisons -->
-  <div class="table-responsive text-nowrap">
-    <table class="table table-hover">
-      <thead class="table-light">
+  <div class="table-responsive">
+    <table class="table admin-table mb-0">
+      <thead>
         <tr>
-          <th>Commande</th>
+          <th>N° Commande</th>
           <th>Destinataire</th>
           <th>Adresse / Destination</th>
-          <th>Date Prévue</th>
-          <th>Statut Livraison</th>
+          <th>Date de Livraison</th>
+          <th>Statut Expédition</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
-      <tbody class="table-border-bottom-0">
+      <tbody>
         {% for livraison in livraisons %}
           <tr>
             <td>
@@ -62,6 +62,9 @@
             </td>
             <td>
               <div class="d-flex align-items-center gap-2">
+                <div class="rounded-circle bg-light text-dark fw-bold d-flex align-items-center justify-content-center border" style="width: 34px; height: 34px; font-size: 11px;">
+                  {{ livraison.commande.utilisateur.prenom|slice:":1"|default:livraison.commande.utilisateur.nomutilisateur|slice:":1"|upper }}
+                </div>
                 <div>
                   <strong class="text-dark d-block">{{ livraison.commande.utilisateur.get_full_name }}</strong>
                   <small class="text-muted">{{ livraison.commande.utilisateur.numero_de_telephone }}</small>
@@ -69,11 +72,11 @@
               </div>
             </td>
             <td>
-              <span class="d-block text-truncate" style="max-width: 220px;">{{ livraison.adresse_livraison }}</span>
+              <span class="d-block text-truncate fw-medium" style="max-width: 220px;">{{ livraison.adresse_livraison }}</span>
               <small class="text-muted">{{ livraison.ville }} ({{ livraison.pays }})</small>
             </td>
-            <td class="small text-muted">
-              {{ livraison.date_livraison|date:"d/m/Y H:i"|default:"Non planifiée" }}
+            <td class="text-muted small">
+              {{ livraison.date_livraison|date:"d/m/Y H:i"|default:"En attente de planification" }}
             </td>
             <td>
               <span class="badge bg-{{ livraison.status_badge_class }}">
@@ -81,18 +84,20 @@
               </span>
             </td>
             <td class="text-center">
-              <a href="{% url 'afficher_livraison' livraison.commande.id %}" class="btn btn-sm btn-label-info px-2" title="Détails">
-                <i class="bx bx-show"></i>
-              </a>
-              <a href="{% url 'ajouter_modifier_livraison' livraison.commande.id %}" class="btn btn-sm btn-label-primary px-2 ms-1" title="Modifier le statut">
-                <i class="bx bx-edit-alt"></i>
-              </a>
+              <div class="d-inline-flex gap-1">
+                <a href="{% url 'afficher_livraison' livraison.commande.id %}" class="btn btn-sm btn-light rounded-circle p-2 text-dark" title="Détails de l'expédition">
+                  <i class="fa-solid fa-eye"></i>
+                </a>
+                <a href="{% url 'ajouter_modifier_livraison' livraison.commande.id %}" class="btn btn-sm btn-light rounded-circle p-2 text-primary" title="Mettre à jour">
+                  <i class="fa-solid fa-pen-to-square"></i>
+                </a>
+              </div>
             </td>
           </tr>
         {% empty %}
           <tr>
             <td colspan="6" class="text-center py-5 text-muted">
-              <i class="bx bx-package fs-1 d-block mb-2 text-muted"></i>
+              <i class="fa-solid fa-truck fs-1 d-block mb-2 opacity-50"></i>
               Aucune livraison trouvée.
             </td>
           </tr>
