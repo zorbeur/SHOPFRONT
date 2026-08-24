@@ -1,0 +1,45 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Renvoyer le lien d'activation | E-SHOP Togo{% endblock %}
+
+{% block content %}
+<div class="py-5" style="background-color: #f8fafc; min-height: 75vh; display: flex; align-items: center;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-7 col-lg-5">
+        <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white">
+          <div class="text-center mb-4">
+            <span class="d-inline-flex p-3 rounded-circle bg-primary-subtle text-primary fs-3 mb-2">
+              <i class="fa-solid fa-paper-plane"></i>
+            </span>
+            <h4 class="fw-bold text-dark mb-1">Renvoyer l'Email d'Activation</h4>
+            <p class="text-muted small">Indiquez l'adresse email utilisée lors de votre inscription.</p>
+          </div>
+
+          <form method="POST" action="{% url 'renvoyer_activation' %}">
+            {% csrf_token %}
+            <div class="mb-4">
+              <label class="form-label small fw-bold text-dark">Votre adresse email</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0"><i class="fa-solid fa-envelope text-muted"></i></span>
+                <input type="email" name="email" class="form-control border-start-0" placeholder="nom@exemple.com" required>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-bold mb-3">
+              Envoyer le lien de confirmation
+            </button>
+
+            <div class="text-center small">
+              <a href="{% url 'connexion' %}" class="text-muted text-decoration-none">
+                <i class="fa-solid fa-arrow-left me-1"></i> Retour à la connexion
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,6 +1,10 @@
-from django.test import TestCase, Client
+﻿from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.core.management import call_command
 from adminfront.models import Categorie, Produit, Commande, ElementCommande, Livraison
 
 User = get_user_model()
@@ -14,7 +18,8 @@ class FrontendViewTests(TestCase):
             password='testpassword123',
             prenom='Alice',
             nom='Martin',
-            numero_de_telephone='+228 90 00 00 00'
+            numero_de_telephone='+228 90 00 00 00',
+            email_verifie=True
         )
         self.categorie = Categorie.objects.create(
             nom='Salon & Séjour',
@@ -163,7 +168,8 @@ class FrontendViewTests(TestCase):
         response_cart_after = self.client.get(reverse('cart'))
         self.assertEqual(response_cart_after.context['cart_count'], 0)
 
-    def test_user_authentication_and_profile(self):
+    def test_user_registration_and_email_activation_flow(self):
+        # 1. Inscription
         response_reg = self.client.post(reverse('enregistrement'), {
             'prenom': 'David',
             'nom': 'Lawson',
@@ -174,9 +180,26 @@ class FrontendViewTests(TestCase):
             'password2': 'newuserpass123'
         })
         self.assertEqual(response_reg.status_code, 302)
-        self.assertTrue(User.objects.filter(nomutilisateur='davidl').exists())
+        user = User.objects.filter(nomutilisateur='davidl').first()
+        self.assertIsNotNone(user)
+        self.assertFalse(user.email_verifie)
 
-        self.client.login(nomutilisateur='davidl', password='newuserpass123')
+        # 2. Activation du compte avec token
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+        response_act = self.client.get(reverse('activer_compte', kwargs={'uidb64': uid, 'token': token}))
+        self.assertEqual(response_act.status_code, 302)
+
+        user.refresh_from_db()
+        self.assertTrue(user.email_verifie)
+
+        # 3. Accès au profil
         response_prof = self.client.get(reverse('profil'))
         self.assertEqual(response_prof.status_code, 200)
         self.assertContains(response_prof, 'David Lawson')
+
+    def test_init_admin_command(self):
+        call_command('init_admin')
+        admin_user = User.objects.filter(is_staff=True).first()
+        self.assertIsNotNone(admin_user)
+        self.assertTrue(admin_user.is_superuser)

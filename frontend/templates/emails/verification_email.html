@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Validez votre compte E-SHOP</title>
+</head>
+<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f1f5f9; margin: 0; padding: 30px 10px;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td align="center">
+        <table width="600" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
+          <!-- Header -->
+          <tr>
+            <td style="background: linear-gradient(135deg, #183d2e 0%, #204c3b 100%); padding: 35px 30px; text-align: center;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 26px; letter-spacing: 1px;">🛍️ E-SHOP<span style="color: #f59e0b;">.</span></h1>
+              <p style="color: rgba(255,255,255,0.75); margin: 6px 0 0 0; font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px;">Boutique en ligne moderne au Togo</p>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding: 40px 35px;">
+              <h2 style="color: #1e293b; margin: 0 0 15px 0; font-size: 20px;">Bienvenue {{ user.get_full_name }},</h2>
+              <p style="color: #475569; font-size: 15px; line-height: 1.6; margin: 0 0 25px 0;">
+                Merci de votre inscription sur <strong>E-SHOP Togo</strong> ! Afin de sécuriser votre compte et de profiter pleinement de vos commandes en ligne, veuillez confirmer votre adresse email en cliquant sur le bouton ci-dessous :
+              </p>
+
+              <!-- CTA Button -->
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin: 30px 0;">
+                <tr>
+                  <td align="center">
+                    <a href="{{ activation_url }}" style="background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); color: #0f241a; text-decoration: none; font-weight: 700; font-size: 16px; padding: 14px 36px; border-radius: 50px; display: inline-block; box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);">
+                      ✓ Activer mon compte
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="color: #94a3b8; font-size: 12.5px; line-height: 1.5; margin: 25px 0 0 0; border-top: 1px solid #e2e8f0; padding-top: 20px;">
+                Si le bouton ne fonctionne pas, copiez et collez ce lien direct dans votre navigateur :<br>
+                <a href="{{ activation_url }}" style="color: #1b3d2f; word-break: break-all;">{{ activation_url }}</a>
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #f8fafc; padding: 20px 35px; text-align: center; border-top: 1px solid #e2e8f0;">
+              <p style="color: #94a3b8; font-size: 12px; margin: 0;">
+                © E-SHOP Togo • Boulevard du 13 Janvier, Lomé • +228 90 91 23 67
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

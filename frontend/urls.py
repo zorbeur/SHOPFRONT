@@ -1,4 +1,4 @@
-﻿from django.urls import path
+from django.urls import path
 from . import views
 
 urlpatterns = [
@@ -44,6 +44,9 @@ urlpatterns = [
     path('login/', views.connexion, name='login'),
     path('enregistrement/', views.enregistrement, name='enregistrement'),
     path('signup/', views.enregistrement, name='signup'),
+    path('activation-en-attente/', views.activation_en_attente, name='activation_en_attente'),
+    path('activer-compte/<str:uidb64>/<str:token>/', views.activer_compte, name='activer_compte'),
+    path('renvoyer-activation/', views.renvoyer_activation, name='renvoyer_activation'),
     path('deconnexion/', views.deconnexion, name='deconnexion'),
     path('logout/', views.deconnexion, name='logout'),
 ]

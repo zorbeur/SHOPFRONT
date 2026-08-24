@@ -1,4 +1,4 @@
-﻿from django.test import TestCase, Client
+from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from adminfront.models import Categorie, Produit, Commande, ElementCommande, Livraison, Notification
@@ -10,7 +10,7 @@ class AdminfrontModelTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             nomutilisateur='testadmin',
-            email='admin@eshop.tg',
+            email='jean.dupont@eshop.tg',
             password='securepassword123',
             prenom='Jean',
             nom='Dupont',

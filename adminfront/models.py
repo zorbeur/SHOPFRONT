@@ -45,6 +45,7 @@ class Administrateur(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False, verbose_name="Équipe administrative")
     numero_de_telephone = models.CharField(max_length=30, default='+22890912367', blank=True, verbose_name="Numéro de téléphone")
     date_inscription = models.DateTimeField(default=timezone.now, verbose_name="Date d'inscription")
+    email_verifie = models.BooleanField(default=True, verbose_name="Email vérifié")
 
     groups = models.ManyToManyField(
         'auth.Group',

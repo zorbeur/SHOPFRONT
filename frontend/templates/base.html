@@ -462,9 +462,6 @@
           <div class="nav-item {% if request.resolver_match.url_name == 'shop' %}active{% endif %}">
             <a href="{% url 'shop' %}" class="nav-pill-link"><i class="fa-solid fa-store opacity-75"></i> Boutique</a>
           </div>
-          <div class="nav-item {% if request.resolver_match.url_name == 'about' %}active{% endif %}">
-            <a href="{% url 'about' %}" class="nav-pill-link"><i class="fa-solid fa-circle-info opacity-75"></i> À propos</a>
-          </div>
           <div class="nav-item {% if request.resolver_match.url_name == 'services' %}active{% endif %}">
             <a href="{% url 'services' %}" class="nav-pill-link"><i class="fa-solid fa-truck-fast opacity-75"></i> Services</a>
           </div>
@@ -581,7 +578,6 @@
       <ul class="list-unstyled d-flex flex-column gap-2 mb-4">
         <li><a href="{% url 'home' %}" class="nav-pill-link fs-6 py-2"><i class="fa-solid fa-house me-2 text-warning"></i> Accueil</a></li>
         <li><a href="{% url 'shop' %}" class="nav-pill-link fs-6 py-2"><i class="fa-solid fa-store me-2 text-warning"></i> Boutique</a></li>
-        <li><a href="{% url 'about' %}" class="nav-pill-link fs-6 py-2"><i class="fa-solid fa-circle-info me-2 text-warning"></i> À propos de nous</a></li>
         <li><a href="{% url 'services' %}" class="nav-pill-link fs-6 py-2"><i class="fa-solid fa-truck-fast me-2 text-warning"></i> Nos Services</a></li>
         <li><a href="{% url 'blog' %}" class="nav-pill-link fs-6 py-2"><i class="fa-solid fa-newspaper me-2 text-warning"></i> Blog & Actus</a></li>
         <li><a href="{% url 'contact' %}" class="nav-pill-link fs-6 py-2"><i class="fa-solid fa-envelope me-2 text-warning"></i> Contactez-nous</a></li>

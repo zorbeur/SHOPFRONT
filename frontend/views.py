@@ -1,13 +1,18 @@
-import json
 from decimal import Decimal
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import EmailMultiAlternatives
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
+from django.urls import reverse
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.decorators.http import require_POST
 
 from adminfront.models import Categorie, Produit, Commande, ElementCommande, Livraison, Notification
@@ -388,24 +393,106 @@ def connexion(request):
 
     return render(request, 'login.html', {'form': form})
 
+def _send_verification_email(request, user):
+    """Génère et envoie l'email de validation de compte."""
+    token = default_token_generator.make_token(user)
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    activation_url = request.build_absolute_uri(
+        reverse('activer_compte', kwargs={'uidb64': uid, 'token': token})
+    )
+
+    subject = "Confirmez votre adresse email - E-SHOP Togo"
+    from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', 'E-SHOP Togo <noreply@eshop.tg>')
+
+    context = {
+        'user': user,
+        'activation_url': activation_url,
+    }
+
+    try:
+        html_content = render_to_string('emails/verification_email.html', context)
+        text_content = f"Bonjour {user.get_full_name()},\n\nMerci de vous être inscrit sur E-SHOP Togo !\nVeuillez cliquer sur ce lien pour valider votre compte :\n{activation_url}\n\nL'équipe E-SHOP."
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [user.email])
+        msg.attach_alternative(html_content, "text/html")
+        msg.send(fail_silently=False)
+    except Exception as e:
+        print(f"[E-SHOP EMAIL]: Erreur d'envoi d'email à {user.email}: {e}")
+
+    return activation_url
+
 def enregistrement(request):
-    """Inscription client avec le modèle Administrateur / Utilisateur."""
+    """Inscription client avec envoi de lien de vérification par email."""
     if request.user.is_authenticated:
         return redirect('home')
 
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
         if form.is_valid():
-            user = form.save()
-            login(request, user)
-            messages.success(request, "Félicitations, votre compte a été créé avec succès ! Bienvenue sur E-SHOP.")
-            return redirect('home')
+            user = form.save(commit=False)
+            # Le compte est créé inactif ou non vérifié jusqu'à confirmation de l'email
+            user.is_active = True
+            user.email_verifie = False
+            user.save()
+
+            activation_url = _send_verification_email(request, user)
+            request.session['pending_activation_email'] = user.email
+            request.session['debug_activation_url'] = activation_url if settings.DEBUG else ''
+
+            messages.success(request, f"Un email de confirmation vous a été envoyé à {user.email}.")
+            return redirect('activation_en_attente')
         else:
             messages.error(request, "Veuillez corriger les erreurs ci-dessous.")
     else:
         form = UserRegisterForm()
 
     return render(request, 'signup.html', {'form': form})
+
+def activation_en_attente(request):
+    """Page d'attente invitant le client à vérifier sa boîte de réception."""
+    email = request.session.get('pending_activation_email', '')
+    debug_url = request.session.get('debug_activation_url', '')
+    return render(request, 'activation_en_attente.html', {
+        'email': email,
+        'debug_url': debug_url,
+    })
+
+def activer_compte(request, uidb64, token):
+    """Active le compte utilisateur lorsque le token de vérification est valide."""
+    User = get_user_model()
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        user.is_active = True
+        user.email_verifie = True
+        user.save()
+        login(request, user)
+        messages.success(request, f"Félicitations {user.get_full_name()} ! Votre adresse email a été confirmée avec succès. Bienvenue sur E-SHOP.")
+        return redirect('home')
+    else:
+        return render(request, 'activation_invalide.html')
+
+def renvoyer_activation(request):
+    """Formulaire permettant de renvoyer un nouvel email d'activation."""
+    User = get_user_model()
+    if request.method == 'POST':
+        email = request.POST.get('email', '').strip()
+        user = User.objects.filter(email=email).first()
+        if user:
+            if user.email_verifie:
+                messages.info(request, "Ce compte est déjà validé. Vous pouvez vous connecter directement.")
+                return redirect('connexion')
+            activation_url = _send_verification_email(request, user)
+            request.session['pending_activation_email'] = user.email
+            request.session['debug_activation_url'] = activation_url if settings.DEBUG else ''
+            messages.success(request, f"Un nouveau lien de validation a été envoyé à {email}.")
+            return redirect('activation_en_attente')
+        else:
+            messages.error(request, "Aucun compte n'a été trouvé avec cette adresse email.")
+    return render(request, 'renvoyer_activation.html')
 
 def deconnexion(request):
     """Déconnexion sécurisée."""
@@ -515,3 +602,21 @@ def promotions(request):
     """Page dédiée aux Promotions, Soldes et Bons Plans."""
     produits_promo = Produit.objects.filter(quantite__gt=0).order_by('-date_ajout')
     return render(request, 'promotions.html', {'produits': produits_promo})
+
+# ----------------- GESTIONNAIRES D'ERREURS HTTP PERSONNALISÉS -----------------
+
+def custom_page_not_found_view(request, exception=None):
+    """Page d'erreur 404 sur-mesure avec design moderne et suggestions."""
+    return render(request, '404.html', status=404)
+
+def custom_server_error_view(request):
+    """Page d'erreur 500 sur-mesure avec message rassurant et assistance."""
+    return render(request, '500.html', status=500)
+
+def custom_permission_denied_view(request, exception=None):
+    """Page d'erreur 403 sur-mesure."""
+    return render(request, '403.html', status=403)
+
+def custom_bad_request_view(request, exception=None):
+    """Page d'erreur 400 sur-mesure."""
+    return render(request, '400.html', status=400)

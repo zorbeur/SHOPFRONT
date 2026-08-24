@@ -1,0 +1,51 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Vérification de l'Email | E-SHOP Togo{% endblock %}
+
+{% block content %}
+<div class="py-5" style="background-color: #f8fafc; min-height: 75vh; display: flex; align-items: center;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 bg-white text-center">
+          <div class="rounded-circle bg-warning-subtle text-warning d-inline-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px; font-size: 36px;">
+            <i class="fa-solid fa-envelope-circle-check"></i>
+          </div>
+
+          <h3 class="fw-bold text-dark mb-2">Vérifiez votre boîte email</h3>
+          <p class="text-muted leading-relaxed mb-4">
+            Un email de confirmation contenant votre lien d'activation sécurisé a été envoyé à l'adresse :<br>
+            <strong class="text-dark">{{ email|default:"votre adresse email" }}</strong>.
+          </p>
+
+          <div class="alert alert-info border-0 rounded-3 text-start small mb-4">
+            <i class="fa-solid fa-circle-info me-2"></i>
+            Veuillez cliquer sur le lien dans l'email pour activer votre compte et commencer vos achats. Pensez à vérifier votre dossier <strong>Spams / Courriers indésirables</strong> si vous ne le voyez pas dans les 2 minutes.
+          </div>
+
+          {% if debug_url %}
+            <!-- Raccourci de développement en mode DEBUG -->
+            <div class="p-3 bg-light border border-warning rounded-3 mb-4 text-start">
+              <span class="badge bg-warning text-dark mb-2">Mode Développement / Test Local</span>
+              <p class="small text-muted mb-2">Lien direct d'activation généré :</p>
+              <a href="{{ debug_url }}" class="btn btn-sm btn-outline-dark rounded-pill w-100 text-truncate">
+                🚀 Activer directement en 1 clic
+              </a>
+            </div>
+          {% endif %}
+
+          <div class="d-flex flex-column gap-2">
+            <a href="{% url 'renvoyer_activation' %}" class="text-muted text-decoration-none small">
+              <i class="fa-solid fa-rotate-right me-1"></i> Vous n'avez pas reçu l'email ? Renvoyer un lien
+            </a>
+            <a href="{% url 'home' %}" class="btn btn-outline-secondary rounded-pill mt-3">
+              <i class="fa-solid fa-house me-1"></i> Retour à l'accueil
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
