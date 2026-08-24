@@ -1,50 +1,44 @@
 ﻿{% extends 'admin_base.html' %}
 {% load static %}
 
-{% block title %}Gestion des Catégories | E-SHOP Admin{% endblock %}
+{% block title %}Rayons & Catégories | E-SHOP Admin Suite{% endblock %}
 
 {% block content %}
-<div class="admin-table-card">
-  <div class="p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
+<div class="helios-card">
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h4 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
-        <i class="fa-solid fa-tags text-warning"></i> Rayons & Catégories
-      </h4>
-      <p class="text-muted small mb-0">Organisez les rayons de votre boutique pour simplifier la navigation client.</p>
+      <h3 class="fw-bold text-white mb-1" style="font-size: 22px;">Rayons & Catégories</h3>
+      <p class="text-muted small mb-0">Structurez et organisez vos rayons de vente.</p>
     </div>
-    <a href="{% url 'categorie_create' %}" class="btn btn-admin-primary">
+    <a href="{% url 'categorie_create' %}" class="helios-btn-glow">
       <i class="fa-solid fa-plus me-1"></i> Nouveau Rayon
     </a>
   </div>
 
-  <!-- Recherche -->
-  <div class="p-3 bg-light border-bottom">
+  <div class="helios-card-inner mb-4">
     <form method="GET" class="row g-2 align-items-center">
-      <div class="col-md-8">
-        <div class="input-group">
-          <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-          <input type="text" name="q" value="{{ request.GET.q|default:'' }}" class="form-control border-start-0 bg-white" placeholder="Rechercher un rayon...">
-        </div>
+      <div class="col-md-9">
+        <input type="text" name="q" value="{{ request.GET.q|default:'' }}" class="form-control" placeholder="Rechercher un rayon...">
       </div>
-      <div class="col-md-4 d-flex gap-2">
-        <button type="submit" class="btn btn-dark rounded-3 flex-grow-1">Rechercher</button>
+      <div class="col-md-3 d-flex gap-2">
+        <button type="submit" class="helios-pill-btn active py-2 px-3 flex-grow-1 justify-content-center">Rechercher</button>
         {% if request.GET.q %}
-          <a href="{% url 'categorie_list' %}" class="btn btn-outline-secondary rounded-3 px-3"><i class="fa-solid fa-rotate-left"></i></a>
+          <a href="{% url 'categorie_list' %}" class="helios-icon-btn"><i class="fa-solid fa-rotate-left"></i></a>
         {% endif %}
       </div>
     </form>
   </div>
 
   <div class="table-responsive">
-    <table class="table admin-table mb-0">
+    <table class="helios-table">
       <thead>
         <tr>
           <th>Visuel</th>
           <th>Nom du Rayon</th>
           <th>Identifiant URL (Slug)</th>
           <th>Description</th>
-          <th>Articles Liés</th>
-          <th class="text-center">Actions</th>
+          <th>Articles</th>
+          <th class="text-center">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -52,31 +46,31 @@
           <tr>
             <td style="width: 70px;">
               {% if cat.image %}
-                <img src="{{ cat.image.url }}" alt="{{ cat.nom }}" class="rounded-3 border shadow-xs" style="width: 46px; height: 46px; object-fit: contain; background: #fff;">
+                <img src="{{ cat.image.url }}" alt="{{ cat.nom }}" class="rounded-3 border border-secondary-subtle" style="width: 46px; height: 46px; object-fit: contain; background: #fff;">
               {% else %}
-                <div class="bg-light rounded-3 d-flex align-items-center justify-content-center border" style="width: 46px; height: 46px;">
-                  <i class="fa-solid fa-tags text-muted opacity-50"></i>
+                <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: var(--helios-card-inner);">
+                  <i class="fa-solid fa-layer-group text-muted"></i>
                 </div>
               {% endif %}
             </td>
             <td>
-              <strong class="text-dark">{{ cat.nom }}</strong>
+              <strong class="text-white">{{ cat.nom }}</strong>
             </td>
             <td>
-              <code class="text-primary bg-light px-2 py-1 rounded">{{ cat.slug }}</code>
+              <code style="color: var(--helios-pink); background: var(--helios-card-inner); padding: 4px 8px; border-radius: 8px;">{{ cat.slug }}</code>
             </td>
-            <td class="text-muted small text-truncate" style="max-width: 260px;" title="{{ cat.description }}">
-              {{ cat.description|default:"Aucune description enregistrée" }}
+            <td class="text-muted small text-truncate" style="max-width: 260px;">
+              {{ cat.description|default:"Aucune description" }}
             </td>
             <td>
-              <span class="badge badge-soft-primary">{{ cat.produit_set.count }} article{{ cat.produit_set.count|pluralize }}</span>
+              <span class="badge-helios-pink">{{ cat.produit_set.count }} article{{ cat.produit_set.count|pluralize }}</span>
             </td>
             <td class="text-center">
-              <div class="d-inline-flex gap-1">
-                <a href="{% url 'categorie_update' cat.pk %}" class="btn btn-sm btn-light rounded-circle p-2 text-primary" title="Modifier">
+              <div class="d-inline-flex gap-2">
+                <a href="{% url 'categorie_update' cat.pk %}" class="helios-icon-btn" style="width: 32px; height: 32px; font-size: 12px; color: var(--helios-orchid);" title="Modifier">
                   <i class="fa-solid fa-pen-to-square"></i>
                 </a>
-                <a href="{% url 'categorie_delete' cat.pk %}" class="btn btn-sm btn-light rounded-circle p-2 text-danger" title="Supprimer">
+                <a href="{% url 'categorie_delete' cat.pk %}" class="helios-icon-btn text-danger" style="width: 32px; height: 32px; font-size: 12px;" title="Supprimer">
                   <i class="fa-solid fa-trash"></i>
                 </a>
               </div>
@@ -84,10 +78,7 @@
           </tr>
         {% empty %}
           <tr>
-            <td colspan="6" class="text-center py-5 text-muted">
-              <i class="fa-solid fa-tags fs-1 d-block mb-2 opacity-50"></i>
-              Aucune catégorie trouvée.
-            </td>
+            <td colspan="6" class="text-center py-5 text-muted">Aucune catégorie trouvée.</td>
           </tr>
         {% endfor %}
       </tbody>

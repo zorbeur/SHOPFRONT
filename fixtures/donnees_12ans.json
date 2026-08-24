@@ -1097,7 +1097,7 @@
   "fields": {
     "nom": "Téléphones et Accessoires",
     "description": "Smartphones : Découvrez notre gamme de smartphones dernier cri, offrant des performances puissantes, des caméras exceptionnelles et une connectivité avancée.\r\nCoques et protections : Protégez votre téléphone avec nos coques robustes et élégantes, disponibles dans une variété de styles et de matériaux.\r\nChargeurs et câbles : Gardez vos appareils chargés avec nos chargeurs rapides et câbles durables, compatibles avec toutes les marques populaires.\r\nBatteries externes : Emportez de l'énergie supplémentaire partout où vous allez avec nos batteries externes de haute capacité.\r\nÉcouteurs et casques : Profitez d'une qualité sonore supérieure avec notre sélection d'écouteurs et de casques, filaires et sans fil.",
-    "image": "categories/Téléphones_et_Accessoires.jpeg",
+    "image": "categories/couche4.png",
     "slug": "telephones_accessoires"
   }
 },
@@ -1107,7 +1107,7 @@
   "fields": {
     "nom": "Ordinateurs et Périphériques",
     "description": "Ordinateurs portables : Explorez notre collection de portables performants, parfaits pour le travail, les études et le divertissement.\r\nOrdinateurs de bureau : Trouvez des ordinateurs de bureau puissants pour les besoins professionnels et les jeux intensifs.\r\nTablettes : Optez pour la flexibilité des tablettes, idéales pour la lecture, le streaming et la productivité en déplacement.\r\nClaviers et souris : Améliorez votre confort et votre efficacité avec nos claviers ergonomiques et souris précises.\r\nMoniteurs : Découvrez des écrans haute résolution pour une expérience visuelle immersive, qu'il s'agisse de travail ou de divertissement.\r\nImprimantes et scanners : Facilitez vos tâches d'impression et de numérisation avec nos imprimantes multifonctions et scanners rapides",
-    "image": "categories/Ordinateurs_et_Périphériques.jpeg",
+    "image": "categories/post2.png",
     "slug": "Ordinateurs_et_peripheriques"
   }
 },
@@ -1117,7 +1117,7 @@
   "fields": {
     "nom": "Composants Informatiques",
     "description": "Processeurs (CPU) : Boostez les performances de votre ordinateur avec nos processeurs de dernière génération.\r\nCartes mères : Choisissez des cartes mères fiables et évolutives pour construire ou mettre à niveau votre PC.\r\nCartes graphiques (GPU) : Profitez d'une qualité graphique exceptionnelle avec nos cartes graphiques puissantes, idéales pour les jeux et le montage vidéo.\r\nDisques durs et SSD : Augmentez votre capacité de stockage avec nos disques durs et SSD rapides et fiables.\r\nMémoire RAM : Améliorez la réactivité de votre système avec notre sélection de mémoires RAM haute performance.\r\nBoîtiers d'ordinateur : Trouvez des boîtiers stylés et fonctionnels pour protéger vos composants internes.\r\nAlimentations : Assurez une alimentation stable et efficace avec nos alimentations certifiées",
-    "image": "categories/Composants_informatiques.jpeg",
+    "image": "categories/product3.png",
     "slug": "Composants_informatiques"
   }
 },
@@ -1127,7 +1127,7 @@
   "fields": {
     "nom": "Télévision et Audio",
     "description": "Téléviseurs : Découvrez notre sélection de téléviseurs haute définition, offrant des images nettes et des couleurs vibrantes.\r\nBarres de son : Améliorez le son de votre téléviseur avec nos barres de son puissantes et élégantes.\r\nSystèmes home cinéma : Transformez votre salon en salle de cinéma avec nos systèmes home cinéma complets.\r\nEnceintes Bluetooth : Profitez de la musique sans fil avec nos enceintes Bluetooth portables et performantes.\r\nRécepteurs AV : Améliorez votre expérience audio-visuelle avec nos récepteurs AV de qualité.",
-    "image": "",
+    "image": "categories/product2.png",
     "slug": "Television_et_audio"
   }
 },
@@ -1137,7 +1137,7 @@
   "fields": {
     "nom": "Appareils Photo et Caméras",
     "description": "Appareils photo numériques : Capturez chaque moment avec précision grâce à nos appareils photo numériques de haute qualité.\r\nCaméras vidéo : Enregistrez des vidéos en haute définition avec nos caméras vidéo avancées.\r\nObjectifs : Complétez votre équipement avec notre gamme d'objectifs, adaptés à toutes les situations de prise de vue.\r\nTrépieds et stabilisateurs : Obtenez des prises de vue stables et professionnelles avec nos trépieds et stabilisateurs.\r\nAccessoires photo : Trouvez tout ce dont vous avez besoin pour améliorer votre expérience photographique, des sacs aux cartes mémoire.",
-    "image": "categories/Appareils_Photo_et_Caméras.jpeg",
+    "image": "categories/couch2.png",
     "slug": "Appareils_photo_et_Cameras"
   }
 },
@@ -1147,7 +1147,7 @@
   "fields": {
     "nom": "Jeux Vidéo",
     "description": "Consoles de jeux : Explorez notre sélection de consoles de jeux, offrant des graphismes de pointe et des expériences immersives.\r\nJeux vidéo : Découvrez les derniers jeux vidéo pour toutes les plateformes, des blockbusters aux indies.\r\nAccessoires de gaming : Optimisez votre expérience de jeu avec nos accessoires de gaming, y compris les casques, les manettes et les claviers mécaniques.\r\nManettes et contrôleurs : Améliorez votre contrôle du jeu avec nos manettes et contrôleurs ergonomiques et réactifs.",
-    "image": "categories/Jeux_Vidéo.jpeg",
+    "image": "categories/img-grid-1.jpg",
     "slug": "Jeux_video"
   }
 },
@@ -1157,7 +1157,7 @@
   "fields": {
     "nom": "Maison Connectée",
     "description": "Assistants vocaux : Contrôlez votre maison avec la voix grâce à nos assistants vocaux intelligents.\r\nÉclairage intelligent : Créez des ambiances personnalisées avec notre éclairage intelligent et programmable.\r\nSécurité domestique (caméras, alarmes) : Protégez votre domicile avec nos solutions de sécurité connectées, incluant caméras et systèmes d'alarme.\r\nThermostats connectés : Gérez la température de votre maison à distance avec nos thermostats intelligents.\r\nPrises intelligentes : Contrôlez vos appareils électriques avec nos prises intelligentes, pratiques et faciles à utiliser.",
-    "image": "categories/Maison_Connectée.jpeg",
+    "image": "categories/img-grid-3.jpg",
     "slug": "Maison_connectee"
   }
 },
@@ -1167,7 +1167,7 @@
   "fields": {
     "nom": "Réseaux et Connectivité",
     "description": "Routeurs et modems : Assurez une connexion Internet rapide et stable avec nos routeurs et modems de haute performance.\r\nRépéteurs Wi-Fi : Étendez la portée de votre réseau avec nos répéteurs Wi-Fi efficaces.\r\nCâbles réseau : Trouvez des câbles réseau de qualité pour des connexions rapides et fiables.\r\nAdaptateurs et dongles : Ajoutez des fonctionnalités supplémentaires à vos appareils avec nos adaptateurs et dongles pratiques.",
-    "image": "categories/Réseaux_et_Connectivité.jpeg",
+    "image": "categories/post3.png",
     "slug": "Reseaux_et_connectivite"
   }
 },
@@ -1177,7 +1177,7 @@
   "fields": {
     "nom": "Électronique Portable",
     "description": "Montres connectées : Suivez votre activité et restez connecté avec nos montres connectées élégantes et fonctionnelles.\r\nBracelets de fitness : Atteignez vos objectifs de fitness avec nos bracelets de fitness précis et confortables.\r\nCasques de réalité virtuelle (VR) : Plongez dans des mondes virtuels immersifs avec nos casques de réalité virtuelle avancés.",
-    "image": "categories/Électronique_Portable.jpeg",
+    "image": "categories/sourie.png",
     "slug": "electronique_portable"
   }
 },
@@ -1187,7 +1187,7 @@
   "fields": {
     "nom": "Audio et Hi-Fi",
     "description": "Systèmes Hi-Fi : Profitez d'une qualité sonore exceptionnelle avec nos systèmes Hi-Fi complets.\r\nPlatine vinyles : Redécouvrez vos vinyles préférés avec nos platines vinyles de qualité.\r\nAmplificateurs : Amplifiez votre musique avec nos amplificateurs puissants et précis.",
-    "image": "categories/Audio_et_Hi-Fi.jpeg",
+    "image": "categories/product1.png",
     "slug": "Audio_et_Hi-Fi"
   }
 },
@@ -1197,7 +1197,7 @@
   "fields": {
     "nom": "Drones et Accessoires",
     "description": "Drones : Découvrez nos drones performants pour la photographie aérienne et les loisirs.\r\nPièces et accessoires pour drones : Trouvez toutes les pièces de rechange et accessoires pour optimiser votre drone.",
-    "image": "categories/Drones_et_Accessoires.jpeg",
+    "image": "categories/sourie.png",
     "slug": "Drones_et_accessoires"
   }
 },
@@ -1207,7 +1207,7 @@
   "fields": {
     "nom": "Équipement de Bureau",
     "description": "Téléphones de bureau : Améliorez la communication au travail avec nos téléphones de bureau modernes et fonctionnels.\r\nProjecteurs : Projetez des images et des vidéos en haute résolution avec nos projecteurs performants.\r\nSystèmes de visioconférence : Facilitez les réunions à distance avec nos systèmes de visioconférence de haute qualité.",
-    "image": "categories/Équipement_de_Bureau.jpeg",
+    "image": "categories/bowl-2.png",
     "slug": "Equipement_de_Bureau"
   }
 },
@@ -1217,7 +1217,7 @@
   "fields": {
     "nom": "Autres Accessoires",
     "description": "Adaptateurs et convertisseurs : Trouvez des adaptateurs et convertisseurs pour connecter et utiliser vos appareils électroniques en toute simplicité.\r\nBatteries et chargeurs : Prolongez la durée de vie de vos appareils avec nos batteries de rechange et chargeurs fiables.\r\nSacs et étuis pour appareils électroniques : Protégez et transportez vos appareils électroniques avec nos sacs et étuis robustes et stylés.",
-    "image": "categories/Autres_Accessoires.jpeg",
+    "image": "categories/product2.png",
     "slug": "Autres_accessoires"
   }
 },
@@ -1227,7 +1227,7 @@
   "fields": {
     "nom": "Salon & Séjour",
     "description": "Canapés grand confort, fauteuils scandinaves, tables basses en verre et bois massif pour sublimer votre séjour.",
-    "image": "",
+    "image": "categories/couch2.png",
     "slug": "salon-sejour"
   }
 },
@@ -1237,7 +1237,7 @@
   "fields": {
     "nom": "Informatique & Bureau",
     "description": "Ordinateurs portables, écrans 4K, claviers mécaniques RGB, chaises ergonomiques et bureautique moderne.",
-    "image": "",
+    "image": "categories/bowl-3.png",
     "slug": "informatique-bureau"
   }
 },
@@ -1247,7 +1247,7 @@
   "fields": {
     "nom": "Téléphonie & Tablettes",
     "description": "Smartphones dernière génération, tablettes tactiles, écouteurs sans fil et accessoires de charge rapide.",
-    "image": "",
+    "image": "categories/product1.png",
     "slug": "telephonie-tablettes"
   }
 },
@@ -1257,7 +1257,7 @@
   "fields": {
     "nom": "Électroménager",
     "description": "Réfrigérateurs basse consommation, climatiseurs inverter, micro-ondes et robots cuiseurs multifonctions.",
-    "image": "",
+    "image": "categories/product3.png",
     "slug": "electromenager"
   }
 },
@@ -1267,7 +1267,7 @@
   "fields": {
     "nom": "Gaming & Consoles",
     "description": "Consoles next-gen, fauteuils gaming, volants à retour de force et casques immersifs surround 7.1.",
-    "image": "",
+    "image": "categories/bowl-2.png",
     "slug": "gaming-consoles"
   }
 },
@@ -1277,7 +1277,7 @@
   "fields": {
     "nom": "Mobilier de Chambre",
     "description": "Lits coffre, matelas orthopédiques, armoires à portes coulissantes et tables de chevet contemporaines.",
-    "image": "",
+    "image": "categories/post1.png",
     "slug": "mobilier-de-chambre"
   }
 },
@@ -1287,7 +1287,7 @@
   "fields": {
     "nom": "Luminaire & Décoration",
     "description": "Lustres suspendus, lampadaires à intensité variable, appliques murales LED et décoration d'intérieur épurée.",
-    "image": "",
+    "image": "categories/img-grid-2.jpg",
     "slug": "luminaire-decoration"
   }
 },
@@ -1297,7 +1297,7 @@
   "fields": {
     "nom": "Audio & Sonorisation",
     "description": "Enceintes Bluetooth étanches, barres de son home-cinéma et systèmes audio haute fidélité.",
-    "image": "",
+    "image": "categories/couche4.png",
     "slug": "audio-sonorisation"
   }
 },

@@ -1,4 +1,4 @@
-﻿import random
+import random
 from decimal import Decimal
 from datetime import datetime, timedelta
 from django.core.management.base import BaseCommand
@@ -13,7 +13,26 @@ class Command(BaseCommand):
     help = 'Peuple la base de données avec des données complètes et autonomes simulant 12 ans d activité (2014-2026).'
 
     def handle(self, *args, **options):
+        import os, shutil
         self.stdout.write("Génération de l historique complet sur 12 ans (2014 - 2026)...")
+
+        # Synchronisation automatique des images statiques vers media/
+        static_img_dir = os.path.join('static', 'images')
+        media_prod_dir = os.path.join('media', 'produits')
+        media_cat_dir = os.path.join('media', 'categories')
+        os.makedirs(media_prod_dir, exist_ok=True)
+        os.makedirs(media_cat_dir, exist_ok=True)
+
+        if os.path.exists(static_img_dir):
+            for fname in os.listdir(static_img_dir):
+                src = os.path.join(static_img_dir, fname)
+                if os.path.isfile(src):
+                    dst_prod = os.path.join(media_prod_dir, fname)
+                    dst_cat = os.path.join(media_cat_dir, fname)
+                    if not os.path.exists(dst_prod):
+                        shutil.copy2(src, dst_prod)
+                    if not os.path.exists(dst_cat):
+                        shutil.copy2(src, dst_cat)
 
         # 1. Catégories Complètes
         categories_data = [

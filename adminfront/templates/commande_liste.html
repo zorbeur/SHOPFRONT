@@ -1,45 +1,39 @@
 ﻿{% extends 'admin_base.html' %}
 {% load static %}
 
-{% block title %}Gestion des Commandes | E-SHOP Admin{% endblock %}
+{% block title %}Journal des Commandes | E-SHOP Admin Suite{% endblock %}
 
 {% block content %}
-<div class="admin-table-card">
-  <div class="p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
+<div class="helios-card">
+  <!-- Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h4 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
-        <i class="fa-solid fa-receipt text-primary"></i> Journal des Commandes
-      </h4>
-      <p class="text-muted small mb-0">Consultez, traitez et mettez à jour les statuts des commandes passées.</p>
+      <h3 class="fw-bold text-white mb-1" style="font-size: 22px;">Journal des Commandes</h3>
+      <p class="text-muted small mb-0">Consultez, traitez et suivez l'ensemble des commandes clients.</p>
     </div>
-    <div>
-      <span class="badge badge-soft-primary px-3 py-2 fs-6">
-        Total : {{ total_count }} commande{{ total_count|pluralize }}
-      </span>
-    </div>
+    <span class="badge-helios-pink px-3 py-2 fs-6">
+      Total : {{ total_count }} commande{{ total_count|pluralize }}
+    </span>
   </div>
 
-  <!-- Barre de Recherche et Filtres -->
-  <div class="p-3 bg-light border-bottom">
+  <!-- Search & Filter Bar -->
+  <div class="helios-card-inner mb-4">
     <form method="GET" class="row g-2 align-items-center">
-      <div class="col-md-5">
-        <div class="input-group">
-          <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-          <input type="text" name="q" value="{{ search_query }}" class="form-control border-start-0 bg-white" placeholder="Rechercher par #ID, nom client, ville...">
-        </div>
+      <div class="col-md-6">
+        <input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Rechercher par #ID, nom client, ville...">
       </div>
       <div class="col-md-4">
-        <select name="statut" class="form-select bg-white" onchange="this.form.submit()">
+        <select name="statut" class="form-select" onchange="this.form.submit()">
           <option value="">Tous les Statuts</option>
           {% for code, label in statut_choices %}
             <option value="{{ code }}" {% if selected_statut == code %}selected{% endif %}>{{ label }}</option>
           {% endfor %}
         </select>
       </div>
-      <div class="col-md-3 d-flex gap-2">
-        <button type="submit" class="btn btn-dark rounded-3 px-3 flex-grow-1">Filtrer</button>
+      <div class="col-md-2 d-flex gap-2">
+        <button type="submit" class="helios-pill-btn active py-2 px-3 flex-grow-1 justify-content-center">Filtrer</button>
         {% if search_query or selected_statut %}
-          <a href="{% url 'commandes_admin' %}" class="btn btn-outline-secondary rounded-3 px-3" title="Réinitialiser">
+          <a href="{% url 'commandes_admin' %}" class="helios-icon-btn" title="Réinitialiser">
             <i class="fa-solid fa-rotate-left"></i>
           </a>
         {% endif %}
@@ -47,35 +41,35 @@
     </form>
   </div>
 
-  <!-- Table des Commandes -->
+  <!-- Table -->
   <div class="table-responsive">
-    <table class="table admin-table mb-0">
+    <table class="helios-table">
       <thead>
         <tr>
           <th>N° Commande</th>
           <th>Client</th>
-          <th>Date de Commande</th>
+          <th>Date</th>
           <th>Destination</th>
           <th>Articles</th>
-          <th>Montant Total</th>
+          <th>Montant</th>
           <th>Statut</th>
-          <th class="text-center">Actions</th>
+          <th class="text-center">Action</th>
         </tr>
       </thead>
       <tbody>
         {% for commande in commandes %}
           <tr>
             <td>
-              <strong class="text-dark">#{{ commande.id }}</strong>
+              <strong class="text-white">#{{ commande.id }}</strong>
             </td>
             <td>
               <div class="d-flex align-items-center gap-2">
-                <div class="rounded-circle bg-light text-dark fw-bold d-flex align-items-center justify-content-center border" style="width: 34px; height: 34px; font-size: 11px;">
+                <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; background: var(--helios-card-inner); color: #ffffff; font-size: 11px; font-weight: 700;">
                   {{ commande.utilisateur.prenom|slice:":1"|default:commande.utilisateur.nomutilisateur|slice:":1"|upper }}
                 </div>
                 <div>
-                  <span class="fw-bold text-dark d-block">{{ commande.utilisateur.get_full_name }}</span>
-                  <small class="text-muted">{{ commande.utilisateur.numero_de_telephone|default:commande.utilisateur.email }}</small>
+                  <div class="fw-bold text-white small">{{ commande.utilisateur.get_full_name }}</div>
+                  <small class="text-muted" style="font-size: 11px;">{{ commande.utilisateur.numero_de_telephone|default:commande.utilisateur.email }}</small>
                 </div>
               </div>
             </td>
@@ -83,29 +77,33 @@
               {{ commande.date_commande|date:"d/m/Y H:i" }}
             </td>
             <td>
-              <span class="d-block text-truncate fw-medium" style="max-width: 170px;">{{ commande.ville }}</span>
-              <small class="text-muted">{{ commande.adresse_livraison|truncatechars:22 }}</small>
+              <div class="text-white small">{{ commande.ville }}</div>
+              <small class="text-muted">{{ commande.adresse_livraison|truncatechars:20 }}</small>
             </td>
             <td>
-              <span class="badge badge-soft-info">{{ commande.elements.count }} article{{ commande.elements.count|pluralize }}</span>
+              <span class="badge-helios-muted">{{ commande.elements.count }} article{{ commande.elements.count|pluralize }}</span>
             </td>
             <td>
-              <strong class="text-success">{{ commande.total|floatformat:0 }} FCFA</strong>
+              <strong style="color: var(--helios-green);">{{ commande.total|floatformat:0 }} FCFA</strong>
             </td>
             <td>
-              <span class="badge bg-{{ commande.status_badge_class }}">
-                {{ commande.get_etat_commande_display }}
-              </span>
+              {% if commande.etat_commande == 'LIVRE' %}
+                <span class="badge-helios-green">Livré</span>
+              {% elif commande.etat_commande == 'EXPEDIE' %}
+                <span class="badge-helios-pink">En Route</span>
+              {% else %}
+                <span class="badge-helios-muted">{{ commande.get_etat_commande_display }}</span>
+              {% endif %}
             </td>
             <td class="text-center">
-              <div class="d-inline-flex gap-1">
-                <a href="{% url 'commande_status' commande.id %}" target="_blank" class="btn btn-sm btn-light rounded-circle p-2 text-dark" title="Facture & Reçu">
+              <div class="d-inline-flex gap-2">
+                <a href="{% url 'commande_status' commande.id %}" target="_blank" class="helios-icon-btn" style="width: 32px; height: 32px; font-size: 12px;" title="Facture">
                   <i class="fa-solid fa-receipt"></i>
                 </a>
-                <a href="{% url 'mettre_a_jour_commande' commande.id %}" class="btn btn-sm btn-light rounded-circle p-2 text-primary" title="Mettre à jour le statut">
+                <a href="{% url 'mettre_a_jour_commande' commande.id %}" class="helios-icon-btn" style="width: 32px; height: 32px; font-size: 12px; color: var(--helios-orchid);" title="Modifier Statut">
                   <i class="fa-solid fa-pen-to-square"></i>
                 </a>
-                <a href="{% url 'supprimer_commande' commande.id %}" class="btn btn-sm btn-light rounded-circle p-2 text-danger" title="Supprimer">
+                <a href="{% url 'supprimer_commande' commande.id %}" class="helios-icon-btn text-danger" style="width: 32px; height: 32px; font-size: 12px;" title="Supprimer">
                   <i class="fa-solid fa-trash"></i>
                 </a>
               </div>

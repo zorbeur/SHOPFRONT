@@ -1,43 +1,39 @@
 ﻿{% extends 'admin_base.html' %}
 {% load static %}
 
-{% block title %}Catalogue des Produits | E-SHOP Admin{% endblock %}
+{% block title %}Catalogue Produits | E-SHOP Admin Suite{% endblock %}
 
 {% block content %}
-<div class="admin-table-card">
-  <div class="p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
+<div class="helios-card">
+  <!-- Header -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <h4 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
-        <i class="fa-solid fa-boxes-stacked text-primary"></i> Catalogue des Articles
-      </h4>
-      <p class="text-muted small mb-0">Gestion de l'inventaire, des prix et des seuils d'approvisionnement.</p>
+      <h3 class="fw-bold text-white mb-1" style="font-size: 22px;">Catalogue des Articles</h3>
+      <p class="text-muted small mb-0">Gestion de l'inventaire, des visuels et des stocks en temps réel.</p>
     </div>
-    <a href="{% url 'produit_create' %}" class="btn btn-admin-primary">
+    <a href="{% url 'produit_create' %}" class="helios-btn-glow">
       <i class="fa-solid fa-plus me-1"></i> Nouveau Produit
     </a>
   </div>
 
-  <!-- Barre de Recherche et Filtres -->
-  <div class="p-3 bg-light border-bottom">
+  <!-- Search & Filter Bar -->
+  <div class="helios-card-inner mb-4">
     <form method="GET" class="row g-2 align-items-center">
-      <div class="col-md-5">
-        <div class="input-group">
-          <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-magnifying-glass"></i></span>
-          <input type="text" name="q" value="{{ search_query }}" class="form-control border-start-0 bg-white" placeholder="Rechercher par nom ou référence...">
-        </div>
+      <div class="col-md-6">
+        <input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Rechercher par nom ou référence...">
       </div>
       <div class="col-md-4">
-        <select name="category" class="form-select bg-white" onchange="this.form.submit()">
+        <select name="category" class="form-select" onchange="this.form.submit()">
           <option value="">Tous les Rayons (Catégories)</option>
           {% for cat in categories %}
             <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:"s" %}selected{% endif %}>{{ cat.nom }}</option>
           {% endfor %}
         </select>
       </div>
-      <div class="col-md-3 d-flex gap-2">
-        <button type="submit" class="btn btn-dark rounded-3 px-3 flex-grow-1">Filtrer</button>
+      <div class="col-md-2 d-flex gap-2">
+        <button type="submit" class="helios-pill-btn active py-2 px-3 flex-grow-1 justify-content-center">Filtrer</button>
         {% if search_query or selected_category %}
-          <a href="{% url 'produit_list' %}" class="btn btn-outline-secondary rounded-3 px-3" title="Réinitialiser">
+          <a href="{% url 'produit_list' %}" class="helios-icon-btn" title="Réinitialiser">
             <i class="fa-solid fa-rotate-left"></i>
           </a>
         {% endif %}
@@ -45,17 +41,17 @@
     </form>
   </div>
 
-  <!-- Table des Produits -->
+  <!-- Table -->
   <div class="table-responsive">
-    <table class="table admin-table mb-0">
+    <table class="helios-table">
       <thead>
         <tr>
           <th>Visuel</th>
           <th>Article</th>
           <th>Rayon</th>
           <th>Prix (FCFA)</th>
-          <th>Stock Disponible</th>
-          <th>Date d'Ajout</th>
+          <th>Stock</th>
+          <th>Date</th>
           <th class="text-center">Actions</th>
         </tr>
       </thead>
@@ -64,44 +60,44 @@
           <tr>
             <td style="width: 70px;">
               {% if produit.image %}
-                <img src="{{ produit.image.url }}" alt="{{ produit.nom }}" class="rounded-3 border shadow-xs" style="width: 46px; height: 46px; object-fit: contain; background: #fff;">
+                <img src="{{ produit.image.url }}" alt="{{ produit.nom }}" class="rounded-3 border border-secondary-subtle" style="width: 46px; height: 46px; object-fit: contain; background: #ffffff;">
               {% else %}
-                <div class="bg-light rounded-3 d-flex align-items-center justify-content-center border" style="width: 46px; height: 46px;">
-                  <i class="fa-solid fa-image text-muted opacity-50"></i>
+                <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 46px; height: 46px; background: var(--helios-card-inner);">
+                  <i class="fa-solid fa-image text-muted"></i>
                 </div>
               {% endif %}
             </td>
             <td>
-              <strong class="text-dark d-block text-truncate" style="max-width: 260px;">{{ produit.nom }}</strong>
-              <small class="text-muted font-monospace">slug: {{ produit.slug|truncatechars:25 }}</small>
+              <div class="fw-bold text-white d-block text-truncate" style="max-width: 260px;">{{ produit.nom }}</div>
+              <small class="text-muted font-monospace" style="font-size: 11px;">slug: {{ produit.slug|truncatechars:20 }}</small>
             </td>
             <td>
-              <span class="badge badge-soft-info">{{ produit.categorie.nom }}</span>
+              <span class="badge-helios-pink">{{ produit.categorie.nom }}</span>
             </td>
             <td>
-              <strong class="text-success">{{ produit.prix|floatformat:0 }} FCFA</strong>
+              <strong style="color: var(--helios-green);">{{ produit.prix|floatformat:0 }} FCFA</strong>
             </td>
             <td>
               {% if produit.quantite == 0 %}
-                <span class="badge badge-soft-danger"><i class="fa-solid fa-xmark me-1"></i>Rupture (0)</span>
+                <span class="badge-helios-muted text-danger"><i class="fa-solid fa-xmark me-1"></i>Rupture (0)</span>
               {% elif produit.quantite <= 5 %}
-                <span class="badge badge-soft-warning"><i class="fa-solid fa-triangle-exclamation me-1"></i>Faible ({{ produit.quantite }})</span>
+                <span class="badge-helios-muted text-warning"><i class="fa-solid fa-triangle-exclamation me-1"></i>Faible ({{ produit.quantite }})</span>
               {% else %}
-                <span class="badge badge-soft-success"><i class="fa-solid fa-check me-1"></i>En stock ({{ produit.quantite }})</span>
+                <span class="badge-helios-green"><i class="fa-solid fa-check me-1"></i>En stock ({{ produit.quantite }})</span>
               {% endif %}
             </td>
             <td class="text-muted small">
               {{ produit.date_ajout|date:"d/m/Y" }}
             </td>
             <td class="text-center">
-              <div class="d-inline-flex gap-1">
-                <a href="{% url 'produit_detail' produit.id %}" target="_blank" class="btn btn-sm btn-light rounded-circle p-2 text-dark" title="Voir sur la boutique">
+              <div class="d-inline-flex gap-2">
+                <a href="{% url 'produit_detail' produit.id %}" target="_blank" class="helios-icon-btn" style="width: 32px; height: 32px; font-size: 12px;" title="Voir sur le site">
                   <i class="fa-solid fa-eye"></i>
                 </a>
-                <a href="{% url 'produit_update' produit.pk %}" class="btn btn-sm btn-light rounded-circle p-2 text-primary" title="Modifier">
+                <a href="{% url 'produit_update' produit.pk %}" class="helios-icon-btn" style="width: 32px; height: 32px; font-size: 12px; color: var(--helios-orchid);" title="Modifier">
                   <i class="fa-solid fa-pen-to-square"></i>
                 </a>
-                <a href="{% url 'produit_delete' produit.pk %}" class="btn btn-sm btn-light rounded-circle p-2 text-danger" title="Supprimer">
+                <a href="{% url 'produit_delete' produit.pk %}" class="helios-icon-btn text-danger" style="width: 32px; height: 32px; font-size: 12px;" title="Supprimer">
                   <i class="fa-solid fa-trash"></i>
                 </a>
               </div>
@@ -111,7 +107,7 @@
           <tr>
             <td colspan="7" class="text-center py-5 text-muted">
               <i class="fa-solid fa-box-open fs-1 d-block mb-2 opacity-50"></i>
-              Aucun produit ne correspond à votre recherche.
+              Aucun produit trouvé.
             </td>
           </tr>
         {% endfor %}

@@ -1,65 +1,61 @@
 ﻿{% extends 'admin_base.html' %}
 {% load static %}
 
-{% block title %}Mettre à jour Commande #{{ commande.id }} | E-SHOP Admin{% endblock %}
+{% block title %}Mettre à jour Commande #{{ commande.id }} | E-SHOP Admin Suite{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
   <div class="col-lg-8">
-    <div class="admin-table-card">
-      <div class="p-4 border-bottom d-flex flex-wrap justify-content-between align-items-center gap-3">
+    <div class="helios-card">
+      <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 pb-3 border-bottom border-white-10 gap-3">
         <div>
-          <h4 class="fw-bold text-dark mb-1 d-flex align-items-center gap-2">
-            <i class="fa-solid fa-pen-to-square text-primary"></i> Traitement Commande #{{ commande.id }}
-          </h4>
-          <p class="text-muted small mb-0">Client : <strong>{{ commande.utilisateur.get_full_name }}</strong> &bull; Total : <strong class="text-success">{{ commande.total|floatformat:0 }} FCFA</strong></p>
+          <h3 class="fw-bold text-white mb-1" style="font-size: 22px;">Traitement Commande #{{ commande.id }}</h3>
+          <p class="text-muted small mb-0">Client : <strong class="text-white">{{ commande.utilisateur.get_full_name }}</strong> &bull; Total : <strong style="color: var(--helios-green);">{{ commande.total|floatformat:0 }} FCFA</strong></p>
         </div>
-        <a href="{% url 'commandes_admin' %}" class="btn btn-outline-secondary rounded-pill px-3">
-          <i class="fa-solid fa-arrow-left me-1"></i> Retour aux commandes
+        <a href="{% url 'commandes_admin' %}" class="helios-pill-btn py-2 px-3">
+          <i class="fa-solid fa-arrow-left me-1"></i> Commandes
         </a>
       </div>
 
-      <div class="p-4 p-md-5">
-        <!-- Récapitulatif Articles -->
-        <div class="card border-0 bg-light rounded-4 p-3 mb-4">
-          <h6 class="fw-bold text-dark mb-2">Articles commandés :</h6>
-          <ul class="list-group list-group-flush bg-transparent">
-            {% for elem in commande.elements.all %}
-              <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-2">
-                <span>{{ elem.quantite }}x <strong>{{ elem.produit.nom }}</strong></span>
-                <span class="text-dark fw-bold">{{ elem.prix_total|floatformat:0 }} FCFA</span>
-              </li>
-            {% endfor %}
-          </ul>
+      <!-- Articles commandés -->
+      <div class="helios-card-inner mb-4">
+        <h6 class="fw-bold text-white mb-3">Articles commandés :</h6>
+        <div class="d-flex flex-column gap-2">
+          {% for elem in commande.elements.all %}
+            <div class="d-flex justify-content-between align-items-center py-1">
+              <span class="text-muted">{{ elem.quantite }}x <strong class="text-white">{{ elem.produit.nom }}</strong></span>
+              <span class="text-white fw-bold">{{ elem.prix_total|floatformat:0 }} FCFA</span>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-4">
+          <label class="form-label text-muted small fw-bold">État actuel de la commande</label>
+          {{ form.etat_commande }}
         </div>
 
-        <form method="POST">
-          {% csrf_token %}
-
-          <div class="mb-4">
-            <label class="form-label fw-bold text-dark small">État actuel de la commande</label>
-            {{ form.etat_commande }}
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label class="form-label text-muted small fw-bold">Adresse de livraison</label>
+            {{ form.adresse_livraison }}
           </div>
-
-          <div class="row g-3 mb-4">
-            <div class="col-md-6">
-              <label class="form-label fw-bold text-dark small">Adresse de livraison</label>
-              {{ form.adresse_livraison }}
-            </div>
-            <div class="col-md-6">
-              <label class="form-label fw-bold text-dark small">Ville</label>
-              {{ form.ville }}
-            </div>
+          <div class="col-md-6">
+            <label class="form-label text-muted small fw-bold">Ville</label>
+            {{ form.ville }}
           </div>
+        </div>
 
-          <div class="d-flex justify-content-end gap-3 pt-3 border-top">
-            <a href="{% url 'commandes_admin' %}" class="btn btn-light rounded-pill px-4">Annuler</a>
-            <button type="submit" class="btn btn-admin-primary px-4">
-              <i class="fa-solid fa-check me-2"></i> Mettre à jour le Statut
-            </button>
-          </div>
-        </form>
-      </div>
+        <div class="d-flex justify-content-end gap-3 pt-3 border-top border-white-10">
+          <a href="{% url 'commandes_admin' %}" class="helios-pill-btn py-2 px-4">Annuler</a>
+          <button type="submit" class="helios-btn-glow px-4">
+            <i class="fa-solid fa-check me-2"></i> Mettre à jour le Statut
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

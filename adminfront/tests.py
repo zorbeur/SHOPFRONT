@@ -117,7 +117,7 @@ class AdminfrontViewTests(TestCase):
         self.client.login(nomutilisateur='adminboss', password='adminpassword123')
         response = self.client.get(reverse('admin_index'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Tableau de Bord')
+        self.assertContains(response, 'Dashboard')
 
     def test_produit_list_view(self):
         self.client.login(nomutilisateur='adminboss', password='adminpassword123')

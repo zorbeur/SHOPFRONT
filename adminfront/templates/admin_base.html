@@ -1,9 +1,9 @@
 ﻿{% load static %}
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-bs-theme="dark">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Administration | E-SHOP Togo{% endblock %}</title>
 
   <link rel="icon" type="image/png" href="{% static 'images/eshop.png' %}" />
@@ -11,246 +11,411 @@
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <link rel="stylesheet" href="{% static 'admin/assets/vendor/fonts/boxicons.css' %}" />
 
-  <!-- Bootstrap CSS & Chart.js -->
+  <!-- Bootstrap 5 CSS & Chart.js -->
   <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     :root {
-      --admin-sidebar-bg: #0f172a;
-      --admin-sidebar-hover: #1e293b;
-      --admin-primary: #10b981;
-      --admin-primary-dark: #059669;
-      --admin-gold: #f59e0b;
-      --admin-bg: #f8fafc;
-      --admin-card-border: #e2e8f0;
-      --admin-text-main: #1e293b;
-      --admin-text-muted: #64748b;
+      --helios-bg: #111015;
+      --helios-card: #181622;
+      --helios-card-inner: #201d2d;
+      --helios-card-hover: #262236;
+      --helios-border: rgba(255, 255, 255, 0.07);
+      --helios-border-subtle: rgba(255, 255, 255, 0.04);
+      --helios-text-main: #ffffff;
+      --helios-text-muted: #9490a5;
+      --helios-pink: #d946ef;
+      --helios-pink-glow: rgba(217, 70, 239, 0.25);
+      --helios-orchid: #c084fc;
+      --helios-green: #34d399;
+      --helios-green-glow: rgba(52, 211, 153, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background-color: var(--admin-bg);
-      color: var(--admin-text-main);
+      background-color: var(--helios-bg);
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(192, 132, 252, 0.07) 0%, transparent 35%),
+        radial-gradient(circle at 90% 85%, rgba(217, 70, 239, 0.05) 0%, transparent 40%);
+      color: var(--helios-text-main);
+      min-height: 100vh;
+      margin: 0;
+      padding: 24px;
       overflow-x: hidden;
     }
 
-    /* Layout Wrapper */
-    .admin-layout {
-      display: flex;
-      min-height: 100vh;
+    @media (max-width: 768px) {
+      body {
+        padding: 12px;
+      }
     }
 
-    /* Sidebar Styling */
-    .admin-sidebar {
-      width: 270px;
-      background: var(--admin-sidebar-bg);
-      color: #94a3b8;
+    /* Container Box Wrapper */
+    .helios-wrapper {
+      max-width: 1480px;
+      margin: 0 auto;
+      display: flex;
+      gap: 24px;
+      position: relative;
+    }
+
+    /* 1. Sidebar Styles */
+    .helios-sidebar {
+      width: 260px;
+      background: var(--helios-card);
+      border: 1px solid var(--helios-border);
+      border-radius: 28px;
+      padding: 28px 20px;
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      min-height: calc(100vh - 48px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
       z-index: 1040;
     }
-    @media (max-width: 991.98px) {
-      .admin-sidebar {
+
+    @media (max-width: 1024px) {
+      .helios-sidebar {
         position: fixed;
-        top: 0;
-        bottom: 0;
-        left: -270px;
+        top: 12px;
+        bottom: 12px;
+        left: -280px;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .admin-sidebar.show {
-        left: 0;
+      .helios-sidebar.show {
+        left: 12px;
       }
     }
 
-    /* Brand Logo Box */
-    .sidebar-brand {
-      padding: 24px 20px;
+    /* Sidebar Logo */
+    .helios-brand {
       display: flex;
       align-items: center;
       gap: 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 4px 8px 28px 8px;
       text-decoration: none;
+      color: #ffffff;
+      border-bottom: 1px solid var(--helios-border-subtle);
+      margin-bottom: 20px;
     }
-    .brand-badge-icon {
-      width: 40px;
-      height: 40px;
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    .helios-brand-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #d946ef 0%, #c084fc 100%);
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #ffffff;
-      font-size: 18px;
-      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+      font-size: 16px;
+      box-shadow: 0 4px 16px var(--helios-pink-glow);
     }
-    .brand-title {
-      font-size: 19px;
+    .helios-brand-title {
+      font-size: 17px;
       font-weight: 800;
-      color: #ffffff;
+      letter-spacing: -0.3px;
       margin: 0;
-      line-height: 1;
-      letter-spacing: -0.5px;
-    }
-    .brand-tag {
-      font-size: 9.5px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--admin-gold);
+      color: #ffffff;
     }
 
     /* Sidebar Navigation Links */
-    .sidebar-menu {
-      padding: 16px 12px;
+    .helios-nav {
       list-style: none;
+      padding: 0;
       margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
       flex-grow: 1;
-      overflow-y: auto;
     }
-    .menu-header-label {
-      font-size: 10.5px;
-      font-weight: 700;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      color: #475569;
-      padding: 18px 12px 6px 12px;
-    }
-    .sidebar-link {
+    .helios-nav-link {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 10px 14px;
-      color: #cbd5e1;
+      gap: 14px;
+      padding: 12px 18px;
+      border-radius: 18px;
+      color: var(--helios-text-muted);
       text-decoration: none;
-      font-size: 13.5px;
+      font-size: 14px;
       font-weight: 600;
-      border-radius: 10px;
       transition: all 0.2s ease;
-      position: relative;
+      border: 1px solid transparent;
     }
-    .sidebar-link:hover {
-      background: var(--admin-sidebar-hover);
+    .helios-nav-link:hover {
       color: #ffffff;
-      transform: translateX(3px);
+      background: var(--helios-card-inner);
     }
-    .sidebar-link.active {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(5, 150, 105, 0.25) 100%);
-      color: #34d399;
-      border-left: 3px solid var(--admin-primary);
+    .helios-nav-link.active {
+      background: linear-gradient(135deg, rgba(217, 70, 239, 0.2) 0%, rgba(192, 132, 252, 0.1) 100%);
+      border: 1px solid rgba(217, 70, 239, 0.35);
+      color: #ffffff;
+      box-shadow: 0 4px 20px rgba(217, 70, 239, 0.15);
     }
-    .sidebar-link i {
+    .helios-nav-link i {
       font-size: 18px;
-      width: 20px;
+      width: 22px;
       text-align: center;
     }
 
-    /* Main Content Area */
-    .admin-main {
+    .sidebar-footer-links {
+      border-top: 1px solid var(--helios-border-subtle);
+      padding-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    /* 2. Main Body Area */
+    .helios-main {
       flex-grow: 1;
       display: flex;
       flex-direction: column;
       min-width: 0;
+      gap: 24px;
     }
 
-    /* Top Navigation Bar */
-    .admin-topbar {
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--admin-card-border);
-      padding: 14px 28px;
-      position: sticky;
-      top: 0;
-      z-index: 1030;
+    /* Topbar Navigation */
+    .helios-topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .helios-welcome-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin: 0;
+      color: #ffffff;
+    }
+    .helios-welcome-sub {
+      color: var(--helios-text-muted);
+      font-size: 13.5px;
+      margin-top: 4px;
+      margin-bottom: 0;
     }
 
-    /* Cards & Stats */
-    .stat-card {
-      background: #ffffff;
-      border: 1px solid var(--admin-card-border);
-      border-radius: 16px;
-      padding: 22px;
-      transition: all 0.25s ease;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.04);
+    /* Topbar Search Pill */
+    .helios-search-pill {
+      background: var(--helios-card);
+      border: 1px solid var(--helios-border);
+      border-radius: 50px;
+      padding: 8px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--helios-text-muted);
+      font-size: 13.5px;
+      width: 240px;
+      transition: all 0.2s;
     }
-    .stat-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 25px -4px rgba(0, 0, 0, 0.08);
-      border-color: #cbd5e1;
+    .helios-search-pill:focus-within {
+      border-color: var(--helios-pink);
+      box-shadow: 0 0 0 3px var(--helios-pink-glow);
     }
-    .stat-icon-wrap {
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
+    .helios-search-input {
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      outline: none;
+      width: 100%;
+      font-size: 13.5px;
+    }
+
+    /* Topbar Icon Button */
+    .helios-icon-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--helios-card);
+      border: 1px solid var(--helios-border);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      color: var(--helios-text-muted);
+      text-decoration: none;
+      position: relative;
+      transition: all 0.2s;
+    }
+    .helios-icon-btn:hover {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
     }
 
-    /* Tables */
-    .admin-table-card {
-      background: #ffffff;
-      border: 1px solid var(--admin-card-border);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.04);
+    /* User Profile Capsule */
+    .helios-user-capsule {
+      background: var(--helios-card);
+      border: 1px solid var(--helios-border);
+      border-radius: 50px;
+      padding: 6px 16px 6px 6px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: #ffffff;
+      transition: all 0.2s;
     }
-    .admin-table thead th {
-      background: #f8fafc;
-      color: #64748b;
-      font-size: 11.5px;
+    .helios-user-capsule:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .helios-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--helios-pink);
+    }
+    .helios-avatar-initials {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #d946ef 0%, #c084fc 100%);
+      color: #ffffff;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    /* 3. Cards & Containers */
+    .helios-card {
+      background: var(--helios-card);
+      border: 1px solid var(--helios-border);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+      position: relative;
+    }
+    .helios-card-inner {
+      background: var(--helios-card-inner);
+      border: 1px solid var(--helios-border-subtle);
+      border-radius: 20px;
+      padding: 16px;
+    }
+
+    /* Filter Pills */
+    .helios-pill-btn {
+      background: var(--helios-card);
+      border: 1px solid var(--helios-border);
+      color: var(--helios-text-muted);
+      border-radius: 50px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .helios-pill-btn:hover {
+      color: #ffffff;
+      background: var(--helios-card-inner);
+    }
+    .helios-pill-btn.active {
+      background: #ffffff;
+      color: #111015;
+      font-weight: 700;
+      border-color: #ffffff;
+    }
+
+    /* Glowing Gradient Button */
+    .helios-btn-glow {
+      background: linear-gradient(135deg, #f472b6 0%, #c084fc 50%, #e879f9 100%);
+      color: #111015;
+      font-weight: 800;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 24px;
+      font-size: 13.5px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+      box-shadow: 0 6px 20px var(--helios-pink-glow);
+    }
+    .helios-btn-glow:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(217, 70, 239, 0.4);
+      color: #000000;
+    }
+
+    /* Table Styles */
+    .helios-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      color: #ffffff;
+    }
+    .helios-table th {
+      color: var(--helios-text-muted);
+      font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       padding: 14px 18px;
-      border-bottom: 1px solid var(--admin-card-border);
+      border-bottom: 1px solid var(--helios-border-subtle);
     }
-    .admin-table tbody td {
+    .helios-table td {
       padding: 14px 18px;
       vertical-align: middle;
-      color: #334155;
+      border-bottom: 1px solid var(--helios-border-subtle);
       font-size: 13.5px;
-      border-bottom: 1px solid #f1f5f9;
     }
-    .admin-table tbody tr:hover td {
-      background-color: #f8fafc;
+    .helios-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
     }
 
-    /* Badges */
-    .badge-soft-success { background: #dcfce7; color: #15803d; font-weight: 700; border-radius: 50px; padding: 4px 10px; }
-    .badge-soft-primary { background: #e0e7ff; color: #4338ca; font-weight: 700; border-radius: 50px; padding: 4px 10px; }
-    .badge-soft-warning { background: #fef3c7; color: #b45309; font-weight: 700; border-radius: 50px; padding: 4px 10px; }
-    .badge-soft-danger  { background: #fee2e2; color: #b91c1c; font-weight: 700; border-radius: 50px; padding: 4px 10px; }
-    .badge-soft-info    { background: #e0f2fe; color: #0369a1; font-weight: 700; border-radius: 50px; padding: 4px 10px; }
-
-    /* Buttons */
-    .btn-admin-primary {
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-      color: #ffffff;
-      border: none;
-      font-weight: 600;
-      padding: 8px 18px;
-      border-radius: 10px;
-      transition: all 0.2s;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    /* Dark Input Forms */
+    .form-control, .form-select {
+      background-color: var(--helios-card-inner) !important;
+      border: 1px solid var(--helios-border) !important;
+      color: #ffffff !important;
+      border-radius: 14px !important;
+      padding: 12px 16px !important;
     }
-    .btn-admin-primary:hover {
-      background: linear-gradient(135deg, #059669 0%, #047857 100%);
-      color: #ffffff;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 15px rgba(16, 185, 129, 0.35);
+    .form-control:focus, .form-select:focus {
+      border-color: var(--helios-pink) !important;
+      box-shadow: 0 0 0 3px var(--helios-pink-glow) !important;
+    }
+
+    /* Green / Pink Badges */
+    .badge-helios-green {
+      background: rgba(52, 211, 153, 0.15);
+      color: var(--helios-green);
+      font-weight: 700;
+      border-radius: 50px;
+      padding: 4px 10px;
+      font-size: 12px;
+    }
+    .badge-helios-pink {
+      background: rgba(217, 70, 239, 0.15);
+      color: #f472b6;
+      font-weight: 700;
+      border-radius: 50px;
+      padding: 4px 10px;
+      font-size: 12px;
+    }
+    .badge-helios-muted {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--helios-text-muted);
+      font-weight: 700;
+      border-radius: 50px;
+      padding: 4px 10px;
+      font-size: 12px;
     }
   </style>
 
@@ -258,223 +423,105 @@
 </head>
 
 <body>
-  <div class="admin-layout">
+  <div class="helios-wrapper">
     <!-- =========================================================================
-         1. SIDEBAR DE NAVIGATION ADMIN
+         1. SIDEBAR (Floating Dark Rounded Sidebar)
          ========================================================================= -->
-    <aside class="admin-sidebar" id="adminSidebar">
-      <!-- Brand Logo -->
-      <a href="{% url 'admin_index' %}" class="sidebar-brand">
-        <div class="brand-badge-icon">
-          <i class="fa-solid fa-gauge-high"></i>
+    <aside class="helios-sidebar" id="heliosSidebar">
+      <!-- Logo Header -->
+      <a href="{% url 'admin_index' %}" class="helios-brand">
+        <div class="helios-brand-icon">
+          <i class="fa-solid fa-shapes"></i>
         </div>
         <div>
-          <h2 class="brand-title">E-SHOP<span class="text-warning">.</span></h2>
-          <span class="brand-tag">Backoffice Suite</span>
+          <h2 class="helios-brand-title">E-SHOP <span style="color: var(--helios-pink);">Suite</span></h2>
         </div>
       </a>
 
       <!-- Menu Items -->
-      <ul class="sidebar-menu">
-        <li class="menu-header-label">Vue d'ensemble</li>
+      <ul class="helios-nav">
         <li>
-          <a href="{% url 'admin_index' %}" class="sidebar-link {% if request.resolver_match.url_name == 'admin_index' %}active{% endif %}">
-            <i class="fa-solid fa-chart-pie text-primary"></i>
-            <span>Tableau de Bord</span>
-          </a>
-        </li>
-
-        <li class="menu-header-label">Catalogue & Stocks</li>
-        <li>
-          <a href="{% url 'produit_list' %}" class="sidebar-link {% if 'produit' in request.resolver_match.url_name %}active{% endif %}">
-            <i class="fa-solid fa-boxes-stacked text-info"></i>
-            <span>Produits en Vente</span>
+          <a href="{% url 'admin_index' %}" class="helios-nav-link {% if request.resolver_match.url_name == 'admin_index' %}active{% endif %}">
+            <i class="fa-solid fa-compass"></i>
+            <span>Dashboard</span>
           </a>
         </li>
         <li>
-          <a href="{% url 'produit_create' %}" class="sidebar-link {% if request.resolver_match.url_name == 'produit_create' %}active{% endif %}">
-            <i class="fa-solid fa-circle-plus text-success"></i>
-            <span>Ajouter un Produit</span>
+          <a href="{% url 'produit_list' %}" class="helios-nav-link {% if 'produit' in request.resolver_match.url_name %}active{% endif %}">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span>Catalogue</span>
           </a>
         </li>
         <li>
-          <a href="{% url 'categorie_list' %}" class="sidebar-link {% if 'categorie' in request.resolver_match.url_name %}active{% endif %}">
-            <i class="fa-solid fa-tags text-warning"></i>
-            <span>Rayons & Catégories</span>
-          </a>
-        </li>
-
-        <li class="menu-header-label">Ventes & Expéditions</li>
-        <li>
-          <a href="{% url 'commandes_admin' %}" class="sidebar-link {% if 'commande' in request.resolver_match.url_name %}active{% endif %}">
-            <i class="fa-solid fa-receipt text-primary"></i>
-            <span>Toutes les Commandes</span>
+          <a href="{% url 'categorie_list' %}" class="helios-nav-link {% if 'categorie' in request.resolver_match.url_name %}active{% endif %}">
+            <i class="fa-solid fa-layer-group"></i>
+            <span>Rayons</span>
           </a>
         </li>
         <li>
-          <a href="{% url 'liste_livraisons' %}" class="sidebar-link {% if 'livraison' in request.resolver_match.url_name %}active{% endif %}">
-            <i class="fa-solid fa-truck-fast text-success"></i>
-            <span>Suivi des Livraisons</span>
-          </a>
-        </li>
-
-        <li class="menu-header-label">Utilisateurs & Accès</li>
-        <li>
-          <a href="{% url 'liste_clients' %}" class="sidebar-link {% if request.resolver_match.url_name == 'liste_clients' %}active{% endif %}">
-            <i class="fa-solid fa-users text-info"></i>
-            <span>Clients & Utilisateurs</span>
+          <a href="{% url 'commandes_admin' %}" class="helios-nav-link {% if 'commande' in request.resolver_match.url_name %}active{% endif %}">
+            <i class="fa-solid fa-chart-simple"></i>
+            <span>Commandes</span>
           </a>
         </li>
         <li>
-          <a href="{% url 'inscription_admin' %}" class="sidebar-link {% if request.resolver_match.url_name == 'inscription_admin' %}active{% endif %}">
-            <i class="fa-solid fa-user-shield text-warning"></i>
-            <span>Créer un Compte Staff</span>
+          <a href="{% url 'liste_livraisons' %}" class="helios-nav-link {% if 'livraison' in request.resolver_match.url_name %}active{% endif %}">
+            <i class="fa-solid fa-truck-fast"></i>
+            <span>Livraisons</span>
           </a>
         </li>
-
-        <li class="menu-header-label">Communication</li>
         <li>
-          <a href="{% url 'afficher_notifications' %}" class="sidebar-link {% if 'notification' in request.resolver_match.url_name %}active{% endif %}">
-            <i class="fa-solid fa-bell text-danger"></i>
-            <span>Notifications & Alertes</span>
+          <a href="{% url 'liste_clients' %}" class="helios-nav-link {% if request.resolver_match.url_name == 'liste_clients' %}active{% endif %}">
+            <i class="fa-solid fa-users"></i>
+            <span>Clients</span>
           </a>
         </li>
-
-        <li class="menu-header-label">Storefront</li>
         <li>
-          <a href="{% url 'home' %}" target="_blank" class="sidebar-link">
-            <i class="fa-solid fa-arrow-up-right-from-square text-muted"></i>
-            <span>Ouvrir la Boutique ↗</span>
+          <a href="{% url 'afficher_notifications' %}" class="helios-nav-link {% if 'notification' in request.resolver_match.url_name %}active{% endif %}">
+            <i class="fa-regular fa-bell"></i>
+            <span>Notifications</span>
           </a>
         </li>
       </ul>
 
-      <!-- User footer in sidebar -->
-      <div class="p-3 border-top border-white-10 d-flex align-items-center justify-content-between">
-        <div class="d-flex align-items-center gap-2">
-          <div class="rounded-circle bg-warning text-dark fw-bold d-flex align-items-center justify-content-center" style="width: 34px; height: 34px; font-size: 13px;">
-            {{ user.prenom|slice:":1"|default:user.nomutilisateur|slice:":1"|upper }}
-          </div>
-          <div>
-            <div class="fw-bold text-white small">{{ user.prenom|default:user.nomutilisateur }}</div>
-            <div class="text-muted" style="font-size: 10.5px;">Administrateur</div>
-          </div>
-        </div>
-        <a href="{% url 'deconnexion_admin' %}" class="text-danger p-2" title="Déconnexion">
+      <!-- Bottom Settings / Storefront -->
+      <div class="sidebar-footer-links">
+        <a href="{% url 'home' %}" target="_blank" class="helios-nav-link">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          <span>Boutique Live ↗</span>
+        </a>
+        <a href="{% url 'inscription_admin' %}" class="helios-nav-link">
+          <i class="fa-solid fa-user-plus"></i>
+          <span>Créer un Staff</span>
+        </a>
+        <a href="{% url 'deconnexion_admin' %}" class="helios-nav-link text-danger">
           <i class="fa-solid fa-power-off"></i>
+          <span>Déconnexion</span>
         </a>
       </div>
     </aside>
 
     <!-- =========================================================================
-         2. CONTENU PRINCIPAL & TOPBAR
+         2. MAIN CONTENT AREA
          ========================================================================= -->
-    <div class="admin-main">
-      <!-- Topbar -->
-      <header class="admin-topbar">
-        <div class="d-flex align-items-center gap-3">
-          <button class="btn btn-light d-lg-none rounded-3 p-2" onclick="document.getElementById('adminSidebar').classList.toggle('show')">
-            <i class="fa-solid fa-bars fs-5"></i>
-          </button>
-          <div class="d-none d-md-flex align-items-center gap-2 text-muted small">
-            <i class="fa-solid fa-circle text-success" style="font-size: 8px;"></i>
-            <span>E-SHOP Togo Admin Suite &bull; Connecté en tant que <strong>{{ user.get_full_name }}</strong></span>
-          </div>
-        </div>
-
-        <div class="d-flex align-items-center gap-3">
-          <a href="{% url 'home' %}" target="_blank" class="btn btn-sm btn-outline-secondary rounded-pill px-3 d-none d-sm-inline-flex align-items-center gap-1">
-            <i class="fa-solid fa-bag-shopping text-warning"></i> Voir la boutique
-          </a>
-
-          <!-- Notifications -->
-          <div class="dropdown">
-            <a href="#" class="btn btn-light rounded-circle p-2 position-relative text-dark" data-bs-toggle="dropdown" aria-expanded="false" style="width: 38px; height: 38px;">
-              <i class="fa-regular fa-bell"></i>
-              {% if notifications_non_lues and notifications_non_lues > 0 %}
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px;">
-                  {{ notifications_non_lues }}
-                </span>
-              {% endif %}
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 mt-2 p-2" style="min-width: 280px;">
-              <li class="px-3 py-2 border-bottom fw-bold text-dark d-flex justify-content-between align-items-center">
-                <span>Notifications</span>
-                <a href="{% url 'afficher_notifications' %}" class="small text-primary text-decoration-none">Tout voir</a>
-              </li>
-              {% if notifications_list %}
-                {% for notif in notifications_list %}
-                  <li>
-                    <a class="dropdown-item py-2 px-3 small rounded-3" href="{% url 'afficher_notifications' %}">
-                      <div class="text-truncate text-dark fw-medium">{{ notif.message }}</div>
-                      <small class="text-muted">{{ notif.date_creation|timesince }}</small>
-                    </a>
-                  </li>
-                {% endfor %}
-              {% else %}
-                <li class="p-3 text-center text-muted small">Aucune nouvelle notification.</li>
-              {% endif %}
-            </ul>
-          </div>
-
-          <!-- User Menu -->
-          <div class="dropdown">
-            <a href="#" class="d-flex align-items-center gap-2 text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-              {% if user.photo_de_profil %}
-                <img src="{{ user.photo_de_profil.url }}" alt="{{ user.nomutilisateur }}" class="rounded-circle" style="width: 36px; height: 36px; object-fit: cover; border: 2px solid var(--admin-primary);">
-              {% else %}
-                <div class="rounded-circle bg-dark text-warning fw-bold d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
-                  {{ user.prenom|slice:":1"|default:user.nomutilisateur|slice:":1"|upper }}
-                </div>
-              {% endif %}
-              <div class="d-none d-md-block text-start">
-                <div class="fw-bold small text-dark line-clamp-1">{{ user.prenom|default:user.nomutilisateur }}</div>
-                <small class="text-muted" style="font-size: 11px;">Administrateur</small>
-              </div>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 mt-2 p-2" style="min-width: 200px;">
-              <li><a class="dropdown-item py-2 rounded-3" href="{% url 'profil' %}"><i class="fa-solid fa-user me-2 text-primary"></i> Mon Profil</a></li>
-              <li><a class="dropdown-item py-2 rounded-3" href="{% url 'home' %}"><i class="fa-solid fa-store me-2 text-success"></i> Boutique</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item py-2 rounded-3 text-danger" href="{% url 'deconnexion_admin' %}"><i class="fa-solid fa-power-off me-2"></i> Déconnexion</a></li>
-            </ul>
-          </div>
-        </div>
-      </header>
-
-      <!-- Alert Messages Flash -->
+    <div class="helios-main">
+      <!-- Flash Messages -->
       {% if messages %}
-        <div class="container-fluid px-4 mt-3">
-          {% for message in messages %}
-            <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm rounded-4 d-flex align-items-center gap-2" role="alert">
-              {% if message.tags == 'success' %}
-                <i class="fa-solid fa-circle-check text-success fs-5"></i>
-              {% elif message.tags == 'danger' or message.tags == 'error' %}
-                <i class="fa-solid fa-circle-exclamation text-danger fs-5"></i>
-              {% else %}
-                <i class="fa-solid fa-circle-info text-info fs-5"></i>
-              {% endif %}
-              <div class="flex-grow-1 fw-medium">{{ message }}</div>
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
-            </div>
-          {% endfor %}
-        </div>
+        {% for message in messages %}
+          <div class="alert alert-dark border border-secondary-subtle rounded-4 d-flex align-items-center gap-3 p-3 shadow-lg" role="alert">
+            <i class="fa-solid fa-circle-info text-info fs-5"></i>
+            <div class="flex-grow-1 small">{{ message }}</div>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+          </div>
+        {% endfor %}
       {% endif %}
 
       <!-- Page Content -->
-      <main class="flex-grow-1 p-4">
-        {% block content %}{% endblock %}
-      </main>
-
-      <!-- Footer -->
-      <footer class="py-3 px-4 bg-white border-top border-light text-muted small d-flex justify-content-between align-items-center">
-        <div>&copy; {% now "Y" %} <strong>E-SHOP Togo</strong> &bull; Système de Gestion Intégré (ERP/CRM).</div>
-        <div>Version 2.0 &bull; Conçu pour le commerce togolais</div>
-      </footer>
+      {% block content %}{% endblock %}
     </div>
   </div>
 
-  <!-- Bootstrap JS -->
+  <!-- Bootstrap JS Bundle -->
   <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
   {% block extra_js %}{% endblock %}
 </body>
