@@ -2,9 +2,12 @@ from django.apps import AppConfig
 from django.db.models.signals import post_migrate
 
 def create_default_superuser(sender, **kwargs):
-    """Crée automatiquement un administrateur par défaut après chaque migration si aucun staff n'existe."""
+    """Crée automatiquement l'administrateur et initialise l'historique sur 12 ans au déploiement."""
     from django.conf import settings
     from django.contrib.auth import get_user_model
+    from django.core.management import call_command
+    from adminfront.models import Commande, Produit
+
     try:
         User = get_user_model()
         username = getattr(settings, 'DEFAULT_ADMIN_USERNAME', 'admin')
@@ -12,7 +15,7 @@ def create_default_superuser(sender, **kwargs):
         password = getattr(settings, 'DEFAULT_ADMIN_PASSWORD', 'AdminEshop2026!')
 
         if not User.objects.filter(is_staff=True).exists() and not User.objects.filter(nomutilisateur=username).exists() and not User.objects.filter(email=email).exists():
-            user = User.objects.create_user(
+            User.objects.create_user(
                 nomutilisateur=username,
                 email=email,
                 password=password,
@@ -24,7 +27,13 @@ def create_default_superuser(sender, **kwargs):
                 email_verifie=True,
             )
             print(f"[E-SHOP] Super Administrateur par défaut créé : @{username} ({email})")
-    except Exception:
+
+        # Auto-peuplement de l'historique sur 12 ans au déploiement si la base est neuve/vide (hors mode test)
+        import sys
+        if 'test' not in sys.argv:
+            if Commande.objects.count() == 0 or Produit.objects.count() == 0:
+                call_command('seed_data')
+    except Exception as e:
         pass
 
 class AdminfrontConfig(AppConfig):
